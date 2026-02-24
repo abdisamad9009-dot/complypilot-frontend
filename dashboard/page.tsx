@@ -1,84 +1,90 @@
+import Link from "next/link";
+
 export default function Dashboard() {
   return (
     <main style={container}>
-      <header style={header}>
-        <h1 style={logo}>ComplyPilot</h1>
-      </header>
+      <h1 style={title}>ComplyPilot Dashboard</h1>
 
-      <div style={content}>
-        <h2 style={pageTitle}>Dashboard</h2>
+      {/* TOP CARDS */}
+      <div style={topGrid}>
+        <div style={card}>
+          <p style={label}>Compliance Score</p>
+          <div style={score}>82%</div>
+        </div>
 
-        <div style={grid}>
-          {/* Compliance Score */}
-          <div style={card}>
-            <p style={cardLabel}>Compliance Score</p>
-            <div style={score}>84%</div>
-            <p style={muted}>Good standing</p>
-          </div>
+        <div style={card}>
+          <p style={label}>Open Risks</p>
+          <div style={risk}>3</div>
+        </div>
 
-          {/* Next Steps */}
-          <div style={card}>
-            <p style={cardLabel}>Next Steps</p>
-            <ul style={list}>
-              <li>Finish risk assessment</li>
-              <li>Upload security policy</li>
-              <li>Generate SOC2 report</li>
-            </ul>
-          </div>
+        <div style={card}>
+          <p style={label}>Next Review</p>
+          <div style={text}>12 March</div>
+        </div>
+      </div>
 
-          {/* Risk */}
-          <div style={card}>
-            <p style={cardLabel}>Risk Level</p>
-            <div style={risk}>Medium</div>
-            <p style={muted}>2 items need attention</p>
-          </div>
+      {/* NEXT STEPS PREVIEW */}
+      <div style={section}>
+        <h2 style={sectionTitle}>Priority Actions</h2>
 
-          {/* Documents */}
-          <div style={card}>
-            <p style={cardLabel}>Documents</p>
-            <button style={primaryBtn}>Generate Policy</button>
-            <div style={{ height: 10 }} />
-            <button style={secondaryBtn}>Download Report</button>
-          </div>
+        <div style={card}>
+          <ul style={list}>
+            <li>Finish risk assessment</li>
+            <li>Upload security policy</li>
+            <li>Enable access reviews</li>
+          </ul>
+
+          <Link href="/next-steps">
+            <button style={button}>View full plan →</button>
+          </Link>
+        </div>
+      </div>
+
+      {/* DOCUMENTS */}
+      <div style={section}>
+        <h2 style={sectionTitle}>Documents</h2>
+
+        <div style={card}>
+          <p style={muted}>Generate compliance documents instantly</p>
+
+          <Link href="/documents">
+            <button style={button}>Open document center →</button>
+          </Link>
         </div>
       </div>
     </main>
   );
 }
 
-/* STYLES */
+/* styles */
 
 const container = {
-  background: "#f5f6f7",
+  background: "#f6f7f8",
   minHeight: "100vh",
-  fontFamily: "Inter, system-ui, sans-serif",
-};
-
-const header = {
-  background: "white",
-  padding: "16px 28px",
-  borderBottom: "1px solid #e5e7eb",
-};
-
-const logo = {
-  fontSize: "18px",
-  fontWeight: 600,
-};
-
-const content = {
   padding: "40px",
+  fontFamily: "Inter, sans-serif",
 };
 
-const pageTitle = {
+const title = {
   fontSize: "28px",
   fontWeight: 600,
   marginBottom: "30px",
 };
 
-const grid = {
+const topGrid = {
   display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
   gap: "20px",
-  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+  marginBottom: "30px",
+};
+
+const section = {
+  marginTop: "20px",
+};
+
+const sectionTitle = {
+  fontSize: "20px",
+  marginBottom: "12px",
 };
 
 const card = {
@@ -88,47 +94,42 @@ const card = {
   border: "1px solid #e5e7eb",
 };
 
-const cardLabel = {
+const label = {
   fontSize: "13px",
   color: "#6b7280",
-  marginBottom: "10px",
 };
 
 const score = {
-  fontSize: "42px",
+  fontSize: "38px",
   fontWeight: 700,
   color: "#16a34a",
 };
 
 const risk = {
-  fontSize: "28px",
+  fontSize: "34px",
+  fontWeight: 700,
+  color: "#dc2626",
+};
+
+const text = {
+  fontSize: "20px",
   fontWeight: 600,
 };
 
 const muted = {
-  fontSize: "13px",
   color: "#6b7280",
+  marginBottom: "10px",
 };
 
 const list = {
   paddingLeft: "18px",
-  fontSize: "14px",
-  lineHeight: "1.7",
+  lineHeight: "1.8",
 };
 
-const primaryBtn = {
-  background: "#16a34a",
+const button = {
+  marginTop: "12px",
+  background: "#111",
   color: "white",
-  padding: "10px 14px",
-  borderRadius: "8px",
-  border: "none",
-  cursor: "pointer",
-  fontWeight: 500,
-};
-
-const secondaryBtn = {
-  background: "#eef0f1",
-  color: "#111",
   padding: "10px 14px",
   borderRadius: "8px",
   border: "none",
