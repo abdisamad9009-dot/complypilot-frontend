@@ -1,6 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 export default function Documents() {
+ const router = useRouter();
+  
   const generateDoc = async (type: string) => {
     const res = await fetch("/api/generate", {
       method: "POST",
@@ -11,7 +15,8 @@ export default function Documents() {
     });
 
     const data = await res.json();
-    alert(data.document);
+   localStorage.setItem("generatedDoc", data.document);
+router.push("/chat");
   };
 
   return (
