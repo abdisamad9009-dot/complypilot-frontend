@@ -70,8 +70,8 @@ export default function Documents() {
 
             <button 
               onClick={() => generateDoc("GDPR Policy")}
-              className="bg-black text-white px-5 py-3 rounded-xl hover:opacity-90 transition">
-            > 
+              className="bg-black text-white px-5 py-3 rounded-xl hover:opacity-90 transition"            > 
+              >
               Generate with AI
             </button>
           </div>
