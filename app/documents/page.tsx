@@ -3,6 +3,20 @@
 import Link from "next/link"
 
 export default function Documents() {
+
+  const generateDoc = async (type: string) => {
+  const res = await fetch("/api/generate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ type }),
+  });
+
+  const data = await res.json();
+  alert(data.document);
+};
+  
   return (
     <main className="min-h-screen bg-white px-12 py-16">
 
@@ -39,10 +53,12 @@ export default function Documents() {
               Status: Missing
             </p>
 
-            <button className="bg-black text-white px-5 py-3 rounded-xl hover:opacity-90 transition">
-              Generate with AI
-            </button>
-          </div>
+           <button
+  onClick={() => generateDoc("Risk Assessment")}
+  className="bg-black text-white px-5 py-3 rounded-xl hover:opacity-90 transition"
+>
+  Generate with AI
+</button>
 
           <div className="border border-neutral-200 rounded-2xl p-8">
             <h2 className="text-xl font-medium text-black">
@@ -52,7 +68,10 @@ export default function Documents() {
               Status: Missing
             </p>
 
-            <button className="bg-black text-white px-5 py-3 rounded-xl hover:opacity-90 transition">
+            <button 
+              onClick={() => generateDoc("GDPR Policy")}
+              className="bg-black text-white px-5 py-3 rounded-xl hover:opacity-90 transition">
+            > 
               Generate with AI
             </button>
           </div>
