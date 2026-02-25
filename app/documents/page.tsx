@@ -1,5 +1,4 @@
 export default function Documents() {
-
   const generateDoc = async (type: string) => {
     const res = await fetch("/api/generate", {
       method: "POST",
@@ -58,3 +57,5 @@ export default function Documents() {
     </main>
   );
 }
+
+    
