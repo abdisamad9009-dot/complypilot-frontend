@@ -1,3 +1,5 @@
+"use client";
+
 export default function Documents() {
   const generateDoc = async (type: string) => {
     const res = await fetch("/api/generate", {
