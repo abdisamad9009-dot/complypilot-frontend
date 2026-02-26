@@ -43,5 +43,6 @@ export default function ChatInner() {
         {doc}
       </div>
     )}
-  </div>
-);
+    </div>
+  );
+}  
