@@ -11,38 +11,43 @@ export default function ChatInner() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-  if (!type) return;
+    if (!type) return;
 
-  const generate = async () => {
-    setLoading(true);
+    const generate = async () => {
+      try {
+        setLoading(true);
 
-    const res = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ type }),
-    });
+        const res = await fetch("/api/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ type }),
+        });
 
-    const data = await res.json();
-    setDoc(data.document);
-    setLoading(false);
-  };
+        const data = await res.json();
+        setDoc(data.document);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  generate();
-}, [type]);
+    generate();
+  }, [type]);
 
   return (
-  <div className="min-h-screen bg-white text-black p-10">
-    <h1 className="text-3xl mb-6">Ask ComplyPilot</h1>
+    <div className="min-h-screen bg-white text-black p-10">
+      <h1 className="text-3xl mb-6">Ask ComplyPilot</h1>
 
-    {loading && <p>Generating document...</p>}
+      {loading && <p>Generating document...</p>}
 
-    {!loading && doc && (
-      <div className="bg-white text-black p-8 rounded-xl shadow whitespace-pre-wrap">
-        {doc}
-      </div>
-    )}
+      {!loading && doc && (
+        <div className="bg-white text-black p-8 rounded-xl shadow whitespace-pre-wrap">
+          {doc}
+        </div>
+      )}
     </div>
   );
-}  
+}
