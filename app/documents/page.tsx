@@ -5,19 +5,9 @@ import { useRouter } from "next/navigation";
 export default function Documents() {
  const router = useRouter();
   
-  const generateDoc = async (type: string) => {
-    const res = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ type }),
-    });
-
-    const data = await res.json();
-   localStorage.setItem("generatedDoc", data.document);
-router.push("/chat");
-  };
+ const generateDoc = (type: string) => {
+  router.push(`/chat?type=${encodeURIComponent(type)}`);
+};
 
   return (
     <main className="min-h-screen bg-white p-10">
