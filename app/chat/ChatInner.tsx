@@ -13,7 +13,7 @@ export default function ChatInner() {
   useEffect(() => {
     if (!type) return;
 
-    async function generate() {
+    const generate = async () => {
       setLoading(true);
 
       try {
@@ -28,11 +28,11 @@ export default function ChatInner() {
         const data = await res.json();
         setDoc(data.document);
       } catch (err) {
-        console.error(err);
+        console.error("Generate error:", err);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
-    }
+    };
 
     generate();
   }, [type]);
