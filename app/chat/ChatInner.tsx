@@ -33,16 +33,15 @@ export default function ChatInner() {
   }, [type]);
 
   return (
-    <div className="p-10">
-      <h1 className="text-3xl mb-6">Ask ComplyPilot</h1>
+  <div className="min-h-screen bg-white text-black p-10">
+    <h1 className="text-3xl mb-6">Ask ComplyPilot</h1>
 
-      {loading && <p>Generating document...</p>}
+    {loading && <p>Generating document...</p>}
 
-      {!loading && doc && (
-        <pre className="bg-gray-100 p-6 rounded-xl whitespace-pre-wrap">
-          {doc}
-        </pre>
-      )}
-    </div>
-  );
-}
+    {!loading && doc && (
+      <div className="bg-white text-black p-8 rounded-xl shadow whitespace-pre-wrap">
+        {doc}
+      </div>
+    )}
+  </div>
+);
