@@ -11,26 +11,26 @@ export default function ChatInner() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!type) return;
+  if (!type) return;
 
-    const generate = async () => {
-      setLoading(true);
+  const generate = async () => {
+    setLoading(true);
 
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ type }),
-      });
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ type }),
+    });
 
-      const data = await res.json();
-      setDoc(data.document);
-      setLoading(false);
-    };
+    const data = await res.json();
+    setDoc(data.document);
+    setLoading(false);
+  };
 
-    generate();
-  }, [type]);
+  generate();
+}, [type]);
 
   return (
   <div className="min-h-screen bg-white text-black p-10">
