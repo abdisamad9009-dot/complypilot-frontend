@@ -13,10 +13,10 @@ export default function ChatInner() {
   useEffect(() => {
     if (!type) return;
 
-    const generate = async () => {
-      try {
-        setLoading(true);
+    async function generate() {
+      setLoading(true);
 
+      try {
         const res = await fetch("/api/generate", {
           method: "POST",
           headers: {
@@ -29,10 +29,10 @@ export default function ChatInner() {
         setDoc(data.document);
       } catch (err) {
         console.error(err);
-      } finally {
-        setLoading(false);
       }
-    };
+
+      setLoading(false);
+    }
 
     generate();
   }, [type]);
