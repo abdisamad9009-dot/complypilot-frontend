@@ -2,43 +2,49 @@ import Link from "next/link";
 
 export default function Dashboard() {
   return (
-    <main style={container}>
-      <h1 style={title}>ComplyPilot Dashboard</h1>
+    <div className="space-y-10">
 
-      {/* Top cards */}
-      <div style={topGrid}>
-        <div style={card}>
-          <p style={label}>Compliance Score</p>
-          <div style={score}>82%</div>
-        </div>
-
-        <div style={card}>
-          <p style={label}>Open Risks</p>
-          <div style={risk}>3</div>
-        </div>
-
-        <div style={card}>
-          <p style={label}>Next Review</p>
-          <div style={text}>12 March</div>
-        </div>
+      <div>
+        <h1 className="text-3xl font-semibold tracking-tight">
+          ComplyPilot Dashboard
+        </h1>
       </div>
 
-      {/* Next steps */}
-      <div style={section}>
-        <h2 style={sectionTitle}>Priority Actions</h2>
+      {/* KPI GRID */}
+      <div className="grid grid-cols-3 gap-6">
 
-        <div style={card}>
-          <ul style={list}>
-            <li>Finish risk assessment</li>
-            <li>Upload security policy</li>
-            <li>Enable access reviews</li>
-          </ul>
-
-          <Link href="/next-steps">
-            <button style={button}>View full plan →</button>
-          </Link>
+        <div className="bg-white border border-black/10 rounded-xl p-6">
+          <p className="text-xs uppercase tracking-wider text-black/50">
+            Compliance Score
+          </p>
+          <h2 className="text-4xl font-bold mt-2 text-slate-900">
+            82%
+          </h2>
         </div>
+
+        <div className="bg-white border border-black/10 rounded-xl p-6">
+          <p className="text-xs uppercase tracking-wider text-black/50">
+            Open Risks
+          </p>
+          <h2 className="text-4xl font-bold mt-2 text-slate-900">
+            3
+          </h2>
+        </div>
+
+        <div className="bg-white border border-black/10 rounded-xl p-6">
+          <p className="text-xs uppercase tracking-wider text-black/50">
+            Next Review
+          </p>
+          <h2 className="text-4xl font-bold mt-2 text-slate-900">
+            12 March
+          </h2>
+        </div>
+
       </div>
+
+    </div>
+  );
+}
 
       {/* Documents */}
       <div style={section}>
