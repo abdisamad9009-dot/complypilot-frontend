@@ -46,98 +46,23 @@ export default function Dashboard() {
   );
 }
 
-      {/* Documents */}
-      <div style={section}>
-        <h2 style={sectionTitle}>Documents</h2>
+     {/* Documents Section */}
+<div className="bg-white border border-black/10 rounded-xl p-6">
 
-        <div style={card}>
-          <p style={muted}>Generate compliance documents instantly</p>
+  <h2 className="text-xl font-semibold tracking-tight mb-2">
+    Documents
+  </h2>
 
-          <Link href="/documents">
-            <button style={button}>Open document center →</button>
-          </Link>
-        </div>
-      </div>
-    </main>
+  <p className="text-black/60 mb-4">
+    Generate compliance documents instantly
+  </p>
+
+  <Link href="/documents">
+    <button className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition duration-200">
+      Open document center →
+    </button>
+  </Link>
+
+    </div>
   );
 }
-
-/* styles */
-
-const container = {
-  background: "#f6f7f8",
-  minHeight: "100vh",
-  padding: "40px",
-  fontFamily: "Inter, sans-serif",
-};
-
-const title = {
-  fontSize: "28px",
-  fontWeight: 600,
-  marginBottom: "30px",
-};
-
-const topGrid = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-  gap: "20px",
-  marginBottom: "30px",
-};
-
-const section = {
-  marginTop: "20px",
-};
-
-const sectionTitle = {
-  fontSize: "20px",
-  marginBottom: "12px",
-};
-
-const card = {
-  background: "white",
-  padding: "22px",
-  borderRadius: "14px",
-  border: "1px solid #e5e7eb",
-};
-
-const label = {
-  fontSize: "13px",
-  color: "#6b7280",
-};
-
-const score = {
-  fontSize: "38px",
-  fontWeight: 700,
-  color: "#16a34a",
-};
-
-const risk = {
-  fontSize: "34px",
-  fontWeight: 700,
-  color: "#dc2626",
-};
-
-const text = {
-  fontSize: "20px",
-  fontWeight: 600,
-};
-
-const muted = {
-  color: "#6b7280",
-  marginBottom: "10px",
-};
-
-const list = {
-  paddingLeft: "18px",
-  lineHeight: "1.8",
-};
-
-const button = {
-  marginTop: "12px",
-  background: "#111",
-  color: "white",
-  padding: "10px 14px",
-  borderRadius: "8px",
-  border: "none",
-  cursor: "pointer",
-};
