@@ -1,13 +1,22 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function AssessmentPage() {
+
+  const router = useRouter()
+
   const [company, setCompany] = useState("")
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    alert("Assessment submitted")
+
+    // later this will call AI
+    console.log("Running compliance assessment for:", company)
+
+    // redirect to dashboard
+    router.push("/dashboard")
   }
 
   return (
