@@ -1,13 +1,29 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 
 export default function TasksPage() {
-  const tasks = [
-    "Enable Multi‑Factor Authentication",
-    "Encrypt customer data",
-    "Implement monitoring and backups"
-  ]
+
+  const [score, setScore] = useState(50)
+
+  const [tasks, setTasks] = useState([
+    { name: "Enable Multi‑Factor Authentication", done: false },
+    { name: "Encrypt customer data", done: false },
+    { name: "Implement monitoring and backups", done: false }
+  ])
+
+  function completeTask(index: number) {
+
+    const updatedTasks = [...tasks]
+
+    if (!updatedTasks[index].done) {
+      updatedTasks[index].done = true
+      setScore(score + 2)
+    }
+
+    setTasks(updatedTasks)
+  }
 
   return (
     <div className="min-h-screen bg-white text-black p-8 space-y-10">
@@ -18,43 +34,65 @@ export default function TasksPage() {
 
       {/* Compliance Score */}
       <div>
-        <p className="text-sm">
+
+        <p className="text-sm text-gray-500">
           Compliance Score
         </p>
 
         <div className="text-5xl font-bold">
-          50%
+          {score}%
         </div>
 
         <Link href="/assessment">
-          <button className="mt-4 border border-black px-4 py-2 rounded">
+          <button className="mt-4 bg-black text-white px-4 py-2 rounded">
             Run Assessment
           </button>
         </Link>
+
       </div>
 
-      {/* Tasks */}
+      {/* Task List */}
       <div>
+
         <h2 className="text-xl font-semibold mb-3">
           Compliance Checklist
         </h2>
 
         <ul className="space-y-3">
+
           {tasks.map((task, index) => (
+
             <li
               key={index}
-              className="flex justify-between items-center border border-black p-3 rounded"
+              className="flex justify-between items-center border p-3 rounded"
             >
-              {task}
 
-              <button className="border border-black px-3 py-1 rounded">
-                Complete
+              <span
+                className={task.done ? "line-through text-gray-400" : ""}
+              >
+                {task.name}
+              </span>
+
+              <button
+                onClick={() => completeTask(index)}
+                disabled={task.done}
+                className={
+                  task.done
+                    ? "bg-gray-300 text-gray-600 px-3 py-1 rounded"
+                    : "bg-black text-white px-3 py-1 rounded"
+                }
+              >
+                {task.done ? "Completed" : "Complete"}
               </button>
+
             </li>
+
           ))}
+
         </ul>
 
       </div>
+
     </div>
   )
 }
