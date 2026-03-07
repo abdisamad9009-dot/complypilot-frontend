@@ -1,9 +1,9 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function Dashboard() {
+
   const [score, setScore] = useState("0");
   const [gdpr, setGdpr] = useState("0");
   const [auth, setAuth] = useState("0");
@@ -11,32 +11,49 @@ export default function Dashboard() {
   const [total, setTotal] = useState("0");
 
   useEffect(() => {
+
     const params = new URLSearchParams(window.location.search);
 
-    setScore(params.get("score") || "0");
-    setGdpr(params.get("gdpr") || "0");
-    setAuth(params.get("auth") || "0");
-    setSecurity(params.get("security") || "0");
-    setTotal(params.get("total") || "0");
+    const urlScore = params.get("score") || "0";
+    const urlGdpr = params.get("gdpr") || "0";
+    const urlAuth = params.get("auth") || "0";
+    const urlSecurity = params.get("security") || "0";
+    const urlTotal = params.get("total") || "0";
+
+    setGdpr(urlGdpr);
+    setAuth(urlAuth);
+    setSecurity(urlSecurity);
+    setTotal(urlTotal);
+
+    const savedScore = localStorage.getItem("complianceScore");
+
+    if (savedScore) {
+      setScore(savedScore);
+    } else {
+      setScore(urlScore);
+      localStorage.setItem("complianceScore", urlScore);
+    }
+
   }, []);
 
-  useEffect(() => {
-  const savedScore = localStorage.getItem("complianceScore")
+  const updateScore = () => {
+    setScore((prev) => {
+      const newScore = (Number(prev) + 2).toString();
+      localStorage.setItem("complianceScore", newScore);
+      return newScore;
+    });
+  };
 
-  if (savedScore) {
-    setScore(savedScore)
-  }
-}, [])
-  
-  const gdprExposure = Number(gdpr) * 20000000
-const authExposure = Number(auth) * 50000
-const securityExposure = Number(security) * 75000
+  const gdprExposure = Number(gdpr) * 20000000;
+  const authExposure = Number(auth) * 50000;
+  const securityExposure = Number(security) * 75000;
 
-const totalExposure =
-  gdprExposure + authExposure + securityExposure
-  
+  const totalExposure =
+    gdprExposure + authExposure + securityExposure;
+
   return (
     <div style={{ padding: "40px", fontFamily: "sans-serif" }}>
+
       <h1 style={{ fontSize: "32px", fontWeight: "bold" }}>
         Compliance Dashboard
       </h1>
@@ -44,7 +61,6 @@ const totalExposure =
       {/* Compliance Score */}
       <div style={{ marginTop: "30px" }}>
         <h2>Compliance Score</h2>
-
         <div style={{ fontSize: "60px", fontWeight: "bold" }}>
           {score}%
         </div>
@@ -73,12 +89,15 @@ const totalExposure =
         <h2>Financial Risk Exposure</h2>
 
         <p>GDPR Violations: £{gdprExposure.toLocaleString()}</p>
-<p>Authentication Violations: £{authExposure.toLocaleString()}</p>
-<p>Security Violations: £{securityExposure.toLocaleString()}</p>
 
-<h3 style={{ marginTop: "10px" }}>
-  Total Exposure: £{totalExposure.toLocaleString()}
-</h3>
+        <p>Authentication Violations: £{authExposure.toLocaleString()}</p>
+
+        <p>Security Violations: £{securityExposure.toLocaleString()}</p>
+
+        <h3 style={{ marginTop: "10px" }}>
+          Total Exposure: £{totalExposure.toLocaleString()}
+        </h3>
+
       </div>
 
       {/* Open Risks */}
@@ -88,6 +107,7 @@ const totalExposure =
         {Number(gdpr) > 0 && <p>⚠ Customer data protection risk</p>}
         {Number(auth) > 0 && <p>⚠ Weak authentication controls</p>}
         {Number(security) > 0 && <p>⚠ Security monitoring gaps</p>}
+
       </div>
 
       {/* Priority Actions */}
@@ -110,6 +130,7 @@ const totalExposure =
             View Compliance Tasks
           </button>
         </Link>
+
       </div>
 
       {/* Task Progress */}
@@ -120,8 +141,7 @@ const totalExposure =
           <input
             type="checkbox"
             onChange={(e) => {
-              if (e.target.checked)
-                setScore((prev) => (Number(prev) + 2).toString());
+              if (e.target.checked) updateScore();
             }}
           />
           Enable Multi‑Factor Authentication
@@ -133,8 +153,7 @@ const totalExposure =
           <input
             type="checkbox"
             onChange={(e) => {
-              if (e.target.checked)
-               setScore((prev) => (Number(prev) + 2).toString());
+              if (e.target.checked) updateScore();
             }}
           />
           Encrypt Customer Data
@@ -146,13 +165,14 @@ const totalExposure =
           <input
             type="checkbox"
             onChange={(e) => {
-              if (e.target.checked)
-                setScore((prev) => (Number(prev) + 2).toString());
+              if (e.target.checked) updateScore();
             }}
           />
           Implement Monitoring & Backups
         </label>
+
       </div>
+
     </div>
   );
 }
