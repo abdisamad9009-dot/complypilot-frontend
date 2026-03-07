@@ -34,6 +34,23 @@ export default function Dashboard() {
         </div>
       </div>
 
+      <div style={{ marginTop: "20px" }}>
+  <a href="/assessment">
+    <button
+      style={{
+        padding: "10px 20px",
+        backgroundColor: "black",
+        color: "white",
+        borderRadius: "6px",
+        border: "none",
+        cursor: "pointer"
+      }}
+    >
+      Run Assessment
+    </button>
+  </a>
+</div>
+
       {/* Financial Exposure */}
       <div style={{ marginTop: "40px" }}>
         <h2>Financial Risk Exposure</h2>
