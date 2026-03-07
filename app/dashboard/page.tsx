@@ -20,6 +20,14 @@ export default function Dashboard() {
     setTotal(params.get("total") || "0");
   }, []);
 
+  useEffect(() => {
+  const savedScore = localStorage.getItem("complianceScore")
+
+  if (savedScore) {
+    setScore(savedScore)
+  }
+}, [])
+  
   const gdprExposure = Number(gdpr) * 20000000
 const authExposure = Number(auth) * 50000
 const securityExposure = Number(security) * 75000
