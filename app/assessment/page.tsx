@@ -2,124 +2,184 @@
 
 import { useState } from "react"
 
-const questions = [
-  { id: 1, text: "Do you have a privacy policy?" },
-  { id: 2, text: "Do you encrypt stored user data?" },
-  { id: 3, text: "Do you use secure authentication?" },
-  { id: 4, text: "Do you have a data breach response plan?" },
-  { id: 5, text: "Do you regularly update software?" },
-  { id: 6, text: "Do employees receive security training?" },
-  { id: 7, text: "Do you monitor unauthorized access attempts?" },
-  { id: 8, text: "Do you restrict admin access?" },
-  { id: 9, text: "Do you back up company data?" },
-  { id: 10, text: "Do you test backups regularly?" },
-  { id: 11, text: "Do you use multi-factor authentication?" },
-  { id: 12, text: "Do you log security events?" },
-  { id: 13, text: "Do you perform vulnerability scans?" },
-  { id: 14, text: "Do you have firewall protection?" },
-  { id: 15, text: "Do you enforce strong passwords?" },
-  { id: 16, text: "Do you manage user access permissions?" },
-  { id: 17, text: "Do you delete unused accounts?" },
-  { id: 18, text: "Do you secure API endpoints?" },
-  { id: 19, text: "Do you protect customer payment data?" },
-  { id: 20, text: "Do you use HTTPS everywhere?" },
-  { id: 21, text: "Do you review third‑party vendors?" },
-  { id: 22, text: "Do you have incident reporting procedures?" },
-  { id: 23, text: "Do you document security policies?" },
-  { id: 24, text: "Do you restrict database access?" },
-  { id: 25, text: "Do you use endpoint protection?" },
-  { id: 26, text: "Do you monitor network traffic?" },
-  { id: 27, text: "Do you run penetration tests?" },
-  { id: 28, text: "Do you secure cloud infrastructure?" },
-  { id: 29, text: "Do you rotate encryption keys?" },
-  { id: 30, text: "Do you track security incidents?" },
-  { id: 31, text: "Do you review security logs?" },
-  { id: 32, text: "Do you enforce device security?" },
-  { id: 33, text: "Do you use antivirus protection?" },
-  { id: 34, text: "Do you audit system access?" },
-  { id: 35, text: "Do you secure employee devices?" },
-  { id: 36, text: "Do you encrypt backups?" },
-  { id: 37, text: "Do you protect against phishing?" },
-  { id: 38, text: "Do you maintain a risk register?" },
-  { id: 39, text: "Do you have a disaster recovery plan?" },
-  { id: 40, text: "Do you monitor cloud logs?" },
-  { id: 41, text: "Do you review compliance regularly?" },
-  { id: 42, text: "Do you conduct internal audits?" },
-  { id: 43, text: "Do you maintain security documentation?" },
-  { id: 44, text: "Do you review access privileges?" },
-  { id: 45, text: "Do you monitor privileged users?" },
-  { id: 46, text: "Do you secure development environments?" },
-  { id: 47, text: "Do you separate production environments?" },
-  { id: 48, text: "Do you review security alerts?" },
-  { id: 49, text: "Do you perform regular risk assessments?" },
-  { id: 50, text: "Do you continuously improve security controls?" }
-]
+export default function AssessmentPage() {
 
-export default function Assessment() {
+  const questions = [
+    "Do you have a privacy policy?",
+    "Do you encrypt stored user data?",
+    "Do you use secure authentication?",
+    "Do you have a data breach response plan?",
+    "Do you regularly update software?",
+    "Do employees receive security training?",
+    "Do you monitor unauthorized access attempts?",
+    "Do you restrict admin access?",
+    "Do you back up company data?",
+    "Do you test backups regularly?",
+    "Do you use multi-factor authentication?",
+    "Do you log security events?",
+    "Do you perform vulnerability scans?",
+    "Do you have firewall protection?",
+    "Do you enforce strong passwords?",
+    "Do you manage user access permissions?",
+    "Do you delete unused accounts?",
+    "Do you secure API endpoints?",
+    "Do you protect customer payment data?",
+    "Do you use HTTPS everywhere?",
+    "Do you review third‑party vendors?",
+    "Do you have incident reporting procedures?",
+    "Do you document security policies?",
+    "Do you restrict database access?",
+    "Do you use endpoint protection?",
+    "Do you monitor network traffic?",
+    "Do you run penetration tests?",
+    "Do you secure cloud infrastructure?",
+    "Do you rotate encryption keys?",
+    "Do you track security incidents?",
+    "Do you review security logs?",
+    "Do you enforce device security?",
+    "Do you use antivirus protection?",
+    "Do you audit system access?",
+    "Do you secure employee devices?",
+    "Do you encrypt backups?",
+    "Do you protect against phishing?",
+    "Do you maintain a risk register?",
+    "Do you have a disaster recovery plan?",
+    "Do you monitor cloud logs?",
+    "Do you review compliance regularly?",
+    "Do you conduct internal audits?",
+    "Do you maintain security documentation?",
+    "Do you review access privileges?",
+    "Do you monitor privileged users?",
+    "Do you secure development environments?",
+    "Do you separate production environments?",
+    "Do you review security alerts?",
+    "Do you perform regular risk assessments?",
+    "Do you continuously improve security controls?"
+  ]
 
+  const [page, setPage] = useState(0)
   const [answers, setAnswers] = useState({})
 
-  const handleAnswer = (id, value) => {
-    setAnswers({
-      ...answers,
-      [id]: value
-    })
+  const questionsPerPage = 10
+  const start = page * questionsPerPage
+  const currentQuestions = questions.slice(start, start + questionsPerPage)
+
+  function setAnswer(index, value) {
+    setAnswers(prev => ({
+      ...prev,
+      [index]: value
+    }))
   }
 
-  const handleSubmit = () => {
+  function nextPage() {
 
-    if (Object.keys(answers).length < questions.length) {
-      alert("Please answer all questions")
-      return
-    }
+    if (page < 4) {
+      setPage(page + 1)
+      window.scrollTo(0,0)
+    } else {
 
-    const yesCount = Object.values(answers).filter(
-      a => a === "yes"
-    ).length
+      const yesCount =
+        Object.values(answers).filter(a => a === "yes").length
 
-    const score = yesCount * 2
+      const score = yesCount * 2
 
-    const gdpr = Math.floor(score * 0.4)
-    const auth = Math.floor(score * 0.3)
-    const security = Math.floor(score * 0.3)
+      const gdpr = yesCount < 20 ? 1 : 0
+      const auth = yesCount < 30 ? 1 : 0
+      const security = yesCount < 40 ? 1 : 0
 
-    const total = gdpr + auth + security
+      const total = gdpr + auth + security
 
-    // SAVE SCORE SO DASHBOARD + TASKS USE SAME NUMBER
-    localStorage.setItem("complianceScore", score)
+      localStorage.setItem("complianceScore", score)
 
-    window.location.href =
+      window.location.href =
       `/dashboard?score=${score}&gdpr=${gdpr}&auth=${auth}&security=${security}&total=${total}`
+    }
   }
 
   return (
-    <div style={{ padding: 40 }}>
 
-      <h1>Compliance Assessment</h1>
+    <div style={{
+      minHeight:"100vh",
+      background:"white",
+      color:"black",
+      padding:"40px",
+      fontFamily:"sans-serif"
+    }}>
 
-      {questions.map((q) => (
-        <div key={q.id} style={{ marginBottom: 20 }}>
-          <p>{q.text}</p>
+      <h1 style={{fontSize:"32px",fontWeight:"bold"}}>
+        Compliance Assessment
+      </h1>
 
-          <button onClick={() => handleAnswer(q.id, "yes")}>
-            Yes
-          </button>
+      <p style={{marginTop:"10px"}}>
+        Page {page+1} of 5
+      </p>
 
-          <button onClick={() => handleAnswer(q.id, "no")}>
-            No
-          </button>
-        </div>
-      ))}
+      <div style={{marginTop:"30px"}}>
+
+        {currentQuestions.map((q,i)=>{
+
+          const index = start+i
+          const selected = answers[index]
+
+          return(
+
+            <div key={i} style={{marginBottom:"25px"}}>
+
+              <p style={{marginBottom:"10px"}}>
+                {index+1}. {q}
+              </p>
+
+              <button
+              onClick={()=>setAnswer(index,"yes")}
+              style={{
+                marginRight:"10px",
+                padding:"8px 16px",
+                background:selected==="yes"?"black":"white",
+                color:selected==="yes"?"white":"black",
+                border:"1px solid black",
+                borderRadius:"5px",
+                cursor:"pointer"
+              }}
+              >
+                Yes
+              </button>
+
+              <button
+              onClick={()=>setAnswer(index,"no")}
+              style={{
+                padding:"8px 16px",
+                background:selected==="no"?"black":"white",
+                color:selected==="no"?"white":"black",
+                border:"1px solid black",
+                borderRadius:"5px",
+                cursor:"pointer"
+              }}
+              >
+                No
+              </button>
+
+            </div>
+
+          )
+
+        })}
+
+      </div>
 
       <button
-        onClick={handleSubmit}
-        style={{
-          marginTop: 30,
-          padding: 10,
-          fontSize: 18
-        }}
+      onClick={nextPage}
+      style={{
+        marginTop:"40px",
+        padding:"12px 25px",
+        background:"black",
+        color:"white",
+        border:"none",
+        borderRadius:"6px",
+        cursor:"pointer",
+        fontSize:"16px"
+      }}
       >
-        Submit Assessment
+        {page===4 ? "Finish Assessment" : "Next Page"}
       </button>
 
     </div>
