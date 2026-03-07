@@ -68,3 +68,41 @@ export default function Dashboard() {
     </div>
   );
 }
+
+<div style={{ marginTop: "40px" }}>
+  <h2>Task Progress</h2>
+
+  <label>
+    <input
+      type="checkbox"
+      onChange={(e) => {
+        if (e.target.checked) setScore((prev) => Number(prev) + 10);
+      }}
+    />
+    Enable Multi‑Factor Authentication
+  </label>
+
+  <br />
+
+  <label>
+    <input
+      type="checkbox"
+      onChange={(e) => {
+        if (e.target.checked) setScore((prev) => Number(prev) + 10);
+      }}
+    />
+    Encrypt Customer Data
+  </label>
+
+  <br />
+
+  <label>
+    <input
+      type="checkbox"
+      onChange={(e) => {
+        if (e.target.checked) setScore((prev) => Number(prev) + 10);
+      }}
+    />
+    Implement Monitoring & Backups
+  </label>
+</div>
