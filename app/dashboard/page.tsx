@@ -73,24 +73,13 @@ export default function Dashboard() {
         {Number(security) > 0 && <p>⚠️ Security monitoring gaps</p>}
       </div>
 
-    {/* Priority Actions */}
+   {/* Priority Actions */}
 <div style={{ marginTop: "40px" }}>
   <h2>Priority Actions</h2>
 
-  <p>Complete these tasks to improve your compliance score.</p>
-
-  <Link href="/tasks">
-    <button style={{
-      marginTop: "10px",
-      padding: "10px 16px",
-      border: "1px solid black",
-      borderRadius: "6px",
-      background: "white",
-      cursor: "pointer"
-    }}>
-      View Compliance Tasks
-    </button>
-  </Link>
+  {Number(auth) > 0 && <p>• Enable Multi-Factor Authentication</p>}
+  {Number(gdpr) > 0 && <p>• Encrypt customer data</p>}
+  {Number(security) > 0 && <p>• Implement monitoring and backups</p>}
 </div>
       
 <div style={{ marginTop: "40px" }}>
