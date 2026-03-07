@@ -1,5 +1,4 @@
 "use client"
-
 import { useState } from "react"
 
 export default function AssessmentPage() {
@@ -15,7 +14,6 @@ export default function AssessmentPage() {
     "Do you monitor suspicious activity?",
     "Do you log security events?",
     "Do you review security logs?",
-
     "Do you encrypt stored data?",
     "Do you encrypt data in transit?",
     "Do you use secure passwords?",
@@ -26,7 +24,6 @@ export default function AssessmentPage() {
     "Do you review system permissions?",
     "Do you test backups regularly?",
     "Do you store backups securely?",
-
     "Do you comply with GDPR?",
     "Do you allow users to delete data?",
     "Do you allow users to export data?",
@@ -37,7 +34,6 @@ export default function AssessmentPage() {
     "Do you review compliance regularly?",
     "Do you audit third party tools?",
     "Do you restrict data sharing?",
-
     "Do you track failed login attempts?",
     "Do you detect unusual logins?",
     "Do you notify admins of breaches?",
@@ -48,7 +44,6 @@ export default function AssessmentPage() {
     "Do you review staff permissions?",
     "Do you monitor cloud systems?",
     "Do you secure company devices?",
-
     "Do you have incident response plans?",
     "Do you report security incidents?",
     "Do you test incident response?",
@@ -62,23 +57,31 @@ export default function AssessmentPage() {
   ]
 
   const [page, setPage] = useState(0)
-  const [yesCount, setYesCount] = useState(0)
+  const [answers, setAnswers] = useState({})
 
   const questionsPerPage = 10
   const start = page * questionsPerPage
   const currentQuestions = questions.slice(start, start + questionsPerPage)
 
-  function answerYes() {
-    setYesCount(prev => prev + 1)
+  function setAnswer(index, value) {
+    setAnswers(prev => ({
+      ...prev,
+      [index]: value
+    }))
   }
 
   function nextPage() {
+
     if (page < 4) {
       setPage(page + 1)
       window.scrollTo(0, 0)
-    } else {
+    } 
+    else {
 
-      const score = Math.round((yesCount / 50) * 100)
+      const yesCount = Object.values(answers).filter(a => a === "yes").length
+
+      // Each yes = 2%
+      const score = yesCount * 2
 
       const gdpr = yesCount < 20 ? 1 : 0
       const auth = yesCount < 30 ? 1 : 0
@@ -109,43 +112,57 @@ export default function AssessmentPage() {
 
       <div style={{ marginTop: "30px" }}>
 
-        {currentQuestions.map((q, i) => (
-          <div key={i} style={{ marginBottom: "25px" }}>
+        {currentQuestions.map((q, i) => {
 
-            <p style={{ marginBottom: "10px" }}>
-              {start + i + 1}. {q}
-            </p>
+          const questionIndex = start + i
+          const selected = answers[questionIndex]
 
-            <button
-              onClick={answerYes}
-              style={{
-                marginRight: "10px",
-                padding: "8px 16px",
-                backgroundColor: "black",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer"
-              }}
-            >
-              Yes
-            </button>
+          return (
+            <div key={i} style={{
+              marginBottom: "25px",
+              padding: "15px",
+              border: "1px solid #e5e5e5",
+              borderRadius: "8px"
+            }}>
 
-            <button
-              style={{
-                padding: "8px 16px",
-                backgroundColor: "white",
-                color: "black",
-                border: "1px solid black",
-                borderRadius: "5px",
-                cursor: "pointer"
-              }}
-            >
-              No
-            </button>
+              <p style={{ marginBottom: "15px", fontWeight: "500" }}>
+                {questionIndex + 1}. {q}
+              </p>
 
-          </div>
-        ))}
+              <button
+                onClick={() => setAnswer(questionIndex, "yes")}
+                style={{
+                  marginRight: "10px",
+                  padding: "10px 18px",
+                  borderRadius: "6px",
+                  border: "2px solid black",
+                  cursor: "pointer",
+                  backgroundColor: selected === "yes" ? "black" : "white",
+                  color: selected === "yes" ? "white" : "black",
+                  fontWeight: selected === "yes" ? "bold" : "normal"
+                }}
+              >
+                Yes
+              </button>
+
+              <button
+                onClick={() => setAnswer(questionIndex, "no")}
+                style={{
+                  padding: "10px 18px",
+                  borderRadius: "6px",
+                  border: "2px solid black",
+                  cursor: "pointer",
+                  backgroundColor: selected === "no" ? "black" : "white",
+                  color: selected === "no" ? "white" : "black",
+                  fontWeight: selected === "no" ? "bold" : "normal"
+                }}
+              >
+                No
+              </button>
+
+            </div>
+          )
+        })}
 
       </div>
 
@@ -153,7 +170,7 @@ export default function AssessmentPage() {
         onClick={nextPage}
         style={{
           marginTop: "40px",
-          padding: "12px 25px",
+          padding: "14px 28px",
           backgroundColor: "black",
           color: "white",
           border: "none",
