@@ -9,6 +9,45 @@ export default function Dashboard() {
         <p className="text-xs uppercase tracking-wider text-black/50">
           Next Review
         </p>
+
+        <p className="text-black/60 mt-2">
+  Your business is in good standing. A few documents need updating.
+</p>
+
+{/* Open Risks */}
+<div className="bg-white border border-black/10 rounded-xl p-6 mt-6">
+  <h2 className="text-xl font-semibold mb-2">
+    Open Risks
+  </h2>
+
+  <p className="text-black/60 mb-4">
+    Risks identified in your compliance review.
+  </p>
+
+  <Link href="/risks">
+    <button className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition">
+      View open risks →
+    </button>
+  </Link>
+</div>
+
+{/* Priority Steps */}
+<div className="bg-white border border-black/10 rounded-xl p-6 mt-6">
+  <h2 className="text-xl font-semibold mb-2">
+    Priority Steps
+  </h2>
+
+  <p className="text-black/60 mb-4">
+    Actions you should complete next to improve compliance.
+  </p>
+
+  <Link href="/priority">
+    <button className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition">
+      Get next priority steps →
+    </button>
+  </Link>
+</div>
+        
         <h2 className="text-4xl font-bold mt-2 text-slate-900">
           12 March
         </h2>
