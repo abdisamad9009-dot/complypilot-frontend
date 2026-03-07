@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Dashboard() {
   const [score, setScore] = useState("0");
@@ -21,7 +22,6 @@ export default function Dashboard() {
 
   return (
     <div style={{ padding: "40px", fontFamily: "sans-serif" }}>
-      
       <h1 style={{ fontSize: "32px", fontWeight: "bold" }}>
         Compliance Dashboard
       </h1>
@@ -29,38 +29,40 @@ export default function Dashboard() {
       {/* Compliance Score */}
       <div style={{ marginTop: "30px" }}>
         <h2>Compliance Score</h2>
+
         <div style={{ fontSize: "60px", fontWeight: "bold" }}>
           {score}%
         </div>
       </div>
 
+      {/* Run Assessment */}
       <div style={{ marginTop: "20px" }}>
-  <a href="/assessment">
-    <button
-      style={{
-        padding: "10px 20px",
-        backgroundColor: "black",
-        color: "white",
-        borderRadius: "6px",
-        border: "none",
-        cursor: "pointer"
-      }}
-    >
-      Run Assessment
-    </button>
-  </a>
-</div>
+        <Link href="/assessment">
+          <button
+            style={{
+              padding: "10px 20px",
+              backgroundColor: "black",
+              color: "white",
+              borderRadius: "6px",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Run Assessment
+          </button>
+        </Link>
+      </div>
 
       {/* Financial Exposure */}
       <div style={{ marginTop: "40px" }}>
         <h2>Financial Risk Exposure</h2>
 
-        <p>GDPR Violations: £{gdpr}</p>
-        <p>Authentication Violations: £{auth}</p>
-        <p>Security Violations: £{security}</p>
+        <p>GDPR Violations: £{Number(gdpr).toLocaleString()}</p>
+        <p>Authentication Violations: £{Number(auth).toLocaleString()}</p>
+        <p>Security Violations: £{Number(security).toLocaleString()}</p>
 
         <h3 style={{ marginTop: "10px" }}>
-          Total Exposure: £{total}
+          Total Exposure: £{Number(total).toLocaleString()}
         </h3>
       </div>
 
@@ -68,54 +70,74 @@ export default function Dashboard() {
       <div style={{ marginTop: "40px" }}>
         <h2>Open Risks</h2>
 
-        {Number(gdpr) > 0 && <p>⚠️ Customer data protection risk</p>}
-        {Number(auth) > 0 && <p>⚠️ Weak authentication controls</p>}
-        {Number(security) > 0 && <p>⚠️ Security monitoring gaps</p>}
+        {Number(gdpr) > 0 && <p>⚠ Customer data protection risk</p>}
+        {Number(auth) > 0 && <p>⚠ Weak authentication controls</p>}
+        {Number(security) > 0 && <p>⚠ Security monitoring gaps</p>}
       </div>
 
-   {/* Priority Actions */}
-<div style={{ marginTop: "40px" }}>
-  <h2>Priority Actions</h2>
+      {/* Priority Actions */}
+      <div style={{ marginTop: "40px" }}>
+        <h2>Priority Actions</h2>
 
-  {Number(auth) > 0 && <p>• Enable Multi-Factor Authentication</p>}
-  {Number(gdpr) > 0 && <p>• Encrypt customer data</p>}
-  {Number(security) > 0 && <p>• Implement monitoring and backups</p>}
-</div>
-      
-<div style={{ marginTop: "40px" }}>
-  <h2>Task Progress</h2>
+        <p>Complete tasks to improve your compliance score.</p>
 
-  <label>
-    <input
-      type="checkbox"
-      onChange={(e) => {
-        if (e.target.checked) setScore((prev) => Number(prev) + 10);
-      }}
-    />
-    Enable Multi‑Factor Authentication
-  </label>
+        <Link href="/tasks">
+          <button
+            style={{
+              marginTop: "10px",
+              padding: "10px 16px",
+              border: "1px solid black",
+              borderRadius: "6px",
+              background: "white",
+              cursor: "pointer",
+            }}
+          >
+            View Compliance Tasks
+          </button>
+        </Link>
+      </div>
 
-  <br />
+      {/* Task Progress */}
+      <div style={{ marginTop: "40px" }}>
+        <h2>Task Progress</h2>
 
-  <label>
-    <input
-      type="checkbox"
-      onChange={(e) => {
-        if (e.target.checked) setScore((prev) => Number(prev) + 10);
-      }}
-    />
-    Encrypt Customer Data
-  </label>
+        <label>
+          <input
+            type="checkbox"
+            onChange={(e) => {
+              if (e.target.checked)
+                setScore((prev) => (Number(prev) + 10).toString());
+            }}
+          />
+          Enable Multi‑Factor Authentication
+        </label>
 
-  <br />
+        <br />
 
-  <label>
-    <input
-      type="checkbox"
-      onChange={(e) => {
-        if (e.target.checked) setScore((prev) => Number(prev) + 10);
-      }}
-    />
-    Implement Monitoring & Backups
-  </label>
-</div>
+        <label>
+          <input
+            type="checkbox"
+            onChange={(e) => {
+              if (e.target.checked)
+                setScore((prev) => (Number(prev) + 10).toString());
+            }}
+          />
+          Encrypt Customer Data
+        </label>
+
+        <br />
+
+        <label>
+          <input
+            type="checkbox"
+            onChange={(e) => {
+              if (e.target.checked)
+                setScore((prev) => (Number(prev) + 10).toString());
+            }}
+          />
+          Implement Monitoring & Backups
+        </label>
+      </div>
+    </div>
+  );
+}
