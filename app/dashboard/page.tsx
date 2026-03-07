@@ -4,13 +4,14 @@ import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 
 export default function Dashboard() {
+
   const searchParams = useSearchParams()
 
-  const score = searchParams.get("score") || 0
-  const gdpr = searchParams.get("gdpr") || 0
-  const auth = searchParams.get("auth") || 0
-  const security = searchParams.get("security") || 0
-  const total = searchParams.get("total") || 0
+  const score = searchParams.get("score") ?? "0"
+  const gdpr = searchParams.get("gdpr") ?? "0"
+  const auth = searchParams.get("auth") ?? "0"
+  const security = searchParams.get("security") ?? "0"
+  const total = searchParams.get("total") ?? "0"
 
   return (
     <div className="p-8 space-y-10">
@@ -18,15 +19,15 @@ export default function Dashboard() {
       {/* Header */}
       <div>
         <p className="text-xs uppercase tracking-wider text-black/50">
-          Next Review
+          Latest Compliance Review
         </p>
 
         <h2 className="text-4xl font-bold mt-2 text-slate-900">
-          12 March
+          Compliance Dashboard
         </h2>
 
         <p className="text-black/60 mt-2">
-          Your compliance results are based on your latest assessment.
+          Results generated from your latest assessment.
         </p>
       </div>
 
@@ -41,7 +42,7 @@ export default function Dashboard() {
         </div>
 
         <p className="text-black/60 mt-2">
-          Score calculated from your assessment answers.
+          Calculated based on your assessment answers.
         </p>
       </div>
 
@@ -51,19 +52,11 @@ export default function Dashboard() {
           Financial Risk Exposure
         </h2>
 
-        <p className="text-black/70">
-          GDPR Risk: £{gdpr}
-        </p>
+        <p>GDPR Risk: £{gdpr}</p>
+        <p>Authentication Risk: £{auth}</p>
+        <p>Security Risk: £{security}</p>
 
-        <p className="text-black/70">
-          Authentication Risk: £{auth}
-        </p>
-
-        <p className="text-black/70">
-          Security Risk: £{security}
-        </p>
-
-        <div className="mt-4 font-bold text-lg">
+        <div className="mt-4 font-bold">
           Total Exposure: £{total}
         </div>
       </div>
@@ -104,7 +97,7 @@ export default function Dashboard() {
 
       {/* Documents */}
       <div className="bg-white border border-black/10 rounded-xl p-6">
-        <h2 className="text-xl font-semibold tracking-tight mb-2">
+        <h2 className="text-xl font-semibold mb-2">
           Documents
         </h2>
 
@@ -113,7 +106,7 @@ export default function Dashboard() {
         </p>
 
         <Link href="/documents">
-          <button className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition duration-200">
+          <button className="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition">
             Open document center →
           </button>
         </Link>
