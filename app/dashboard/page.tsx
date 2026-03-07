@@ -73,18 +73,21 @@ export default function Dashboard() {
         {Number(security) > 0 && <p>⚠️ Security monitoring gaps</p>}
       </div>
 
-     {/* Priority Actions */}
-<div>
-  <h2 className="text-xl font-semibold mb-2">
-    Priority Actions
-  </h2>
+    {/* Priority Actions */}
+<div style={{ marginTop: "40px" }}>
+  <h2>Priority Actions</h2>
 
-  <p className="text-black/60 mb-4">
-    Complete these tasks to improve your compliance score.
-  </p>
+  <p>Complete these tasks to improve your compliance score.</p>
 
   <Link href="/tasks">
-    <button className="border border-black px-4 py-2 rounded">
+    <button style={{
+      marginTop: "10px",
+      padding: "10px 16px",
+      border: "1px solid black",
+      borderRadius: "6px",
+      background: "white",
+      cursor: "pointer"
+    }}>
       View Compliance Tasks
     </button>
   </Link>
