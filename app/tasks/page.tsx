@@ -3,7 +3,6 @@
 import Link from "next/link"
 
 export default function TasksPage() {
-
   const tasks = [
     "Enable Multi‑Factor Authentication",
     "Encrypt customer data",
@@ -11,7 +10,7 @@ export default function TasksPage() {
   ]
 
   return (
-    <div className="p-8 space-y-10">
+    <div className="min-h-screen bg-white text-black p-8 space-y-10">
 
       <h1 className="text-3xl font-bold">
         Compliance Tasks
@@ -19,7 +18,7 @@ export default function TasksPage() {
 
       {/* Compliance Score */}
       <div>
-        <p className="text-sm text-black/60">
+        <p className="text-sm">
           Compliance Score
         </p>
 
@@ -28,7 +27,7 @@ export default function TasksPage() {
         </div>
 
         <Link href="/assessment">
-          <button className="mt-4 bg-gray-600 text-white px-4 py-2 rounded">
+          <button className="mt-4 border border-black px-4 py-2 rounded">
             Run Assessment
           </button>
         </Link>
@@ -44,18 +43,18 @@ export default function TasksPage() {
           {tasks.map((task, index) => (
             <li
               key={index}
-              className="flex justify-between items-center border p-3 rounded"
+              className="flex justify-between items-center border border-black p-3 rounded"
             >
               {task}
 
-              <button className="bg-black text-white px-3 py-1 rounded">
+              <button className="border border-black px-3 py-1 rounded">
                 Complete
               </button>
             </li>
           ))}
         </ul>
-      </div>
 
+      </div>
     </div>
   )
 }
