@@ -1,50 +1,47 @@
-"use client" 
+"use client"
 
+import DashboardLayout from "@/components/dashboard-layout"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 
 export default function AssessmentPage() {
 
-  const router = useRouter()
-
-  const [company, setCompany] = useState("")
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
-
-    // later this will call AI
-    console.log("Running compliance assessment for:", company)
-
-    // redirect to dashboard
-    router.push("/dashboard")
-  }
+  const [industry, setIndustry] = useState("")
+  const [employees, setEmployees] = useState("")
 
   return (
-    <div className="p-8 space-y-6">
 
-      <h1 className="text-3xl font-bold">
-        Compliance Assessment
-      </h1>
+    <DashboardLayout>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="p-8">
 
-        <input
-          type="text"
-          placeholder="Company Name"
-          className="border p-3 rounded w-full"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
-        />
+        <h1 className="text-2xl font-bold mb-6">
+          Compliance Assessment
+        </h1>
 
-        <button
-          type="submit"
-          className="bg-black text-white px-6 py-3 rounded"
-        >
-          Run Assessment
-        </button>
+        <div className="border border-black p-6 max-w-xl">
 
-      </form>
+          <input
+            placeholder="Industry"
+            className="border border-black p-2 w-full mb-4"
+            onChange={(e)=>setIndustry(e.target.value)}
+          />
 
-    </div>
+          <input
+            placeholder="Number of Employees"
+            className="border border-black p-2 w-full mb-4"
+            onChange={(e)=>setEmployees(e.target.value)}
+          />
+
+          <button
+            className="border border-black px-4 py-2"
+          >
+            Run Assessment
+          </button>
+
+        </div>
+
+      </div>
+
+    </DashboardLayout>
   )
 }
