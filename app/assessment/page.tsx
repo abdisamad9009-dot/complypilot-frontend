@@ -1,12 +1,21 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function AssessmentPage() {
+
+  const router = useRouter()
+
   const [industry, setIndustry] = useState("")
   const [employees, setEmployees] = useState("")
   const [customerData, setCustomerData] = useState("")
   const [mfa, setMfa] = useState("")
+
+  function runAssessment() {
+    // later this will send data to AI
+    router.push("/dashboard")
+  }
 
   return (
     <div className="min-h-screen bg-white text-black p-8">
@@ -53,7 +62,10 @@ export default function AssessmentPage() {
           <option value="no">No</option>
         </select>
 
-        <button className="bg-black text-white px-4 py-2">
+        <button
+          onClick={runAssessment}
+          className="bg-black text-white px-4 py-2"
+        >
           Run Assessment
         </button>
 
