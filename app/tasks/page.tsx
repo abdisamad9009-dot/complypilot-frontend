@@ -22,21 +22,18 @@ export default function TasksPage() {
 
   function completeTask(index) {
 
-  const updatedTasks = [...tasks]
+    const updatedTasks = [...tasks]
 
-  if (!updatedTasks[index].done) {
+    if (!updatedTasks[index].done) {
 
-    updatedTasks[index].done = true
+      updatedTasks[index].done = true
 
-    const newScore = score + 2
+      const newScore = score + 2
 
-    setScore(newScore)
+      setScore(newScore)
 
-    localStorage.setItem("complianceScore", newScore)
-  }
-
-  setTasks(updatedTasks)
-}
+      localStorage.setItem("complianceScore", newScore)
+    }
 
     setTasks(updatedTasks)
   }
@@ -48,9 +45,7 @@ export default function TasksPage() {
         Compliance Tasks
       </h1>
 
-      {/* Compliance Score */}
       <div>
-
         <p className="text-sm text-gray-500">
           Compliance Score
         </p>
@@ -64,10 +59,8 @@ export default function TasksPage() {
             Run Assessment
           </button>
         </Link>
-
       </div>
 
-      {/* Task List */}
       <div>
 
         <h2 className="text-xl font-semibold mb-3">
@@ -83,9 +76,7 @@ export default function TasksPage() {
               className="flex justify-between items-center border p-3 rounded"
             >
 
-              <span
-                className={task.done ? "line-through text-gray-400" : ""}
-              >
+              <span className={task.done ? "line-through text-gray-400" : ""}>
                 {task.name}
               </span>
 
