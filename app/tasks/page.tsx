@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 
 export default function TasksPage() {
 
-  const [score, setScore] = useState(50)
+  const [score, setScore] = useState(0)
 
   const [tasks, setTasks] = useState([
     { name: "Enable Multi‑Factor Authentication", done: false },
@@ -13,14 +13,30 @@ export default function TasksPage() {
     { name: "Implement monitoring and backups", done: false }
   ])
 
-  function completeTask(index: number) {
-
-    const updatedTasks = [...tasks]
-
-    if (!updatedTasks[index].done) {
-      updatedTasks[index].done = true
-      setScore(score + 2)
+  useEffect(() => {
+    const savedScore = localStorage.getItem("complianceScore")
+    if (savedScore) {
+      setScore(Number(savedScore))
     }
+  }, [])
+
+  function completeTask(index) {
+
+  const updatedTasks = [...tasks]
+
+  if (!updatedTasks[index].done) {
+
+    updatedTasks[index].done = true
+
+    const newScore = score + 2
+
+    setScore(newScore)
+
+    localStorage.setItem("complianceScore", newScore)
+  }
+
+  setTasks(updatedTasks)
+}
 
     setTasks(updatedTasks)
   }
