@@ -1,205 +1,169 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 
 export default function AssessmentPage() {
 
-  const router = useRouter()
+  const questions = [
+    "Do you encrypt customer data?",
+    "Do you use multi-factor authentication?",
+    "Do you monitor login attempts?",
+    "Do you back up company data regularly?",
+    "Do you restrict admin access?",
+    "Do you have a privacy policy?",
+    "Do you train staff on security?",
+    "Do you monitor suspicious activity?",
+    "Do you log security events?",
+    "Do you review security logs?",
 
-  const [step, setStep] = useState(1)
+    "Do you encrypt stored data?",
+    "Do you encrypt data in transit?",
+    "Do you use secure passwords?",
+    "Do you rotate passwords regularly?",
+    "Do you audit system access?",
+    "Do you have firewall protection?",
+    "Do you monitor network traffic?",
+    "Do you review system permissions?",
+    "Do you test backups regularly?",
+    "Do you store backups securely?",
 
-  const [answers, setAnswers] = useState<{[key:string]: string}>({})
+    "Do you comply with GDPR?",
+    "Do you allow users to delete data?",
+    "Do you allow users to export data?",
+    "Do you track consent for data use?",
+    "Do you protect personal data?",
+    "Do you document security policies?",
+    "Do you monitor data access?",
+    "Do you review compliance regularly?",
+    "Do you audit third party tools?",
+    "Do you restrict data sharing?",
 
-  function updateAnswer(question: string, value: string) {
-    setAnswers(prev => ({
-      ...prev,
-      [question]: value
-    }))
+    "Do you track failed login attempts?",
+    "Do you detect unusual logins?",
+    "Do you notify admins of breaches?",
+    "Do you review access logs?",
+    "Do you monitor API usage?",
+    "Do you secure internal tools?",
+    "Do you test security controls?",
+    "Do you review staff permissions?",
+    "Do you monitor cloud systems?",
+    "Do you secure company devices?",
+
+    "Do you have incident response plans?",
+    "Do you report security incidents?",
+    "Do you test incident response?",
+    "Do you monitor system uptime?",
+    "Do you track vulnerabilities?",
+    "Do you patch software quickly?",
+    "Do you use antivirus protection?",
+    "Do you monitor data integrity?",
+    "Do you review security alerts?",
+    "Do you test disaster recovery?"
+  ]
+
+  const [page, setPage] = useState(0)
+  const [yesCount, setYesCount] = useState(0)
+
+  const questionsPerPage = 10
+  const start = page * questionsPerPage
+  const currentQuestions = questions.slice(start, start + questionsPerPage)
+
+  function answerYes() {
+    setYesCount(prev => prev + 1)
   }
 
-  function next() {
-    setStep(step + 1)
-  }
+  function nextPage() {
+    if (page < 4) {
+      setPage(page + 1)
+      window.scrollTo(0, 0)
+    } else {
 
-  function back() {
-    setStep(step - 1)
-  }
+      const score = Math.round((yesCount / 50) * 100)
 
-  function runAssessment() {
+      const gdpr = yesCount < 20 ? 1 : 0
+      const auth = yesCount < 30 ? 1 : 0
+      const security = yesCount < 40 ? 1 : 0
+      const total = gdpr + auth + security
 
-    let score = 100
-
-    let gdprFine = 0
-    let authFine = 0
-    let securityFine = 0
-
-    const risky = (q:string) => answers[q] === "no"
-
-    if (risky("customerData")) {
-      score -= 10
-      gdprFine += 10000
+      window.location.href =
+        `/dashboard?score=${score}&gdpr=${gdpr}&auth=${auth}&security=${security}&total=${total}`
     }
-
-    if (risky("mfa")) {
-      score -= 20
-      authFine += 10000
-    }
-
-    if (risky("encryption")) {
-      score -= 20
-      gdprFine += 15000
-    }
-
-    if (risky("backups")) {
-      score -= 10
-      securityFine += 5000
-    }
-
-    if (risky("incidentPlan")) {
-      score -= 10
-      securityFine += 5000
-    }
-
-    if (risky("monitoring")) {
-      score -= 10
-      securityFine += 5000
-    }
-
-    if (score < 0) score = 0
-
-    const totalFine = gdprFine + authFine + securityFine
-
-    router.push(
-      `/dashboard?score=${score}&gdpr=${gdprFine}&auth=${authFine}&security=${securityFine}&total=${totalFine}`
-    )
   }
 
   return (
-    <div className="min-h-screen bg-white text-black p-8">
+    <div style={{
+      minHeight: "100vh",
+      backgroundColor: "white",
+      color: "black",
+      padding: "40px",
+      fontFamily: "sans-serif"
+    }}>
 
-      <h1 className="text-2xl font-bold mb-6">
+      <h1 style={{ fontSize: "32px", fontWeight: "bold" }}>
         Compliance Assessment
       </h1>
 
-      <p className="mb-6">
-        Step {step} of 5
+      <p style={{ marginTop: "10px" }}>
+        Page {page + 1} of 5
       </p>
 
-      <div className="max-w-xl space-y-4">
+      <div style={{ marginTop: "30px" }}>
 
-        {step === 1 && (
-          <>
-            <select onChange={(e)=>updateAnswer("customerData",e.target.value)} className="border p-2 w-full">
-              <option>Do you process customer personal data?</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
+        {currentQuestions.map((q, i) => (
+          <div key={i} style={{ marginBottom: "25px" }}>
 
-            <select onChange={(e)=>updateAnswer("international",e.target.value)} className="border p-2 w-full">
-              <option>Do you operate internationally?</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </>
-        )}
+            <p style={{ marginBottom: "10px" }}>
+              {start + i + 1}. {q}
+            </p>
 
-        {step === 2 && (
-          <>
-            <select onChange={(e)=>updateAnswer("mfa",e.target.value)} className="border p-2 w-full">
-              <option>Do you use Multi‑Factor Authentication?</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-
-            <select onChange={(e)=>updateAnswer("passwords",e.target.value)} className="border p-2 w-full">
-              <option>Are strong passwords enforced?</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </>
-        )}
-
-        {step === 3 && (
-          <>
-            <select onChange={(e)=>updateAnswer("encryption",e.target.value)} className="border p-2 w-full">
-              <option>Is customer data encrypted?</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-
-            <select onChange={(e)=>updateAnswer("accessControl",e.target.value)} className="border p-2 w-full">
-              <option>Do you restrict access to sensitive data?</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </>
-        )}
-
-        {step === 4 && (
-          <>
-            <select onChange={(e)=>updateAnswer("monitoring",e.target.value)} className="border p-2 w-full">
-              <option>Do you monitor systems for suspicious activity?</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-
-            <select onChange={(e)=>updateAnswer("training",e.target.value)} className="border p-2 w-full">
-              <option>Do employees receive security training?</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </>
-        )}
-
-        {step === 5 && (
-          <>
-            <select onChange={(e)=>updateAnswer("backups",e.target.value)} className="border p-2 w-full">
-              <option>Do you maintain secure backups?</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-
-            <select onChange={(e)=>updateAnswer("incidentPlan",e.target.value)} className="border p-2 w-full">
-              <option>Do you have an incident response plan?</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </>
-        )}
-
-        <div className="flex gap-3 mt-6">
-
-          {step > 1 && (
             <button
-              onClick={back}
-              className="border px-4 py-2"
+              onClick={answerYes}
+              style={{
+                marginRight: "10px",
+                padding: "8px 16px",
+                backgroundColor: "black",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer"
+              }}
             >
-              Back
+              Yes
             </button>
-          )}
 
-          {step < 5 && (
             <button
-              onClick={next}
-              className="bg-black text-white px-4 py-2"
+              style={{
+                padding: "8px 16px",
+                backgroundColor: "white",
+                color: "black",
+                border: "1px solid black",
+                borderRadius: "5px",
+                cursor: "pointer"
+              }}
             >
-              Next
+              No
             </button>
-          )}
 
-          {step === 5 && (
-            <button
-              onClick={runAssessment}
-              className="bg-black text-white px-4 py-2"
-            >
-              Run Assessment
-            </button>
-          )}
-
-        </div>
+          </div>
+        ))}
 
       </div>
+
+      <button
+        onClick={nextPage}
+        style={{
+          marginTop: "40px",
+          padding: "12px 25px",
+          backgroundColor: "black",
+          color: "white",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontSize: "16px"
+        }}
+      >
+        {page === 4 ? "Finish Assessment" : "Next Page"}
+      </button>
 
     </div>
   )
