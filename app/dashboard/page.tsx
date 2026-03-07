@@ -20,6 +20,13 @@ export default function Dashboard() {
     setTotal(params.get("total") || "0");
   }, []);
 
+  const gdprExposure = Number(gdpr) * 20000000
+const authExposure = Number(auth) * 50000
+const securityExposure = Number(security) * 75000
+
+const totalExposure =
+  gdprExposure + authExposure + securityExposure
+  
   return (
     <div style={{ padding: "40px", fontFamily: "sans-serif" }}>
       <h1 style={{ fontSize: "32px", fontWeight: "bold" }}>
@@ -57,13 +64,13 @@ export default function Dashboard() {
       <div style={{ marginTop: "40px" }}>
         <h2>Financial Risk Exposure</h2>
 
-        <p>GDPR Violations: £{Number(gdpr).toLocaleString()}</p>
-        <p>Authentication Violations: £{Number(auth).toLocaleString()}</p>
-        <p>Security Violations: £{Number(security).toLocaleString()}</p>
+        <p>GDPR Violations: £{gdprExposure.toLocaleString()}</p>
+<p>Authentication Violations: £{authExposure.toLocaleString()}</p>
+<p>Security Violations: £{securityExposure.toLocaleString()}</p>
 
-        <h3 style={{ marginTop: "10px" }}>
-          Total Exposure: £{Number(total).toLocaleString()}
-        </h3>
+<h3 style={{ marginTop: "10px" }}>
+  Total Exposure: £{totalExposure.toLocaleString()}
+</h3>
       </div>
 
       {/* Open Risks */}
@@ -106,7 +113,7 @@ export default function Dashboard() {
             type="checkbox"
             onChange={(e) => {
               if (e.target.checked)
-                setScore((prev) => (Number(prev) + 10).toString());
+                setScore((prev) => (Number(prev) + 2).toString());
             }}
           />
           Enable Multi‑Factor Authentication
@@ -119,7 +126,7 @@ export default function Dashboard() {
             type="checkbox"
             onChange={(e) => {
               if (e.target.checked)
-                setScore((prev) => (Number(prev) + 10).toString());
+               setScore((prev) => (Number(prev) + 2).toString());
             }}
           />
           Encrypt Customer Data
@@ -132,7 +139,7 @@ export default function Dashboard() {
             type="checkbox"
             onChange={(e) => {
               if (e.target.checked)
-                setScore((prev) => (Number(prev) + 10).toString());
+                setScore((prev) => (Number(prev) + 2).toString());
             }}
           />
           Implement Monitoring & Backups
