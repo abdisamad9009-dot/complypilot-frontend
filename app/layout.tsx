@@ -41,7 +41,7 @@ export default function RootLayout({ children }) {
 
             <Link href="/documents">Document Generation</Link>
 
-            <a href="https://ai.complypilot.uk">AI</a>
+            <a href="https://ai.complypilot.online">AI</a>
 
             <Link href="/risks">Current Risks</Link>
 
