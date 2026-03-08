@@ -3,56 +3,40 @@
 import { useRouter } from "next/navigation";
 
 export default function Documents() {
- const router = useRouter();
-  
- const generateDoc = (type: string) => {
-  router.push(`/chat?type=${encodeURIComponent(type)}`);
-};
+  const router = useRouter();
+
+  const generateDoc = (type: string) => {
+    router.push(`/chat?type=${encodeURIComponent(type)}`);
+  };
+
+  const Card = ({ title }: { title: string }) => (
+    <div className="border border-neutral-200 rounded-2xl p-8 mb-6 bg-white">
+      <h2 className="text-xl font-semibold text-black">{title}</h2>
+
+      <p className="text-neutral-500 mt-2 mb-6">
+        Status: Missing
+      </p>
+
+      <button
+        onClick={() => generateDoc(title)}
+        className="bg-black text-white px-6 py-3 rounded-xl hover:opacity-90 transition"
+      >
+        Generate with AI
+      </button>
+    </div>
+  );
 
   return (
-    <main className="min-h-screen bg-white p-10">
-      <h1 className="text-3xl font-semibold mb-10">Documents</h1>
+    <main className="min-h-screen bg-white p-12 max-w-3xl">
+      <h1 className="text-3xl font-semibold mb-10 text-black">
+        Document Generation
+      </h1>
 
-      {/* Security */}
-      <div className="border border-neutral-200 rounded-2xl p-8 mb-6">
-        <h2 className="text-xl font-medium text-black">Security Policy</h2>
-        <p className="text-neutral-500 mt-1 mb-6">Status: Missing</p>
+      <Card title="Security Policy" />
 
-        <button
-          onClick={() => generateDoc("Security Policy")}
-          className="bg-black text-white px-5 py-3 rounded-xl hover:opacity-90 transition"
-        >
-          Generate with AI
-        </button>
-      </div>
+      <Card title="Risk Assessment" />
 
-      {/* Risk */}
-      <div className="border border-neutral-200 rounded-2xl p-8 mb-6">
-        <h2 className="text-xl font-medium text-black">Risk Assessment</h2>
-        <p className="text-neutral-500 mt-1 mb-6">Status: Missing</p>
-
-        <button
-          onClick={() => generateDoc("Risk Assessment")}
-          className="bg-black text-white px-5 py-3 rounded-xl hover:opacity-90 transition"
-        >
-          Generate with AI
-        </button>
-      </div>
-
-      {/* GDPR */}
-      <div className="border border-neutral-200 rounded-2xl p-8">
-        <h2 className="text-xl font-medium text-black">GDPR Policy</h2>
-        <p className="text-neutral-500 mt-1 mb-6">Status: Missing</p>
-
-        <button
-          onClick={() => generateDoc("GDPR Policy")}
-          className="bg-black text-white px-5 py-3 rounded-xl hover:opacity-90 transition"
-        >
-          Generate with AI
-        </button>
-      </div>
+      <Card title="GDPR Policy" />
     </main>
   );
 }
-
-    
