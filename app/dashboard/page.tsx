@@ -130,6 +130,8 @@ export default function Dashboard() {
             View Compliance Tasks
           </button>
         </Link>
+        
+      </div>
 
       </div>
   );
