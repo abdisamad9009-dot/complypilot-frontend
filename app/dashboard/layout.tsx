@@ -1,62 +1,91 @@
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import Link from "next/link";
+
+export default function RootLayout({ children }) {
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-black flex">
+    <html>
+      <body
+        style={{
+          margin: 0,
+          fontFamily: "Inter, sans-serif",
+          display: "flex",
+          background: "#ffffff",
+          color: "#000",
+        }}
+      >
+        {/* Sidebar */}
+        <div
+          style={{
+            width: "260px",
+            minHeight: "100vh",
+            borderRight: "1px solid #e5e5e5",
+            padding: "32px 24px",
+            background: "#ffffff",
+          }}
+        >
+          <h1
+            style={{
+              fontSize: "20px",
+              fontWeight: 600,
+              marginBottom: "40px",
+              color: "#000",
+            }}
+          >
+            ComplyPilot
+          </h1>
 
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-black/10 p-6">
-        <div className="text-xl font-semibold tracking-tight mb-10">
-          ComplyPilot
+          <nav
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "18px",
+            }}
+          >
+            <Link href="/dashboard" style={link}>
+              Dashboard
+            </Link>
+
+            <Link href="/assessment" style={link}>
+              Assessment
+            </Link>
+
+            <Link href="/documents" style={link}>
+              Document Generation
+            </Link>
+
+            <a href="https://ai.complypilot.uk" style={link}>
+              AI
+            </a>
+
+            <Link href="/risks" style={link}>
+              Current Risks
+            </Link>
+
+            <Link href="/tasks" style={link}>
+              Priority Actions
+            </Link>
+          </nav>
         </div>
 
-        <nav className="space-y-2 text-sm font-medium">
-
-          <a
-            href="/dashboard"
-            className="block px-4 py-2 rounded-lg bg-slate-900 text-white"
-          >
-            Dashboard
-          </a>
-
-          <a
-            href="/chat"
-            className="block px-4 py-2 rounded-lg border border-black/10 hover:bg-slate-900 hover:text-white transition duration-200"
-          >
-            AI Chat
-          </a>
-
-          <a
-            href="/settings"
-            className="block px-4 py-2 rounded-lg border border-black/10 hover:bg-slate-900 hover:text-white transition duration-200"
-          >
-            Settings
-          </a>
-
-        </nav>
-      </aside>
-
-      {/* Main Area */}
-      <div className="flex-1">
-
-        {/* Top Bar */}
-        <div className="h-16 border-b border-black/10 flex items-center justify-between px-8 bg-white">
-          <span className="text-sm font-medium tracking-tight">
-            Dashboard
-          </span>
-          <span className="text-sm text-black/60">
-            Account
-          </span>
-        </div>
-
-        {/* Page Content */}
-        <div className="p-10">
+        {/* Main content */}
+        <div
+          style={{
+            flex: 1,
+            padding: "60px",
+            background: "#ffffff",
+          }}
+        >
           {children}
         </div>
-
-      </div>
-    </div>
+      </body>
+    </html>
   );
 }
+
+const link = {
+  color: "#000",
+  textDecoration: "none",
+  fontSize: "16px",
+  fontWeight: 500,
+  padding: "10px 12px",
+  borderRadius: "8px",
+};
