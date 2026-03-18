@@ -1,10 +1,16 @@
 import Link from "next/link";
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/assessment", label: "Assessment" },
   { href: "/documents", label: "Document Generation" },
-  { href: "https://ai.complypilot.online", label: "AI", external: true },
+  { href: "https://ai.complypilot.uk", label: "AI", external: true },
   { href: "/risks", label: "Current Risks" },
   { href: "/tasks", label: "Priority Actions" },
 ];
@@ -17,51 +23,72 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
+        className={inter.className}
         style={{
           margin: 0,
           background: "#f8fafc",
           color: "#0f172a",
-          fontFamily:
-            'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         }}
       >
         <div style={{ display: "flex", minHeight: "100vh" }}>
+
+          {/* SIDEBAR */}
           <aside
             style={{
-              width: "260px",
+              width: "280px",
               background: "#ffffff",
               borderRight: "1px solid #e2e8f0",
-              padding: "28px 18px",
-              boxSizing: "border-box",
+              padding: "28px 20px",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            <div
-              style={{
-                fontSize: "24px",
-                fontWeight: 800,
-                letterSpacing: "-0.03em",
-                color: "#0f172a",
-                marginBottom: "24px",
-              }}
-            >
-              ComplyPilot
+            {/* LOGO AREA */}
+            <div style={{ marginBottom: "32px" }}>
+              <div
+                style={{
+                  fontSize: "22px",
+                  fontWeight: 800,
+                  letterSpacing: "-0.03em",
+                }}
+              >
+                ComplyPilot
+              </div>
+
+              <div
+                style={{
+                  fontSize: "13px",
+                  color: "#64748b",
+                  marginTop: "6px",
+                }}
+              >
+                Compliance Platform
+              </div>
             </div>
 
+            {/* SECTION LABEL */}
             <div
               style={{
-                fontSize: "12px",
+                fontSize: "11px",
                 fontWeight: 700,
                 color: "#94a3b8",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
-                marginBottom: "10px",
-                paddingLeft: "10px",
+                marginBottom: "12px",
+                paddingLeft: "12px",
               }}
             >
               Platform
             </div>
 
-            <nav style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {/* NAV */}
+            <nav
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
               {navItems.map((item) =>
                 item.external ? (
                   <a key={item.label} href={item.href} style={navLink}>
@@ -74,17 +101,20 @@ export default function RootLayout({
                 )
               )}
             </nav>
+
           </aside>
 
+          {/* MAIN AREA */}
           <main
             style={{
               flex: 1,
-              padding: "32px",
+              padding: "40px",
               background: "#f8fafc",
             }}
           >
             {children}
           </main>
+
         </div>
       </body>
     </html>
@@ -94,9 +124,9 @@ export default function RootLayout({
 const navLink: React.CSSProperties = {
   color: "#0f172a",
   textDecoration: "none",
-  fontSize: "15px",
+  fontSize: "16px",
   fontWeight: 600,
-  padding: "12px 14px",
+  padding: "14px 16px",
   borderRadius: "12px",
   display: "block",
   background: "#ffffff",
