@@ -1,62 +1,92 @@
 import Link from "next/link";
 
-export default function RootLayout({ children }) {
+const navLinkStyle = {
+  color: "#111111",
+  textDecoration: "none",
+  fontSize: "15px",
+  fontWeight: 500,
+  padding: "12px 14px",
+  borderRadius: "10px",
+  display: "block",
+  marginBottom: "6px",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html>
+    <html lang="en">
       <body
         style={{
           margin: 0,
-          fontFamily: "sans-serif",
-          display: "flex",
-          background: "white",
-          color: "black"
+          background: "#ffffff",
+          color: "#111111",
+          fontFamily:
+            'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         }}
       >
-        {/* Sidebar */}
-        <div
-          style={{
-            width: "260px",
-            minHeight: "100vh",
-            borderRight: "1px solid #e5e5e5",
-            padding: "30px 20px",
-            background: "white"
-          }}
-        >
-          <h1 style={{ fontSize: "22px", marginBottom: "40px" }}>
-            ComplyPilot
-          </h1>
-
-          <nav
+        <div style={{ display: "flex", minHeight: "100vh" }}>
+          <aside
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-              fontSize: "18px",
-              fontWeight: "500"
+              width: "260px",
+              background: "#ffffff",
+              borderRight: "1px solid #e5e7eb",
+              padding: "28px 18px",
             }}
           >
-            <Link href="/dashboard">Dashboard</Link>
+            <div
+              style={{
+                fontSize: "22px",
+                fontWeight: 700,
+                color: "#111111",
+                marginBottom: "28px",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              ComplyPilot
+            </div>
 
-            <Link href="/assessment">Assessment</Link>
+            <nav>
+              <Link href="/dashboard" style={navLinkStyle}>
+                Dashboard
+              </Link>
 
-            <Link href="/documents">Document Generation</Link>
+              <Link href="/assessment" style={navLinkStyle}>
+                Assessment
+              </Link>
 
-            <a href="https://ai.complypilot.online">AI</a>
+              <Link href="/documents" style={navLinkStyle}>
+                Document Generation
+              </Link>
 
-            <Link href="/risks">Current Risks</Link>
+              <a
+                href="https://ai.complypilot.uk"
+                style={navLinkStyle}
+              >
+                AI
+              </a>
 
-            <Link href="/tasks">Priority Actions</Link>
-          </nav>
-        </div>
+              <Link href="/risks" style={navLinkStyle}>
+                Current Risks
+              </Link>
 
-        {/* Page Content */}
-        <div
-          style={{
-            flex: 1,
-            padding: "60px"
-          }}
-        >
-          {children}
+              <Link href="/tasks" style={navLinkStyle}>
+                Priority Actions
+              </Link>
+            </nav>
+          </aside>
+
+          <main
+            style={{
+              flex: 1,
+              background: "#ffffff",
+              padding: "48px",
+            }}
+          >
+            {children}
+          </main>
         </div>
       </body>
     </html>
