@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -56,7 +55,7 @@ export default function Documents() {
 
     const now = new Date();
     const next = new Date();
-    next.setDate(now.getDate() + 14); // change to 30 if needed
+    next.setDate(now.getDate() + 14);
 
     updatedDocs[index].status = "Completed";
     updatedDocs[index].lastGenerated = now;
@@ -70,7 +69,7 @@ export default function Documents() {
   return (
     <div>
       {/* HEADER */}
-      <div style={{ marginBottom: "28px" }}>
+      <div style={{ marginBottom: "32px" }}>
         <h1
           style={{
             fontSize: "36px",
@@ -98,7 +97,7 @@ export default function Documents() {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-          gap: "20px",
+          gap: "24px", 
         }}
       >
         {docs.map((doc, index) => (
@@ -106,14 +105,15 @@ export default function Documents() {
             key={doc.title}
             style={{
               background: "#ffffff",
-              border: "1px solid #e2e8f0",
+              border: "1px solid #e5e7eb", 
               borderRadius: "20px",
-              padding: "24px",
+              padding: "28px", 
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              minHeight: "240px",
-              boxShadow: "0 6px 20px rgba(15, 23, 42, 0.04)",
+              minHeight: "260px", 
+              boxShadow: "0 10px 30px rgba(15, 23, 42, 0.08)", 
+              transition: "all 0.2s ease",
             }}
           >
             {/* TOP */}
@@ -130,7 +130,7 @@ export default function Documents() {
 
               <p
                 style={{
-                  marginTop: "10px",
+                  marginTop: "12px",
                   color: "#64748b",
                   fontSize: "14px",
                   lineHeight: 1.6,
@@ -141,17 +141,18 @@ export default function Documents() {
             </div>
 
             {/* STATUS */}
-            <div style={{ marginTop: "16px" }}>
+            <div style={{ marginTop: "18px" }}>
               {doc.status === "Completed" ? (
                 <>
                   <span
                     style={{
                       background: "#DCFCE7",
                       color: "#166534",
-                      padding: "4px 10px",
+                      padding: "6px 12px", 
                       borderRadius: "999px",
                       fontSize: "12px",
-                      fontWeight: 500,
+                      fontWeight: 600,
+                      display: "inline-block",
                     }}
                   >
                     Completed
@@ -161,7 +162,7 @@ export default function Documents() {
                     style={{
                       fontSize: "12px",
                       color: "#6B7280",
-                      marginTop: "6px",
+                      marginTop: "8px",
                     }}
                   >
                     Last generated:{" "}
@@ -181,12 +182,13 @@ export default function Documents() {
               ) : (
                 <span
                   style={{
-                    background: "#F3F4F6",
-                    color: "#374151",
-                    padding: "4px 10px",
+                    background: "#f1f5f9",
+                    color: "#334155",
+                    padding: "6px 12px", 
                     borderRadius: "999px",
                     fontSize: "12px",
-                    fontWeight: 500,
+                    fontWeight: 600,
+                    display: "inline-block",
                   }}
                 >
                   Not Generated
@@ -198,14 +200,14 @@ export default function Documents() {
             <button
               onClick={() => generateDoc(index)}
               style={{
-                marginTop: "16px",
+                marginTop: "18px",
                 width: "100%",
                 background: "#0f172a",
                 color: "#ffffff",
                 border: "none",
                 padding: "12px",
-                borderRadius: "12px",
-                fontWeight: 600,
+                borderRadius: "10px", 
+                fontWeight: 700, 
                 fontSize: "14px",
                 cursor: "pointer",
               }}
