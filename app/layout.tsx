@@ -31,35 +31,33 @@ export default function RootLayout({
         }}
       >
         <div style={{ display: "flex", minHeight: "100vh" }}>
-
           {/* SIDEBAR */}
           <aside
             style={{
-              width: "280px",
+              width: "260px",
               background: "#ffffff",
               borderRight: "1px solid #e2e8f0",
-              padding: "28px 20px",
+              padding: "24px 16px",
               display: "flex",
               flexDirection: "column",
             }}
           >
-            {/* LOGO AREA */}
-            <div style={{ marginBottom: "32px" }}>
+            {/* LOGO */}
+            <div style={{ marginBottom: "28px" }}>
               <div
                 style={{
-                  fontSize: "22px",
-                  fontWeight: 800,
-                  letterSpacing: "-0.03em",
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  letterSpacing: "-0.01em",
                 }}
               >
                 ComplyPilot
               </div>
-
               <div
                 style={{
                   fontSize: "13px",
                   color: "#64748b",
-                  marginTop: "6px",
+                  marginTop: "4px",
                 }}
               >
                 Compliance Platform
@@ -70,12 +68,12 @@ export default function RootLayout({
             <div
               style={{
                 fontSize: "11px",
-                fontWeight: 700,
+                fontWeight: 600,
                 color: "#94a3b8",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
                 marginBottom: "12px",
-                paddingLeft: "12px",
+                paddingLeft: "8px",
               }}
             >
               Platform
@@ -86,7 +84,7 @@ export default function RootLayout({
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "10px",
+                gap: "8px",
               }}
             >
               {navItems.map((item) =>
@@ -101,20 +99,18 @@ export default function RootLayout({
                 )
               )}
             </nav>
-
           </aside>
 
-          {/* MAIN AREA */}
+          {/* MAIN */}
           <main
             style={{
               flex: 1,
-              padding: "40px",
+              padding: "24px",
               background: "#f8fafc",
             }}
           >
             {children}
           </main>
-
         </div>
       </body>
     </html>
@@ -124,11 +120,9 @@ export default function RootLayout({
 const navLink: React.CSSProperties = {
   color: "#0f172a",
   textDecoration: "none",
-  fontSize: "16px",
-  fontWeight: 600,
-  padding: "14px 16px",
-  borderRadius: "12px",
+  fontSize: "15px",
+  fontWeight: 500,
+  padding: "12px 14px",
+  borderRadius: "10px",
   display: "block",
-  background: "#ffffff",
-  border: "1px solid #f1f5f9",
 };
