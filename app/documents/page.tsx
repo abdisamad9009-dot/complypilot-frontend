@@ -9,34 +9,131 @@ export default function Documents() {
     router.push(`/chat?type=${encodeURIComponent(type)}`);
   };
 
-  const Card = ({ title }: { title: string }) => (
-    <div className="border border-neutral-200 rounded-2xl p-8 mb-6 bg-white">
-      <h2 className="text-xl font-semibold text-black">{title}</h2>
-
-      <p className="text-neutral-500 mt-2 mb-6">
-        Status: Missing
-      </p>
-
-      <button
-        onClick={() => generateDoc(title)}
-        className="bg-black text-white px-6 py-3 rounded-xl hover:opacity-90 transition"
-      >
-        Generate with AI
-      </button>
-    </div>
-  );
+  const docs = [
+    {
+      title: "Security Policy",
+      desc: "Define security controls, responsibilities, and internal policies.",
+      status: "Missing",
+    },
+    {
+      title: "Risk Assessment",
+      desc: "Identify, evaluate, and prioritise organisational risks.",
+      status: "Missing",
+    },
+    {
+      title: "GDPR Policy",
+      desc: "Ensure compliance with data protection and privacy regulations.",
+      status: "Missing",
+    },
+  ];
 
   return (
-    <main className="min-h-screen bg-white p-12 max-w-3xl">
-      <h1 className="text-3xl font-semibold mb-10 text-black">
-        Document Generation
-      </h1>
+    <div>
+      {/* HEADER */}
+      <div style={{ marginBottom: "28px" }}>
+        <h1
+          style={{
+            fontSize: "36px",
+            fontWeight: 800,
+            letterSpacing: "-0.03em",
+            margin: 0,
+          }}
+        >
+          Document Generation
+        </h1>
 
-      <Card title="Security Policy" />
+        <p
+          style={{
+            marginTop: "10px",
+            color: "#64748b",
+            fontSize: "16px",
+          }}
+        >
+          Generate compliance documents instantly using AI.
+        </p>
+      </div>
 
-      <Card title="Risk Assessment" />
+      {/* GRID */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          gap: "20px",
+        }}
+      >
+        {docs.map((doc) => (
+          <div
+            key={doc.title}
+            style={{
+              background: "#ffffff",
+              border: "1px solid #e2e8f0",
+              borderRadius: "20px",
+              padding: "24px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              minHeight: "220px",
+              boxShadow: "0 6px 20px rgba(15, 23, 42, 0.04)",
+            }}
+          >
+            {/* TOP */}
+            <div>
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  color: "#0f172a",
+                }}
+              >
+                {doc.title}
+              </h2>
 
-      <Card title="GDPR Policy" />
-    </main>
+              <p
+                style={{
+                  marginTop: "10px",
+                  color: "#64748b",
+                  fontSize: "14px",
+                  lineHeight: 1.6,
+                }}
+              >
+                {doc.desc}
+              </p>
+            </div>
+
+            {/* BOTTOM */}
+            <div style={{ marginTop: "20px" }}>
+              <div
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  color: "#94a3b8",
+                  marginBottom: "12px",
+                }}
+              >
+                Status: {doc.status}
+              </div>
+
+              <button
+                onClick={() => generateDoc(doc.title)}
+                style={{
+                  width: "100%",
+                  background: "#0f172a",
+                  color: "#ffffff",
+                  border: "none",
+                  padding: "12px",
+                  borderRadius: "12px",
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  cursor: "pointer",
+                }}
+              >
+                Generate with AI
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
