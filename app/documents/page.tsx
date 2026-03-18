@@ -1,31 +1,71 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Documents() {
   const router = useRouter();
 
-  const generateDoc = (type: string) => {
-    router.push(`/chat?type=${encodeURIComponent(type)}`);
-  };
-
-  const docs = [
+  const [docs, setDocs] = useState([
     {
-      title: "Security Policy",
+      title: "Information Security Policy",
       desc: "Define security controls, responsibilities, and internal policies.",
-      status: "Missing",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
     },
     {
-      title: "Risk Assessment",
+      title: "Risk Assessment Report",
       desc: "Identify, evaluate, and prioritise organisational risks.",
-      status: "Missing",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
     },
     {
-      title: "GDPR Policy",
+      title: "GDPR Compliance Policy",
       desc: "Ensure compliance with data protection and privacy regulations.",
-      status: "Missing",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
     },
-  ];
+    {
+      title: "Privacy Policy",
+      desc: "Set out how personal data is collected, used, and protected.",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
+    },
+    {
+      title: "Data Retention Policy",
+      desc: "Define how long company and customer data should be stored.",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
+    },
+    {
+      title: "Incident Response Plan",
+      desc: "Outline actions during a security or compliance incident.",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
+    },
+  ]);
+
+  const generateDoc = (index: number) => {
+    const updatedDocs = [...docs];
+
+    const now = new Date();
+    const next = new Date();
+    next.setDate(now.getDate() + 14); // change to 30 if needed
+
+    updatedDocs[index].status = "Completed";
+    updatedDocs[index].lastGenerated = now;
+    updatedDocs[index].nextDue = next;
+
+    setDocs(updatedDocs);
+
+    router.push(`/chat?type=${encodeURIComponent(updatedDocs[index].title)}`);
+  };
 
   return (
     <div>
@@ -49,7 +89,7 @@ export default function Documents() {
             fontSize: "16px",
           }}
         >
-          Generate compliance documents instantly using AI.
+          Generate and manage compliance documents.
         </p>
       </div>
 
@@ -57,11 +97,11 @@ export default function Documents() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
           gap: "20px",
         }}
       >
-        {docs.map((doc) => (
+        {docs.map((doc, index) => (
           <div
             key={doc.title}
             style={{
@@ -72,7 +112,7 @@ export default function Documents() {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              minHeight: "220px",
+              minHeight: "240px",
               boxShadow: "0 6px 20px rgba(15, 23, 42, 0.04)",
             }}
           >
@@ -83,7 +123,6 @@ export default function Documents() {
                   margin: 0,
                   fontSize: "20px",
                   fontWeight: 700,
-                  color: "#0f172a",
                 }}
               >
                 {doc.title}
@@ -101,36 +140,80 @@ export default function Documents() {
               </p>
             </div>
 
-            {/* BOTTOM */}
-            <div style={{ marginTop: "20px" }}>
-              <div
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  color: "#94a3b8",
-                  marginBottom: "12px",
-                }}
-              >
-                Status: {doc.status}
-              </div>
+            {/* STATUS */}
+            <div style={{ marginTop: "16px" }}>
+              {doc.status === "Completed" ? (
+                <>
+                  <span
+                    style={{
+                      background: "#DCFCE7",
+                      color: "#166534",
+                      padding: "4px 10px",
+                      borderRadius: "999px",
+                      fontSize: "12px",
+                      fontWeight: 500,
+                    }}
+                  >
+                    Completed
+                  </span>
 
-              <button
-                onClick={() => generateDoc(doc.title)}
-                style={{
-                  width: "100%",
-                  background: "#0f172a",
-                  color: "#ffffff",
-                  border: "none",
-                  padding: "12px",
-                  borderRadius: "12px",
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  cursor: "pointer",
-                }}
-              >
-                Generate with AI
-              </button>
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      color: "#6B7280",
+                      marginTop: "6px",
+                    }}
+                  >
+                    Last generated:{" "}
+                    {new Date(doc.lastGenerated).toLocaleDateString()}
+                  </p>
+
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      color: "#6B7280",
+                    }}
+                  >
+                    Next due:{" "}
+                    {new Date(doc.nextDue).toLocaleDateString()}
+                  </p>
+                </>
+              ) : (
+                <span
+                  style={{
+                    background: "#F3F4F6",
+                    color: "#374151",
+                    padding: "4px 10px",
+                    borderRadius: "999px",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                  }}
+                >
+                  Not Generated
+                </span>
+              )}
             </div>
+
+            {/* BUTTON */}
+            <button
+              onClick={() => generateDoc(index)}
+              style={{
+                marginTop: "16px",
+                width: "100%",
+                background: "#0f172a",
+                color: "#ffffff",
+                border: "none",
+                padding: "12px",
+                borderRadius: "12px",
+                fontWeight: 600,
+                fontSize: "14px",
+                cursor: "pointer",
+              }}
+            >
+              {doc.status === "Completed"
+                ? "Regenerate"
+                : "Generate with AI"}
+            </button>
           </div>
         ))}
       </div>
