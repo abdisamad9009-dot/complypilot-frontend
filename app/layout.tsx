@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-inter",
 });
 
 const navItems = [
@@ -22,14 +22,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={inter.className}
-        style={{
-          margin: 0,
-          background: "#f8fafc",
-          color: "#0f172a",
-        }}
-      >
+     <body
+  className={inter.variable}
+  style={{
+    margin: 0,
+    background: "#f8fafc",
+    color: "#0f172a",
+    fontFamily: "var(--font-inter)", // 👈 THIS locks it in
+  }}
+>
         <div style={{ display: "flex", minHeight: "100vh" }}>
           {/* SIDEBAR */}
           <aside
