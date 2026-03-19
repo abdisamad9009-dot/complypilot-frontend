@@ -10,7 +10,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/assessment", label: "Assessment" },
   { href: "/documents", label: "Document Generation" },
-  { href: "https://ai.complypilot.uk", label: "AI", external: true },
+  { href: "https://ai.complypilot.online", label: "AI", external: true },
   { href: "/risks", label: "Current Risks" },
   { href: "/tasks", label: "Priority Actions" },
 ];
