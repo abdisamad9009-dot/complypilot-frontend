@@ -13,7 +13,8 @@ export default function RootLayout({
         className={inter.className}
         style={{
           margin: 0,
-          background: "#f3f4f6", // light grey app background
+          background: "#f3f4f6",
+          minHeight: "100vh",
         }}
       >
         {children}
