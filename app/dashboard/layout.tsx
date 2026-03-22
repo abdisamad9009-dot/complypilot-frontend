@@ -1,89 +1,69 @@
 import Link from "next/link";
 
-export default function RootLayout({ children }) {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html>
-      <body
+    <div
+      style={{
+        display: "flex",
+        minHeight: "100vh",
+      }}
+    >
+      {/* Sidebar */}
+      <div
         style={{
-          margin: 0,
-          display: "flex",
+          width: "260px",
+          borderRight: "1px solid #e5e7eb",
+          padding: "32px 24px",
           background: "#ffffff",
-          color: "#000",
         }}
       >
-        {/* Sidebar */}
-        <div
+        <h1
           style={{
-            width: "260px",
-            minHeight: "100vh",
-            borderRight: "1px solid #e5e5e5",
-            padding: "32px 24px",
-            background: "#ffffff",
+            fontSize: "20px",
+            fontWeight: 600,
+            marginBottom: "40px",
           }}
         >
-          <h1
-            style={{
-              fontSize: "20px",
-              fontWeight: 600,
-              marginBottom: "40px",
-              color: "#000",
-            }}
-          >
-            ComplyPilot
-          </h1>
+          ComplyPilot
+        </h1>
 
-          <nav
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "18px",
-            }}
-          >
-            <Link href="/dashboard" style={link}>
-              Dashboard
-            </Link>
-
-            <Link href="/assessment" style={link}>
-              Assessment
-            </Link>
-
-            <Link href="/documents" style={link}>
-              Document Generation
-            </Link>
-
-            <a href="https://ai.complypilot.uk" style={link}>
-              AI
-            </a>
-
-            <Link href="/risks" style={link}>
-              Current Risks
-            </Link>
-
-            <Link href="/tasks" style={link}>
-              Priority Actions
-            </Link>
-          </nav>
-        </div>
-
-        {/* Main content */}
-        <div
+        <nav
           style={{
-            flex: 1,
-            padding: "60px",
-            background: "#ffffff",
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
           }}
         >
-          {children}
-        </div>
-      </body>
-    </html>
+          <Link href="/dashboard" style={link}>Dashboard</Link>
+          <Link href="/assessment" style={link}>Assessment</Link>
+          <Link href="/documents" style={link}>Document Generation</Link>
+          <a href="https://ai.complypilot.uk" style={link}>AI</a>
+          <Link href="/risks" style={link}>Current Risks</Link>
+          <Link href="/tasks" style={link}>Priority Actions</Link>
+        </nav>
+      </div>
+
+      {/* Main content */}
+      <div
+        style={{
+          flex: 1,
+          padding: "40px",
+        }}
+      >
+        {children}
+      </div>
+    </div>
   );
 }
 
 const link = {
-  color: "#000",
+  color: "#111827",
   textDecoration: "none",
-  fontSize: "16px",
+  fontSize: "15px",
   fontWeight: 500,
   padding: "10px 12px",
   borderRadius: "8px",
