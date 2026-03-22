@@ -10,17 +10,19 @@ export default function DashboardLayout({
       style={{
         display: "flex",
         minHeight: "100vh",
-        background: "#f3f4f6", 
+        background: "#f3f4f6",
       }}
     >
       {/* Sidebar */}
       <div
         style={{
           width: "260px",
-          padding: "32px 24px",
           background: "#ffffff",
-          boxShadow: "2px 0 8px rgba(0,0,0,0.05)", 
-          zIndex: 10,
+          padding: "32px 24px",
+          boxShadow: "4px 0 12px rgba(0,0,0,0.08)", // 👈 STRONGER SHADOW (you wanted this)
+          position: "sticky",
+          top: 0,
+          height: "100vh", // 👈 FORCES FULL HEIGHT
         }}
       >
         <h1
@@ -49,12 +51,11 @@ export default function DashboardLayout({
         </nav>
       </div>
 
-      {/* Main content */}
+      {/* Main */}
       <div
         style={{
           flex: 1,
           padding: "40px",
-          minHeight: "100vh", 
         }}
       >
         {children}
