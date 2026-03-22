@@ -10,15 +10,17 @@ export default function DashboardLayout({
       style={{
         display: "flex",
         minHeight: "100vh",
+        background: "#f3f4f6", 
       }}
     >
       {/* Sidebar */}
       <div
         style={{
           width: "260px",
-          borderRight: "1px solid #e5e7eb",
           padding: "32px 24px",
           background: "#ffffff",
+          boxShadow: "2px 0 8px rgba(0,0,0,0.05)", 
+          zIndex: 10,
         }}
       >
         <h1
@@ -52,6 +54,7 @@ export default function DashboardLayout({
         style={{
           flex: 1,
           padding: "40px",
+          minHeight: "100vh", 
         }}
       >
         {children}
