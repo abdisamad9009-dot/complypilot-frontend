@@ -17,37 +17,65 @@ export default function DashboardLayout({
       <div
         style={{
           width: "260px",
-          background: "#ffffff",
-          padding: "32px 24px",
-          boxShadow: "4px 0 12px rgba(0,0,0,0.08)", // 👈 STRONGER SHADOW (you wanted this)
+          background: "#f9fafb",
+          padding: "32px 20px",
+          boxShadow: "4px 0 12px rgba(0,0,0,0.08)",
           position: "sticky",
           top: 0,
-          height: "100vh", // 👈 FORCES FULL HEIGHT
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        <h1
-          style={{
-            fontSize: "20px",
-            fontWeight: 600,
-            marginBottom: "40px",
-          }}
-        >
-          ComplyPilot
-        </h1>
+        <div style={{ marginBottom: "32px" }}>
+          <h1
+            style={{
+              fontSize: "20px",
+              fontWeight: 600,
+              marginBottom: "4px",
+              color: "#111827",
+              marginTop: 0,
+            }}
+          >
+            ComplyPilot
+          </h1>
+          <p
+            style={{
+              fontSize: "12px",
+              color: "#6b7280",
+              margin: 0,
+            }}
+          >
+            Compliance Software
+          </p>
+        </div>
 
         <nav
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "16px",
+            gap: "12px",
+            flex: 1,
           }}
         >
-          <Link href="/dashboard" style={link}>Dashboard</Link>
-          <Link href="/assessment" style={link}>Assessment</Link>
-          <Link href="/documents" style={link}>Document Generation</Link>
-          <a href="https://ai.complypilot.uk" style={link}>AI</a>
-          <Link href="/risks" style={link}>Current Risks</Link>
-          <Link href="/tasks" style={link}>Priority Actions</Link>
+          <Link href="/dashboard" style={link}>
+            Dashboard
+          </Link>
+          <Link href="/assessment" style={link}>
+            Assessment
+          </Link>
+          <Link href="/documents" style={link}>
+            Document Generation
+          </Link>
+          <a href="https://ai.complypilot.uk" style={link}>
+            AI
+          </a>
+          <Link href="/risks" style={link}>
+            Current Risks
+          </Link>
+          <Link href="/tasks" style={link}>
+            Priority Actions
+          </Link>
         </nav>
       </div>
 
@@ -69,6 +97,9 @@ const link = {
   textDecoration: "none",
   fontSize: "15px",
   fontWeight: 500,
-  padding: "10px 12px",
-  borderRadius: "8px",
+  padding: "12px 14px",
+  borderRadius: "10px",
+  background: "#f3f4f6",
+  boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+  display: "block",
 };
