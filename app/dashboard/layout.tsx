@@ -54,7 +54,7 @@ export default function DashboardLayout({
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "96px",
+            gap: "72px",
             flex: 1,
           }}
         >
