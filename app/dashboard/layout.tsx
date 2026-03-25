@@ -54,28 +54,39 @@ export default function DashboardLayout({
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "24px",
+            justifyContent: "space-between",
             flex: 1,
           }}
         >
-          <Link href="/dashboard" style={link}>
-            Dashboard
-          </Link>
-          <Link href="/assessment" style={link}>
-            Assessment
-          </Link>
-          <Link href="/documents" style={link}>
-            Document Generation
-          </Link>
-          <a href="https://ai.complypilot.uk" style={link}>
-            AI
-          </a>
-          <Link href="/risks" style={link}>
-            Current Risks
-          </Link>
-          <Link href="/tasks" style={link}>
-            Priority Actions
-          </Link>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+            }}
+          >
+            <Link href="/dashboard" style={link}>
+              Dashboard
+            </Link>
+            <Link href="/assessment" style={link}>
+              Assessment
+            </Link>
+            <Link href="/documents" style={link}>
+              Document Generation
+            </Link>
+            <a href="https://ai.complypilot.uk" style={link}>
+              AI
+            </a>
+            <Link href="/risks" style={link}>
+              Current Risks
+            </Link>
+          </div>
+
+          <div>
+            <Link href="/tasks" style={link}>
+              Priority Actions
+            </Link>
+          </div>
         </nav>
       </div>
 
