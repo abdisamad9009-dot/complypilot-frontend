@@ -1,8 +1,9 @@
 "use client"
 
+import { Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 
-export default function TasksPage() {
+function TasksContent() {
   const searchParams = useSearchParams()
 
   const gdpr = JSON.parse(decodeURIComponent(searchParams.get("gdprIssues") || "[]"))
@@ -11,25 +12,13 @@ export default function TasksPage() {
 
   const allRisks = [...gdpr, ...auth, ...security]
 
-  const actions = allRisks.map(risk => {
-    if (risk.includes("privacy policy"))
-      return "Create and implement a GDPR-compliant privacy policy"
-
-    if (risk.includes("multi-factor"))
-      return "Enable multi-factor authentication across all accounts"
-
-    if (risk.includes("encrypted"))
-      return "Implement encryption for sensitive data"
-
-    if (risk.includes("password"))
-      return "Enforce strong password policies"
-
-    if (risk.includes("monitoring"))
-      return "Set up monitoring for unauthorized access"
-
-    if (risk.includes("firewall"))
-      return "Implement firewall protection"
-
+  const actions = allRisks.map((risk) => {
+    if (risk.includes("privacy policy")) return "Create and implement a GDPR-compliant privacy policy"
+    if (risk.includes("multi-factor")) return "Enable multi-factor authentication across all accounts"
+    if (risk.includes("encrypted")) return "Implement encryption for sensitive data"
+    if (risk.includes("password")) return "Enforce strong password policies"
+    if (risk.includes("monitoring")) return "Set up monitoring for unauthorized access"
+    if (risk.includes("firewall")) return "Implement firewall protection"
     return "Review and resolve: " + risk
   })
 
@@ -58,5 +47,13 @@ export default function TasksPage() {
         ))
       )}
     </div>
+  )
+}
+
+export default function TasksPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <TasksContent />
+    </Suspense>
   )
 }
