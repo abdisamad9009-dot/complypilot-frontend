@@ -57,8 +57,8 @@ export default function AssessmentPage() {
 
   const [page, setPage] = useState(0)
   const [answers, setAnswers] = useState({})
-
   const questionsPerPage = 10
+
   const start = page * questionsPerPage
   const currentQuestions = questions.slice(start, start + questionsPerPage)
 
@@ -72,25 +72,26 @@ export default function AssessmentPage() {
   function nextPage() {
     if (page < 4) {
       setPage(page + 1)
-      window.scrollTo(0,0)
+      window.scrollTo(0, 0)
     } else {
 
-      // ✅ NEW LOGIC STARTS HERE
-      let gdpr = 0
-      let auth = 0
-      let security = 0
+      // ✅ CHANGE: use ARRAYS instead of numbers
+      let gdpr = []
+      let auth = []
+      let security = []
 
       Object.entries(answers).forEach(([index, value]) => {
         if (value === "no") {
           const i = Number(index)
 
-          // GDPR
-          if ([0, 3, 20, 37, 40, 48].includes(i)) gdpr++
+          if ([0, 3, 20, 37, 40, 48].includes(i)) {
+            gdpr.push(questions[i])
+          }
 
-          // Auth
-          if ([2, 7, 10, 14, 15, 16, 43, 44].includes(i)) auth++
+          if ([2, 7, 10, 14, 15, 16, 43, 44].includes(i)) {
+            auth.push(questions[i])
+          }
 
-          // Security
           if (
             [
               1, 4, 5, 6, 8, 9, 11, 12, 13, 17, 18, 19,
@@ -98,7 +99,9 @@ export default function AssessmentPage() {
               31, 32, 33, 34, 35, 36, 38, 39, 41, 42,
               45, 46, 47, 49
             ].includes(i)
-          ) security++
+          ) {
+            security.push(questions[i])
+          }
         }
       })
 
@@ -107,69 +110,70 @@ export default function AssessmentPage() {
 
       const score = Math.round((yesCount / 50) * 100)
 
-      const total = gdpr + auth + security
+      // ✅ NEW STORAGE (this is what you asked for)
+      localStorage.setItem("complianceScore", String(score))
+      localStorage.setItem("gdprIssues", JSON.stringify(gdpr))
+      localStorage.setItem("authIssues", JSON.stringify(auth))
+      localStorage.setItem("securityIssues", JSON.stringify(security))
 
-      // ✅ NEW LOGIC ENDS HERE
-
-      localStorage.setItem("complianceScore", score)
-
+      // ✅ UPDATED REDIRECT (uses lengths)
       window.location.href =
-        `/dashboard?score=${score}&gdpr=${gdpr}&auth=${auth}&security=${security}&total=${total}`
+        `/dashboard?score=${score}&gdpr=${gdpr.length}&auth=${auth.length}&security=${security.length}&total=${gdpr.length + auth.length + security.length}`
     }
   }
 
   return (
     <div style={{
-      minHeight:"100vh",
-      background:"white",
-      color:"black",
-      padding:"40px",
-      fontFamily:"sans-serif"
+      minHeight: "100vh",
+      background: "white",
+      color: "black",
+      padding: "40px",
+      fontFamily: "sans-serif"
     }}>
-      <h1 style={{fontSize:"32px",fontWeight:"bold"}}>
+      <h1 style={{ fontSize: "32px", fontWeight: "bold" }}>
         Compliance Assessment
       </h1>
 
-      <p style={{marginTop:"10px"}}>
-        Page {page+1} of 5
+      <p style={{ marginTop: "10px" }}>
+        Page {page + 1} of 5
       </p>
 
-      <div style={{marginTop:"30px"}}>
-        {currentQuestions.map((q,i)=>{
-          const index = start+i
+      <div style={{ marginTop: "30px" }}>
+        {currentQuestions.map((q, i) => {
+          const index = start + i
           const selected = answers[index]
 
-          return(
-            <div key={i} style={{marginBottom:"25px"}}>
-              <p style={{marginBottom:"10px"}}>
-                {index+1}. {q}
+          return (
+            <div key={i} style={{ marginBottom: "25px" }}>
+              <p style={{ marginBottom: "10px" }}>
+                {index + 1}. {q}
               </p>
 
               <button
-              onClick={()=>setAnswer(index,"yes")}
-              style={{
-                marginRight:"10px",
-                padding:"8px 16px",
-                background:selected==="yes"?"black":"white",
-                color:selected==="yes"?"white":"black",
-                border:"1px solid black",
-                borderRadius:"5px",
-                cursor:"pointer"
-              }}
+                onClick={() => setAnswer(index, "yes")}
+                style={{
+                  marginRight: "10px",
+                  padding: "8px 16px",
+                  background: selected === "yes" ? "black" : "white",
+                  color: selected === "yes" ? "white" : "black",
+                  border: "1px solid black",
+                  borderRadius: "5px",
+                  cursor: "pointer"
+                }}
               >
                 Yes
               </button>
 
               <button
-              onClick={()=>setAnswer(index,"no")}
-              style={{
-                padding:"8px 16px",
-                background:selected==="no"?"black":"white",
-                color:selected==="no"?"white":"black",
-                border:"1px solid black",
-                borderRadius:"5px",
-                cursor:"pointer"
-              }}
+                onClick={() => setAnswer(index, "no")}
+                style={{
+                  padding: "8px 16px",
+                  background: selected === "no" ? "black" : "white",
+                  color: selected === "no" ? "white" : "black",
+                  border: "1px solid black",
+                  borderRadius: "5px",
+                  cursor: "pointer"
+                }}
               >
                 No
               </button>
@@ -179,19 +183,19 @@ export default function AssessmentPage() {
       </div>
 
       <button
-      onClick={nextPage}
-      style={{
-        marginTop:"40px",
-        padding:"12px 25px",
-        background:"black",
-        color:"white",
-        border:"none",
-        borderRadius:"6px",
-        cursor:"pointer",
-        fontSize:"16px"
-      }}
+        onClick={nextPage}
+        style={{
+          marginTop: "40px",
+          padding: "12px 25px",
+          background: "black",
+          color: "white",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontSize: "16px"
+        }}
       >
-        {page===4 ? "Finish Assessment" : "Next Page"}
+        {page === 4 ? "Finish Assessment" : "Next Page"}
       </button>
     </div>
   )
