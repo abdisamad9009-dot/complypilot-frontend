@@ -1,39 +1,40 @@
+"use client"
+
+import { useSearchParams } from "next/navigation"
+
 export default function RisksPage() {
+  const searchParams = useSearchParams()
+
+  const gdpr = JSON.parse(decodeURIComponent(searchParams.get("gdprIssues") || "[]"))
+  const auth = JSON.parse(decodeURIComponent(searchParams.get("authIssues") || "[]"))
+  const security = JSON.parse(decodeURIComponent(searchParams.get("securityIssues") || "[]"))
+
+  const allRisks = [...gdpr, ...auth, ...security]
+
   return (
-    <div className="min-h-screen bg-slate-50 p-10">
+    <div style={{ padding: "40px" }}>
+      <h1 style={{ fontSize: "28px", marginBottom: "20px" }}>
+        Open Risks
+      </h1>
 
-      <div className="max-w-4xl mx-auto space-y-6">
-
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Open Risks
-        </h1>
-
-        <div className="bg-white border border-black/10 rounded-xl p-6">
-
-          <ul className="space-y-4 text-black/80">
-
-            <li className="flex items-center gap-3">
-              ⚠️ Missing Data Retention Policy
-            </li>
-
-            <li className="flex items-center gap-3">
-              ⚠️ Two‑factor authentication not enabled
-            </li>
-
-            <li className="flex items-center gap-3">
-              ⚠️ Privacy policy requires update
-            </li>
-
-            <li className="flex items-center gap-3">
-              ⚠️ No documented access control policy
-            </li>
-
-          </ul>
-
-        </div>
-
-      </div>
-
+      {allRisks.length === 0 ? (
+        <p>No active risks identified</p>
+      ) : (
+        allRisks.map((risk, i) => (
+          <div
+            key={i}
+            style={{
+              padding: "14px",
+              background: "#f9fafb",
+              marginBottom: "12px",
+              borderRadius: "8px",
+              border: "1px solid #e5e7eb"
+            }}
+          >
+            {risk}
+          </div>
+        ))
+      )}
     </div>
   )
 }
