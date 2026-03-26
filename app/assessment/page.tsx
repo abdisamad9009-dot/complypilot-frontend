@@ -1,9 +1,7 @@
 "use client"
-
 import { useState } from "react"
 
 export default function AssessmentPage() {
-
   const questions = [
     "Do you have a privacy policy?",
     "Do you encrypt stored user data?",
@@ -72,32 +70,55 @@ export default function AssessmentPage() {
   }
 
   function nextPage() {
-
     if (page < 4) {
       setPage(page + 1)
       window.scrollTo(0,0)
     } else {
 
+      // ✅ NEW LOGIC STARTS HERE
+      let gdpr = 0
+      let auth = 0
+      let security = 0
+
+      Object.entries(answers).forEach(([index, value]) => {
+        if (value === "no") {
+          const i = Number(index)
+
+          // GDPR
+          if ([0, 3, 20, 37, 40, 48].includes(i)) gdpr++
+
+          // Auth
+          if ([2, 7, 10, 14, 15, 16, 43, 44].includes(i)) auth++
+
+          // Security
+          if (
+            [
+              1, 4, 5, 6, 8, 9, 11, 12, 13, 17, 18, 19,
+              21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+              31, 32, 33, 34, 35, 36, 38, 39, 41, 42,
+              45, 46, 47, 49
+            ].includes(i)
+          ) security++
+        }
+      })
+
       const yesCount =
         Object.values(answers).filter(a => a === "yes").length
 
-      const score = yesCount * 2
-
-      const gdpr = yesCount < 20 ? 1 : 0
-      const auth = yesCount < 30 ? 1 : 0
-      const security = yesCount < 40 ? 1 : 0
+      const score = Math.round((yesCount / 50) * 100)
 
       const total = gdpr + auth + security
+
+      // ✅ NEW LOGIC ENDS HERE
 
       localStorage.setItem("complianceScore", score)
 
       window.location.href =
-      `/dashboard?score=${score}&gdpr=${gdpr}&auth=${auth}&security=${security}&total=${total}`
+        `/dashboard?score=${score}&gdpr=${gdpr}&auth=${auth}&security=${security}&total=${total}`
     }
   }
 
   return (
-
     <div style={{
       minHeight:"100vh",
       background:"white",
@@ -105,7 +126,6 @@ export default function AssessmentPage() {
       padding:"40px",
       fontFamily:"sans-serif"
     }}>
-
       <h1 style={{fontSize:"32px",fontWeight:"bold"}}>
         Compliance Assessment
       </h1>
@@ -115,16 +135,12 @@ export default function AssessmentPage() {
       </p>
 
       <div style={{marginTop:"30px"}}>
-
         {currentQuestions.map((q,i)=>{
-
           const index = start+i
           const selected = answers[index]
 
           return(
-
             <div key={i} style={{marginBottom:"25px"}}>
-
               <p style={{marginBottom:"10px"}}>
                 {index+1}. {q}
               </p>
@@ -157,13 +173,9 @@ export default function AssessmentPage() {
               >
                 No
               </button>
-
             </div>
-
           )
-
         })}
-
       </div>
 
       <button
@@ -181,7 +193,6 @@ export default function AssessmentPage() {
       >
         {page===4 ? "Finish Assessment" : "Next Page"}
       </button>
-
     </div>
   )
 }
