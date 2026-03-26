@@ -1,105 +1,62 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 
 export default function TasksPage() {
+  const searchParams = useSearchParams()
 
-  const [score, setScore] = useState(0)
+  const gdpr = JSON.parse(decodeURIComponent(searchParams.get("gdprIssues") || "[]"))
+  const auth = JSON.parse(decodeURIComponent(searchParams.get("authIssues") || "[]"))
+  const security = JSON.parse(decodeURIComponent(searchParams.get("securityIssues") || "[]"))
 
-  const [tasks, setTasks] = useState([
-    { name: "Enable Multi‑Factor Authentication", done: false },
-    { name: "Encrypt customer data", done: false },
-    { name: "Implement monitoring and backups", done: false }
-  ])
+  const allRisks = [...gdpr, ...auth, ...security]
 
-  useEffect(() => {
-    const savedScore = localStorage.getItem("complianceScore")
-    if (savedScore) {
-      setScore(Number(savedScore))
-    }
-  }, [])
+  const actions = allRisks.map(risk => {
+    if (risk.includes("privacy policy"))
+      return "Create and implement a GDPR-compliant privacy policy"
 
-  function completeTask(index) {
+    if (risk.includes("multi-factor"))
+      return "Enable multi-factor authentication across all accounts"
 
-    const updatedTasks = [...tasks]
+    if (risk.includes("encrypted"))
+      return "Implement encryption for sensitive data"
 
-    if (!updatedTasks[index].done) {
+    if (risk.includes("password"))
+      return "Enforce strong password policies"
 
-      updatedTasks[index].done = true
+    if (risk.includes("monitoring"))
+      return "Set up monitoring for unauthorized access"
 
-      const newScore = score + 2
+    if (risk.includes("firewall"))
+      return "Implement firewall protection"
 
-      setScore(newScore)
-
-      localStorage.setItem("complianceScore", newScore)
-    }
-
-    setTasks(updatedTasks)
-  }
+    return "Review and resolve: " + risk
+  })
 
   return (
-    <div className="min-h-screen bg-white text-black p-8 space-y-10">
-
-      <h1 className="text-3xl font-bold">
-        Compliance Tasks
+    <div style={{ padding: "40px" }}>
+      <h1 style={{ fontSize: "28px", marginBottom: "20px" }}>
+        Priority Actions
       </h1>
 
-      <div>
-        <p className="text-sm text-gray-500">
-          Compliance Score
-        </p>
-
-        <div className="text-5xl font-bold">
-          {score}%
-        </div>
-
-        <Link href="/assessment">
-          <button className="mt-4 bg-black text-white px-4 py-2 rounded">
-            Run Assessment
-          </button>
-        </Link>
-      </div>
-
-      <div>
-
-        <h2 className="text-xl font-semibold mb-3">
-          Compliance Checklist
-        </h2>
-
-        <ul className="space-y-3">
-
-          {tasks.map((task, index) => (
-
-            <li
-              key={index}
-              className="flex justify-between items-center border p-3 rounded"
-            >
-
-              <span className={task.done ? "line-through text-gray-400" : ""}>
-                {task.name}
-              </span>
-
-              <button
-                onClick={() => completeTask(index)}
-                disabled={task.done}
-                className={
-                  task.done
-                    ? "bg-gray-300 text-gray-600 px-3 py-1 rounded"
-                    : "bg-black text-white px-3 py-1 rounded"
-                }
-              >
-                {task.done ? "Completed" : "Complete"}
-              </button>
-
-            </li>
-
-          ))}
-
-        </ul>
-
-      </div>
-
+      {actions.length === 0 ? (
+        <p>No actions required</p>
+      ) : (
+        actions.map((action, i) => (
+          <div
+            key={i}
+            style={{
+              padding: "14px",
+              background: "#ecfdf5",
+              marginBottom: "12px",
+              borderRadius: "8px",
+              border: "1px solid #d1fae5"
+            }}
+          >
+            {action}
+          </div>
+        ))
+      )}
     </div>
   )
 }
