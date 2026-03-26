@@ -1,8 +1,9 @@
 "use client"
 
+import { Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 
-export default function RisksPage() {
+function RisksContent() {
   const searchParams = useSearchParams()
 
   const gdpr = JSON.parse(decodeURIComponent(searchParams.get("gdprIssues") || "[]"))
@@ -21,20 +22,25 @@ export default function RisksPage() {
         <p>No active risks identified</p>
       ) : (
         allRisks.map((risk, i) => (
-          <div
-            key={i}
-            style={{
-              padding: "14px",
-              background: "#f9fafb",
-              marginBottom: "12px",
-              borderRadius: "8px",
-              border: "1px solid #e5e7eb"
-            }}
-          >
+          <div key={i} style={{
+            padding: "14px",
+            background: "#f9fafb",
+            marginBottom: "12px",
+            borderRadius: "8px",
+            border: "1px solid #e5e7eb"
+          }}>
             {risk}
           </div>
         ))
       )}
     </div>
+  )
+}
+
+export default function RisksPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RisksContent />
+    </Suspense>
   )
 }
