@@ -57,8 +57,12 @@ export default function AssessmentPage() {
 
   const [page, setPage] = useState(0)
   const [answers, setAnswers] = useState({})
-  const questionsPerPage = 10
 
+  // ✅ NEW
+  const [businessName, setBusinessName] = useState("")
+  const [industry, setIndustry] = useState("")
+
+  const questionsPerPage = 10
   const start = page * questionsPerPage
   const currentQuestions = questions.slice(start, start + questionsPerPage)
 
@@ -74,8 +78,6 @@ export default function AssessmentPage() {
       setPage(page + 1)
       window.scrollTo(0, 0)
     } else {
-
-      // ✅ CHANGE: use ARRAYS instead of numbers
       let gdpr = []
       let auth = []
       let security = []
@@ -110,13 +112,16 @@ export default function AssessmentPage() {
 
       const score = Math.round((yesCount / 50) * 100)
 
-      // ✅ NEW STORAGE (this is what you asked for)
+      // ✅ SAVE EVERYTHING
       localStorage.setItem("complianceScore", String(score))
       localStorage.setItem("gdprIssues", JSON.stringify(gdpr))
       localStorage.setItem("authIssues", JSON.stringify(auth))
       localStorage.setItem("securityIssues", JSON.stringify(security))
 
-      // ✅ UPDATED REDIRECT (uses lengths)
+      // ✅ NEW
+      localStorage.setItem("businessName", businessName)
+      localStorage.setItem("industry", industry)
+
       window.location.href =
         `/dashboard?score=${score}&gdpr=${gdpr.length}&auth=${auth.length}&security=${security.length}&total=${gdpr.length + auth.length + security.length}`
     }
@@ -130,13 +135,52 @@ export default function AssessmentPage() {
       padding: "40px",
       fontFamily: "sans-serif"
     }}>
+
       <h1 style={{ fontSize: "32px", fontWeight: "bold" }}>
         Compliance Assessment
       </h1>
 
-      <p style={{ marginTop: "10px" }}>
-        Page {page + 1} of 5
-      </p>
+      {/* ✅ NEW INPUTS */}
+      {page === 0 && (
+        <div style={{ marginTop: "20px", marginBottom: "30px" }}>
+          <input
+            placeholder="Business Name"
+            value={businessName}
+            onChange={(e) => setBusinessName(e.target.value)}
+            style={{
+              display: "block",
+              marginBottom: "10px",
+              padding: "10px",
+              width: "300px",
+              border: "1px solid black",
+              borderRadius: "6px"
+            }}
+          />
+
+          <select
+            value={industry}
+            onChange={(e) => setIndustry(e.target.value)}
+            style={{
+              padding: "10px",
+              width: "300px",
+              border: "1px solid black",
+              borderRadius: "6px"
+            }}
+          >
+            <option value="">Select Industry</option>
+            <option value="SaaS">SaaS</option>
+            <option value="E-commerce">E-commerce</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Finance">Finance</option>
+            <option value="Law Firm">Law Firm</option>
+            <option value="Marketing Agency">Marketing Agency</option>
+            <option value="Education">Education</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      )}
+
+      <p>Page {page + 1} of 5</p>
 
       <div style={{ marginTop: "30px" }}>
         {currentQuestions.map((q, i) => {
