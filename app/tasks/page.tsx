@@ -1,26 +1,28 @@
 "use client"
+import { useEffect, useState } from "react"
 
-import { Suspense } from "react"
-import { useSearchParams } from "next/navigation"
+export default function TasksPage() {
+  const [actions, setActions] = useState<string[]>([])
 
-function TasksContent() {
-  const searchParams = useSearchParams()
+  useEffect(() => {
+    const gdpr = JSON.parse(localStorage.getItem("gdprIssues") || "[]")
+    const auth = JSON.parse(localStorage.getItem("authIssues") || "[]")
+    const security = JSON.parse(localStorage.getItem("securityIssues") || "[]")
 
-  const gdpr = JSON.parse(decodeURIComponent(searchParams.get("gdprIssues") || "[]"))
-  const auth = JSON.parse(decodeURIComponent(searchParams.get("authIssues") || "[]"))
-  const security = JSON.parse(decodeURIComponent(searchParams.get("securityIssues") || "[]"))
+    const allRisks = [...gdpr, ...auth, ...security]
 
-  const allRisks = [...gdpr, ...auth, ...security]
+    const mappedActions = allRisks.map((risk: string) => {
+      if (risk.includes("privacy policy")) return "Create and implement a GDPR-compliant privacy policy"
+      if (risk.includes("multi-factor")) return "Enable multi-factor authentication across all accounts"
+      if (risk.includes("encrypted")) return "Implement encryption for sensitive data"
+      if (risk.includes("password")) return "Enforce strong password policies"
+      if (risk.includes("monitoring")) return "Set up monitoring for unauthorized access"
+      if (risk.includes("firewall")) return "Implement firewall protection"
+      return "Review and resolve: " + risk
+    })
 
-  const actions = allRisks.map((risk) => {
-    if (risk.includes("privacy policy")) return "Create and implement a GDPR-compliant privacy policy"
-    if (risk.includes("multi-factor")) return "Enable multi-factor authentication across all accounts"
-    if (risk.includes("encrypted")) return "Implement encryption for sensitive data"
-    if (risk.includes("password")) return "Enforce strong password policies"
-    if (risk.includes("monitoring")) return "Set up monitoring for unauthorized access"
-    if (risk.includes("firewall")) return "Implement firewall protection"
-    return "Review and resolve: " + risk
-  })
+    setActions(mappedActions)
+  }, [])
 
   return (
     <div style={{ padding: "40px" }}>
@@ -47,13 +49,5 @@ function TasksContent() {
         ))
       )}
     </div>
-  )
-}
-
-export default function TasksPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <TasksContent />
-    </Suspense>
   )
 }
