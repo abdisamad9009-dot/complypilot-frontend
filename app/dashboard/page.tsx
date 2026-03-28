@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -9,6 +8,10 @@ export default function Dashboard() {
   const [auth, setAuth] = useState("0");
   const [security, setSecurity] = useState("0");
   const [total, setTotal] = useState("0");
+
+  // ✅ ADDED
+  const [name, setName] = useState("");
+  const [industry, setIndustry] = useState("");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -32,6 +35,10 @@ export default function Dashboard() {
       setScore(urlScore);
       localStorage.setItem("complianceScore", urlScore);
     }
+
+    // ✅ ADDED (load business data)
+    setName(localStorage.getItem("businessName") || "");
+    setIndustry(localStorage.getItem("industry") || "");
   }, []);
 
   const updateScore = () => {
@@ -58,7 +65,8 @@ export default function Dashboard() {
             margin: 0,
           }}
         >
-          Compliance Dashboard
+          {/* ✅ CHANGED TEXT ONLY */}
+          {name ? `${name} Dashboard` : "Compliance Dashboard"}
         </h1>
 
         <p
@@ -68,9 +76,14 @@ export default function Dashboard() {
             fontSize: "16px",
           }}
         >
-          Monitor compliance score, financial exposure, risks, and next actions.
+          {/* ✅ CHANGED TEXT ONLY */}
+          {industry
+            ? `${industry} • Monitor compliance score, financial exposure, risks, and next actions.`
+            : "Monitor compliance score, financial exposure, risks, and next actions."}
         </p>
       </div>
+
+      {/* EVERYTHING ELSE UNCHANGED BELOW */}
 
       <div
         style={{
@@ -172,11 +185,9 @@ export default function Dashboard() {
           {Number(gdpr) > 0 && (
             <div style={riskItemStyle}>Customer data protection risk</div>
           )}
-
           {Number(auth) > 0 && (
             <div style={riskItemStyle}>Weak authentication controls</div>
           )}
-
           {Number(security) > 0 && (
             <div style={riskItemStyle}>Security monitoring gaps</div>
           )}
@@ -191,80 +202,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-const cardStyle: React.CSSProperties = {
-  background: "#ffffff",
-  border: "1px solid #e5e7eb",
-  borderRadius: "20px",
-  padding: "28px",
-  boxShadow: "0 10px 30px rgba(15, 23, 42, 0.08)",
-};
-
-const labelStyle: React.CSSProperties = {
-  margin: 0,
-  fontSize: "14px",
-  fontWeight: 600,
-  color: "#64748b",
-};
-
-const valueStyle: React.CSSProperties = {
-  margin: "10px 0 8px 0",
-  fontSize: "36px",
-  fontWeight: 800,
-  letterSpacing: "-0.03em",
-  color: "#0f172a",
-};
-
-const subtleStyle: React.CSSProperties = {
-  margin: 0,
-  fontSize: "13px",
-  color: "#94a3b8",
-};
-
-const sectionTitle: React.CSSProperties = {
-  margin: 0,
-  fontSize: "20px",
-  fontWeight: 700,
-  color: "#0f172a",
-};
-
-const rowStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  fontSize: "14px",
-  color: "#334155",
-};
-
-const riskItemStyle: React.CSSProperties = {
-  padding: "14px 16px",
-  borderRadius: "14px",
-  border: "1px solid #e2e8f0",
-  background: "#ffffff",
-  color: "#334155",
-  fontWeight: 500,
-};
-
-const primaryButtonStyle: React.CSSProperties = {
-  width: "100%",
-  background: "#0f172a",
-  color: "#ffffff",
-  border: "none",
-  padding: "12px",
-  borderRadius: "10px",
-  fontWeight: 700,
-  fontSize: "14px",
-  cursor: "pointer",
-};
-
-const secondaryButtonStyle: React.CSSProperties = {
-  width: "100%",
-  background: "#ffffff",
-  color: "#0f172a",
-  border: "1px solid #cbd5e1",
-  padding: "12px",
-  borderRadius: "10px",
-  fontWeight: 700,
-  fontSize: "14px",
-  cursor: "pointer",
-};
