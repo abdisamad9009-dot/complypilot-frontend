@@ -15,7 +15,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-
     const urlScore = params.get("score") || "0";
     const urlGdpr = params.get("gdpr") || "0";
     const urlAuth = params.get("auth") || "0";
@@ -28,7 +27,6 @@ export default function Dashboard() {
     setTotal(urlTotal);
 
     const savedScore = localStorage.getItem("complianceScore");
-
     if (savedScore) {
       setScore(savedScore);
     } else {
@@ -36,9 +34,10 @@ export default function Dashboard() {
       localStorage.setItem("complianceScore", urlScore);
     }
 
-    // ✅ ADDED (load business data)
+    // ✅ ADDED
     setName(localStorage.getItem("businessName") || "");
     setIndustry(localStorage.getItem("industry") || "");
+
   }, []);
 
   const updateScore = () => {
@@ -82,8 +81,6 @@ export default function Dashboard() {
             : "Monitor compliance score, financial exposure, risks, and next actions."}
         </p>
       </div>
-
-      {/* EVERYTHING ELSE UNCHANGED BELOW */}
 
       <div
         style={{
@@ -185,9 +182,11 @@ export default function Dashboard() {
           {Number(gdpr) > 0 && (
             <div style={riskItemStyle}>Customer data protection risk</div>
           )}
+
           {Number(auth) > 0 && (
             <div style={riskItemStyle}>Weak authentication controls</div>
           )}
+
           {Number(security) > 0 && (
             <div style={riskItemStyle}>Security monitoring gaps</div>
           )}
