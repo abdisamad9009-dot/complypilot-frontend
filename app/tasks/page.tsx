@@ -34,20 +34,22 @@ export default function TasksPage() {
         <p>No actions required</p>
       ) : (
         actions.map((action, i) => (
-          <div
-            key={i}
-            style={{
-              padding: "14px",
-              background: "#ecfdf5",
-              marginBottom: "12px",
-              borderRadius: "8px",
-              border: "1px solid #d1fae5"
-            }}
-          >
-            {action}
-          </div>
-        ))
-      )}
-    </div>
-  )
-}
+  <div key={i} style={...}>
+    {action}
+
+    <button
+      onClick={() => completeTask(i)}
+      style={{
+        marginTop: "10px",
+        padding: "6px 12px",
+        background: "black",
+        color: "white",
+        border: "none",
+        borderRadius: "6px",
+        cursor: "pointer"
+      }}
+    >
+      Mark Complete
+    </button>
+  </div>
+))
