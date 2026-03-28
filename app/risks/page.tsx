@@ -1,16 +1,22 @@
 "use client"
+import { useEffect, useState } from "react"
 
-import { Suspense } from "react"
-import { useSearchParams } from "next/navigation"
+export default function RisksPage() {
+  const [allRisks, setAllRisks] = useState<any[]>([])
 
-function RisksContent() {
-  const searchParams = useSearchParams()
+  useEffect(() => {
+    const gdpr = JSON.parse(localStorage.getItem("gdprIssues") || "[]")
+    const auth = JSON.parse(localStorage.getItem("authIssues") || "[]")
+    const security = JSON.parse(localStorage.getItem("securityIssues") || "[]")
 
-  const gdpr = JSON.parse(decodeURIComponent(searchParams.get("gdprIssues") || "[]"))
-  const auth = JSON.parse(decodeURIComponent(searchParams.get("authIssues") || "[]"))
-  const security = JSON.parse(decodeURIComponent(searchParams.get("securityIssues") || "[]"))
+    const combined = [
+      ...gdpr.map((i: number) => `GDPR Issue #${i + 1}`),
+      ...auth.map((i: number) => `Auth Issue #${i + 1}`),
+      ...security.map((i: number) => `Security Issue #${i + 1}`),
+    ]
 
-  const allRisks = [...gdpr, ...auth, ...security]
+    setAllRisks(combined)
+  }, [])
 
   return (
     <div style={{ padding: "40px" }}>
@@ -22,25 +28,20 @@ function RisksContent() {
         <p>No active risks identified</p>
       ) : (
         allRisks.map((risk, i) => (
-          <div key={i} style={{
-            padding: "14px",
-            background: "#f9fafb",
-            marginBottom: "12px",
-            borderRadius: "8px",
-            border: "1px solid #e5e7eb"
-          }}>
+          <div
+            key={i}
+            style={{
+              padding: "14px",
+              background: "#f9fafb",
+              marginBottom: "12px",
+              borderRadius: "8px",
+              border: "1px solid #e5e7eb",
+            }}
+          >
             {risk}
           </div>
         ))
       )}
     </div>
-  )
-}
-
-export default function RisksPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <RisksContent />
-    </Suspense>
   )
 }
