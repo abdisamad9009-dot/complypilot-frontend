@@ -67,7 +67,7 @@ export default function DashboardLayout({
           <Link href="/documents" style={link}>
             Document Generation
           </Link>
-          <a href="https://ai.complypilot.uk" style={link}>
+          <a href="https://ai.complypilot.online" style={link}>
             AI
           </a>
           <Link href="/risks" style={link}>
