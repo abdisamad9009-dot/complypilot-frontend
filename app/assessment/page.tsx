@@ -58,9 +58,12 @@ export default function AssessmentPage() {
   const [page, setPage] = useState(0)
   const [answers, setAnswers] = useState({})
 
-  // ✅ NEW
+  // ✅ EXISTING
   const [businessName, setBusinessName] = useState("")
   const [industry, setIndustry] = useState("")
+
+  // ✅ ADDED
+  const [employees, setEmployees] = useState("")
 
   const questionsPerPage = 10
   const start = page * questionsPerPage
@@ -118,9 +121,12 @@ export default function AssessmentPage() {
       localStorage.setItem("authIssues", JSON.stringify(auth))
       localStorage.setItem("securityIssues", JSON.stringify(security))
 
-      // ✅ NEW
+      // ✅ EXISTING
       localStorage.setItem("businessName", businessName)
       localStorage.setItem("industry", industry)
+
+      // ✅ ADDED
+      localStorage.setItem("employees", employees)
 
       window.location.href =
         `/dashboard?score=${score}&gdpr=${gdpr.length}&auth=${auth.length}&security=${security.length}&total=${gdpr.length + auth.length + security.length}`
@@ -135,7 +141,6 @@ export default function AssessmentPage() {
       padding: "40px",
       fontFamily: "sans-serif"
     }}>
-
       <h1 style={{ fontSize: "32px", fontWeight: "bold" }}>
         Compliance Assessment
       </h1>
@@ -164,7 +169,8 @@ export default function AssessmentPage() {
               padding: "10px",
               width: "300px",
               border: "1px solid black",
-              borderRadius: "6px"
+              borderRadius: "6px",
+              marginBottom: "10px"
             }}
           >
             <option value="">Select Industry</option>
@@ -176,6 +182,24 @@ export default function AssessmentPage() {
             <option value="Marketing Agency">Marketing Agency</option>
             <option value="Education">Education</option>
             <option value="Other">Other</option>
+          </select>
+
+          {/* ✅ ADDED EMPLOYEE SIZE */}
+          <select
+            value={employees}
+            onChange={(e) => setEmployees(e.target.value)}
+            style={{
+              padding: "10px",
+              width: "300px",
+              border: "1px solid black",
+              borderRadius: "6px"
+            }}
+          >
+            <option value="">Select company size</option>
+            <option value="1-10">1–10 employees</option>
+            <option value="11-50">11–50 employees</option>
+            <option value="51-200">51–200 employees</option>
+            <option value="200+">200+ employees</option>
           </select>
         </div>
       )}
