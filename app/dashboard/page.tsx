@@ -61,6 +61,20 @@ export default function Dashboard() {
   const authExposure = adjustedAuth * 50000 * sizeMultiplier * 0.5;
   const securityExposure = adjustedSecurity * 75000 * sizeMultiplier * 0.5;
   const totalExposure = gdprExposure + authExposure + securityExposure;
+
+const baseTotalExposure = gdprExposure + authExposure + securityExposure;
+
+const completedTasks = typeof window !== "undefined"
+  ? Number(localStorage.getItem("completedTasks") || 0)
+  : 0;
+
+const reductionPerTask = 15000;
+
+const totalExposure = Math.max(
+  baseTotalExposure - completedTasks * reductionPerTask,
+  0
+);
+  
   return (
     <div>
       <div style={{ marginBottom: "32px" }}>
