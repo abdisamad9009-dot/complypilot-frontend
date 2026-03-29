@@ -9,9 +9,10 @@ export default function Dashboard() {
   const [security, setSecurity] = useState("0");
   const [total, setTotal] = useState("0");
 
-  // ✅ ADDED
+  
   const [name, setName] = useState("");
   const [industry, setIndustry] = useState("");
+  const [employees, setEmployees] = useState(""); // 
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -34,9 +35,10 @@ export default function Dashboard() {
       localStorage.setItem("complianceScore", urlScore);
     }
 
-    // ✅ LOAD BUSINESS DATA
+
     setName(localStorage.getItem("businessName") || "");
     setIndustry(localStorage.getItem("industry") || "");
+    setEmployees(localStorage.getItem("employees") || ""); 
   }, []);
 
   const updateScore = () => {
@@ -47,19 +49,18 @@ export default function Dashboard() {
     });
   };
 
-const employees = localStorage.getItem("employees")
+  
+  let sizeMultiplier = 0.5;
+  if (employees === "1-10") sizeMultiplier = 0.3;
+  if (employees === "11-50") sizeMultiplier = 0.6;
+  if (employees === "51-200") sizeMultiplier = 1;
+  if (employees === "200+") sizeMultiplier = 1.5;
 
-let sizeMultiplier = 1
-if (employees === "1-10") sizeMultiplier = 0.3
-if (employees === "11-50") sizeMultiplier = 0.6
-if (employees === "51-200") sizeMultiplier = 1
-if (employees === "200+") sizeMultiplier = 1.5
-
-const gdprExposure = Number(gdpr) * 2000000 * sizeMultiplier * 0.1
-const authExposure = Number(auth) * 50000 * sizeMultiplier * 0.5
-const securityExposure = Number(security) * 75000 * sizeMultiplier * 0.5
-
-const totalExposure = gdprExposure + authExposure + securityExposure
+  
+  const gdprExposure = Number(gdpr) * 2000000 * sizeMultiplier * 0.1;
+  const authExposure = Number(auth) * 50000 * sizeMultiplier * 0.5;
+  const securityExposure = Number(security) * 75000 * sizeMultiplier * 0.5;
+  const totalExposure = gdprExposure + authExposure + securityExposure;
 
   return (
     <div>
@@ -72,7 +73,6 @@ const totalExposure = gdprExposure + authExposure + securityExposure
             margin: 0,
           }}
         >
-          {/* ✅ DYNAMIC NAME */}
           {name ? `${name} Dashboard` : "Compliance Dashboard"}
         </h1>
 
@@ -83,7 +83,6 @@ const totalExposure = gdprExposure + authExposure + securityExposure
             fontSize: "16px",
           }}
         >
-          {/* ✅ DYNAMIC INDUSTRY */}
           {industry
             ? `${industry} • Monitor compliance score, financial exposure, risks, and next actions.`
             : "Monitor compliance score, financial exposure, risks, and next actions."}
@@ -190,9 +189,11 @@ const totalExposure = gdprExposure + authExposure + securityExposure
           {Number(gdpr) > 0 && (
             <div style={riskItemStyle}>Customer data protection risk</div>
           )}
+
           {Number(auth) > 0 && (
             <div style={riskItemStyle}>Weak authentication controls</div>
           )}
+
           {Number(security) > 0 && (
             <div style={riskItemStyle}>Security monitoring gaps</div>
           )}
