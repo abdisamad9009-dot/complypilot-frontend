@@ -59,25 +59,26 @@ export default function DashboardLayout({
           }}
         >
           <Link href="/dashboard" style={link}>
-            Dashboard
-          </Link>
-          <Link href="/assessment" style={link}>
-            Assessment
-          <Link href="/monthly-report" style={link}>
-           Monthly Report 
-          </Link>
-          <Link href="/documents" style={link}>
-            Document Generation
-          </Link>
-          <a href="https://ai.complypilot.online" style={link}>
-            AI
-          </a>
-          <Link href="/risks" style={link}>
-            Current Risks
-          </Link>
-          <Link href="/tasks" style={link}>
-            Priority Actions
-          </Link>
+  Dashboard
+</Link>
+<Link href="/assessment" style={link}>
+  Assessment
+</Link>
+<Link href="/documents" style={link}>
+  Document Generation
+</Link>
+<a href="https://ai.complypilot.online" style={link}>
+  AI
+</a>
+<Link href="/monthly-report" style={link}>
+  Monthly Report
+</Link>
+<Link href="/risks" style={link}>
+  Current Risks
+</Link>
+<Link href="/tasks" style={link}>
+  Priority Actions
+</Link>
         </nav>
       </div>
 
