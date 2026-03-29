@@ -47,7 +47,12 @@ export default function Dashboard() {
   if (employees === "51-200") sizeMultiplier = 1;
   if (employees === "200+") sizeMultiplier = 1.5;
 
-  const completedTasks = Number(localStorage.getItem("completedTasks") || 0);
+  // ✅ FIX ONLY HERE (no other changes)
+  let completedTasks = 0;
+  if (typeof window !== "undefined") {
+    completedTasks = Number(localStorage.getItem("completedTasks") || 0);
+  }
+
   const adjustedGdpr = Math.max(Number(gdpr) - completedTasks, 0);
   const adjustedAuth = Math.max(Number(auth) - completedTasks, 0);
   const adjustedSecurity = Math.max(Number(security) - completedTasks, 0);
