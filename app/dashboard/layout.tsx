@@ -63,6 +63,8 @@ export default function DashboardLayout({
           </Link>
           <Link href="/assessment" style={link}>
             Assessment
+          <Link href="/monthly-report" style={link}>
+           Monthly Report 
           </Link>
           <Link href="/documents" style={link}>
             Document Generation
