@@ -1,0 +1,8 @@
+const report = {
+  month: "March",
+  score: 100,
+  status: "Fully Compliant",
+  issues: 0,
+  completedTasks: 5,
+  upcomingReviews: 2
+};
