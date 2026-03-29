@@ -1,10 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
 export default function Documents() {
   const router = useRouter();
-
   const [docs, setDocs] = useState([
     {
       title: "Information Security Policy",
@@ -48,22 +46,73 @@ export default function Documents() {
       lastGenerated: null,
       nextDue: null,
     },
+
+    // ✅ NEW DOCS ADDED (no layout change)
+    {
+      title: "Access Control Policy",
+      desc: "Define user access levels and role-based permissions.",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
+    },
+    {
+      title: "Acceptable Use Policy",
+      desc: "Define acceptable use of systems, devices, and data.",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
+    },
+    {
+      title: "Business Continuity Plan",
+      desc: "Ensure operations continue during disruptions.",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
+    },
+    {
+      title: "Vendor Risk Policy",
+      desc: "Assess and manage third-party risks.",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
+    },
+    {
+      title: "Encryption Policy",
+      desc: "Define encryption standards for data protection.",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
+    },
+    {
+      title: "Data Breach Response Policy",
+      desc: "Outline steps for handling and reporting data breaches.",
+      status: "Not Generated",
+      lastGenerated: null,
+      nextDue: null,
+    },
   ]);
 
   const generateDoc = (index: number) => {
     const updatedDocs = [...docs];
-
     const now = new Date();
     const next = new Date();
     next.setDate(now.getDate() + 14);
-
     updatedDocs[index].status = "Completed";
     updatedDocs[index].lastGenerated = now;
     updatedDocs[index].nextDue = next;
-
     setDocs(updatedDocs);
-
     router.push(`/chat?type=${encodeURIComponent(updatedDocs[index].title)}`);
+  };
+
+  // ✅ DOWNLOAD FUNCTION (ADDED ONLY)
+  const downloadDoc = (title: string) => {
+    const content = `${title}\n\nThis document was generated automatically.`;
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title}.txt`;
+    a.click();
   };
 
   return (
@@ -80,7 +129,6 @@ export default function Documents() {
         >
           Document Generation
         </h1>
-
         <p
           style={{
             marginTop: "10px",
@@ -97,7 +145,7 @@ export default function Documents() {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-          gap: "24px", 
+          gap: "24px",
         }}
       >
         {docs.map((doc, index) => (
@@ -105,14 +153,14 @@ export default function Documents() {
             key={doc.title}
             style={{
               background: "#ffffff",
-              border: "1px solid #e5e7eb", 
+              border: "1px solid #e5e7eb",
               borderRadius: "20px",
-              padding: "28px", 
+              padding: "28px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              minHeight: "260px", 
-              boxShadow: "0 10px 30px rgba(15, 23, 42, 0.08)", 
+              minHeight: "260px",
+              boxShadow: "0 10px 30px rgba(15, 23, 42, 0.08)",
               transition: "all 0.2s ease",
             }}
           >
@@ -127,7 +175,6 @@ export default function Documents() {
               >
                 {doc.title}
               </h2>
-
               <p
                 style={{
                   marginTop: "12px",
@@ -148,7 +195,7 @@ export default function Documents() {
                     style={{
                       background: "#DCFCE7",
                       color: "#166534",
-                      padding: "6px 12px", 
+                      padding: "6px 12px",
                       borderRadius: "999px",
                       fontSize: "12px",
                       fontWeight: 600,
@@ -157,7 +204,6 @@ export default function Documents() {
                   >
                     Completed
                   </span>
-
                   <p
                     style={{
                       fontSize: "12px",
@@ -168,7 +214,6 @@ export default function Documents() {
                     Last generated:{" "}
                     {new Date(doc.lastGenerated).toLocaleDateString()}
                   </p>
-
                   <p
                     style={{
                       fontSize: "12px",
@@ -178,13 +223,32 @@ export default function Documents() {
                     Next due:{" "}
                     {new Date(doc.nextDue).toLocaleDateString()}
                   </p>
+
+                  {/* ✅ DOWNLOAD BUTTON (ADDED ONLY) */}
+                  <button
+                    onClick={() => downloadDoc(doc.title)}
+                    style={{
+                      marginTop: "10px",
+                      width: "100%",
+                      background: "#16a34a",
+                      color: "#ffffff",
+                      border: "none",
+                      padding: "10px",
+                      borderRadius: "8px",
+                      fontWeight: 600,
+                      fontSize: "13px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Download
+                  </button>
                 </>
               ) : (
                 <span
                   style={{
                     background: "#f1f5f9",
                     color: "#334155",
-                    padding: "6px 12px", 
+                    padding: "6px 12px",
                     borderRadius: "999px",
                     fontSize: "12px",
                     fontWeight: 600,
@@ -206,8 +270,8 @@ export default function Documents() {
                 color: "#ffffff",
                 border: "none",
                 padding: "12px",
-                borderRadius: "10px", 
-                fontWeight: 700, 
+                borderRadius: "10px",
+                fontWeight: 700,
                 fontSize: "14px",
                 cursor: "pointer",
               }}
