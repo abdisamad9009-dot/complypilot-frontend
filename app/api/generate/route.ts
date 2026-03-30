@@ -6,10 +6,7 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
   try {
     const { type } = await req.json();
-    const prompt = `Generate a professional ${type} compliance document for a UK-based startup company.
-
-const prompt = `
-Generate a highly detailed, enterprise-grade ${type} document for a UK-based company.
+    const prompt = `Generate a highly detailed, enterprise-grade ${type} document for a UK-based company.
 
 Requirements:
 - Minimum 1500 words
