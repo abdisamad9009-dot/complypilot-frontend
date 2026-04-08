@@ -4,33 +4,45 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 
 export default function LoginPage() {
-const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
+  const [checking, setChecking] = useState(true);
 
-useEffect(() => {
-const checkUser = async () => {
-const { data } = await supabase.auth.getUser();
-if (data.user) {
-window.location.href = "https://complypilot-frontend.vercel.app/login";
- }
- };
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getUser();
 
-checkUser();
- }, []);
+      if (data.user) {
+        window.location.href = "/dashboard"; 
+      } else {
+        setChecking(false);
+      }
+    };
 
-const handleLogin = async () => {
-const { error } = await supabase.auth.signInWithOtp({
-email,
-options: {
-emailRedirectTo: "https://complypilot-frontend.vercel.app/login",
- },
- });
+    checkUser();
+  }, []);
 
-if (error) {
-alert(error.message);
- } else {
-alert("Check your email");
- }
- };
+  const handleLogin = async () => {
+    await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: "https://complypilot-frontend.vercel.app/login",
+      },
+    });
+  };
+
+  if (checking) return <div>Loading...</div>;
+
+  return (
+    <div>
+      <input
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter email"
+      />
+      <button onClick={handleLogin}>Send Magic Link</button>
+    </div>
+  );
+}
 
 return (
 <div
