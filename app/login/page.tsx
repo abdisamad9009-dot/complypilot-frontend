@@ -10,7 +10,7 @@ useEffect(() => {
 const checkUser = async () => {
 const { data } = await supabase.auth.getUser();
 if (data.user) {
-window.location.href = "https://complypilot-frontend.vercel.app";
+window.location.href = "https://complypilot-frontend.vercel.app/login";
  }
  };
 
@@ -21,7 +21,7 @@ const handleLogin = async () => {
 const { error } = await supabase.auth.signInWithOtp({
 email,
 options: {
-emailRedirectTo: "https://complypilot-frontend.vercel.app",
+emailRedirectTo: "https://complypilot-frontend.vercel.app/login",
  },
  });
 
