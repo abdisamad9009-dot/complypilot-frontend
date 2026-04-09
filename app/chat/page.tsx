@@ -1,10 +1,13 @@
+"use client";
+
+import { Suspense } from "react";
+import ChatInner from "./ChatInner";
+
 export default function ChatPage() {
   return (
-    <div className="w-full h-[80vh]">
-      <iframe
-        src="https://ai.complypilot.online"
-        className="w-full h-full rounded-xl border"
-      />
-    </div>
+    <Suspense fallback={<div className="p-10">Loading...</div>}>
+      <ChatInner />
+    </Suspense>
   );
 }
+   

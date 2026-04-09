@@ -1,26 +1,263 @@
+"use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 export default function Dashboard() {
+  const [score, setScore] = useState("0");
+  const [gdpr, setGdpr] = useState("0");
+  const [auth, setAuth] = useState("0");
+  const [security, setSecurity] = useState("0");
+  const [total, setTotal] = useState("0");
+  
+  const [name, setName] = useState("");
+  const [industry, setIndustry] = useState("");
+  const [employees, setEmployees] = useState(""); // 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlScore = params.get("score") || "0";
+    const urlGdpr = params.get("gdpr") || "0";
+    const urlAuth = params.get("auth") || "0";
+    const urlSecurity = params.get("security") || "0";
+    const urlTotal = params.get("total") || "0";
+    setGdpr(urlGdpr);
+    setAuth(urlAuth);
+    setSecurity(urlSecurity);
+    setTotal(urlTotal);
+    const savedScore = localStorage.getItem("complianceScore");
+    if (savedScore) {
+      setScore(savedScore);
+    } else {
+      setScore(urlScore);
+      localStorage.setItem("complianceScore", urlScore);
+    }
+    setName(localStorage.getItem("businessName") || "");
+    setIndustry(localStorage.getItem("industry") || "");
+    setEmployees(localStorage.getItem("employees") || ""); 
+  }, []);
+  const updateScore = () => {
+    setScore((prev) => {
+      const newScore = (Number(prev) + 2).toString();
+      localStorage.setItem("complianceScore", newScore);
+      return newScore;
+    });
+  };
+  
+  let sizeMultiplier = 0.5;
+  if (employees === "1-10") sizeMultiplier = 0.3;
+  if (employees === "11-50") sizeMultiplier = 0.6;
+  if (employees === "51-200") sizeMultiplier = 1;
+  if (employees === "200+") sizeMultiplier = 1.5;
+  // ✅ FIX ONLY HERE (no other changes)
+  let completedTasks = 0;
+  if (typeof window !== "undefined") {
+    completedTasks = Number(localStorage.getItem("completedTasks") || 0);
+  }
+  const totalIssues = Number(gdpr) + Number(auth) + Number(security);
+  const gdprCompleted = totalIssues > 0 ? Math.round((Number(gdpr) / totalIssues) * completedTasks) : 0;
+  const authCompleted = totalIssues > 0 ? Math.round((Number(auth) / totalIssues) * completedTasks) : 0;
+  const securityCompleted = totalIssues > 0 ? Math.round((Number(security) / totalIssues) * completedTasks) : 0;
+  const adjustedGdpr = Math.max(Number(gdpr) - gdprCompleted, 0);
+  const adjustedAuth = Math.max(Number(auth) - authCompleted, 0);
+  const adjustedSecurity = Math.max(Number(security) - securityCompleted, 0);
+  
+  const gdprExposure = adjustedGdpr * 2000000 * sizeMultiplier * 0.1;
+  const authExposure = adjustedAuth * 50000 * sizeMultiplier * 0.5;
+  const securityExposure = adjustedSecurity * 75000 * sizeMultiplier * 0.5;
+  const totalExposure = gdprExposure + authExposure + securityExposure;
+  
   return (
-    <div className="min-h-screen bg-gray-50 p-10">
-      <h1 className="text-3xl font-semibold text-gray-900 mb-8">
-        ComplyPilot Dashboard
-      </h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-500">Compliance Score</p>
-          <p className="text-4xl font-bold text-green-600">82%</p>
+    <div>
+      <div style={{ marginBottom: "32px" }}>
+        <h1
+          style={{
+            fontSize: "36px",
+            fontWeight: 800,
+            letterSpacing: "-0.03em",
+            margin: 0,
+          }}
+        >
+          {name ? `${name} Dashboard` : "Compliance Dashboard"}
+        </h1>
+        <p
+          style={{
+            marginTop: "10px",
+            color: "#64748b",
+            fontSize: "16px",
+          }}
+        >
+          {industry
+            ? `${industry} • Monitor compliance score, financial exposure, risks, and next actions.`
+            : "Monitor compliance score, financial exposure, risks, and next actions."}
+        </p>
+      </div>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+          gap: "24px",
+          marginBottom: "24px",
+        }}
+      >
+        <div style={cardStyle}>
+          <p style={labelStyle}>Compliance Score</p>
+          <h2 style={valueStyle}>{score}%</h2>
+          <p style={subtleStyle}>Overall readiness</p>
         </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-500">Open Risks</p>
-          <p className="text-4xl font-bold text-red-600">3</p>
+        <div style={cardStyle}>
+          <p style={labelStyle}>GDPR Issues</p>
+          <h2 style={valueStyle}>{adjustedGdpr}</h2>
+          <p style={subtleStyle}>Data protection findings</p>
         </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-500">Next Review</p>
-          <p className="text-xl font-medium text-gray-800">12 March</p>
+        <div style={cardStyle}>
+          <p style={labelStyle}>Auth Issues</p>
+          <h2 style={valueStyle}>{adjustedAuth}</h2>
+          <p style={subtleStyle}>Authentication weaknesses</p>
+        </div>
+        <div style={cardStyle}>
+          <p style={labelStyle}>Security Issues</p>
+          <h2 style={valueStyle}>{adjustedSecurity}</h2>
+          <p style={subtleStyle}>Security control gaps</p>
+        </div>
+      </div>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1.4fr 1fr",
+          gap: "24px",
+          marginBottom: "24px",
+        }}
+      >
+        <div style={cardStyle}>
+          <h3 style={sectionTitle}>Financial Risk Exposure</h3>
+          <div style={{ display: "grid", gap: "12px", marginTop: "18px" }}>
+            <div style={rowStyle}>
+              <span>GDPR Violations</span>
+              <strong>£{gdprExposure.toLocaleString()}</strong>
+            </div>
+            <div style={rowStyle}>
+              <span>Authentication Violations</span>
+              <strong>£{authExposure.toLocaleString()}</strong>
+            </div>
+            <div style={rowStyle}>
+              <span>Security Violations</span>
+              <strong>£{securityExposure.toLocaleString()}</strong>
+            </div>
+            <div
+              style={{
+                ...rowStyle,
+                marginTop: "8px",
+                borderTop: "1px solid #e2e8f0",
+                paddingTop: "16px",
+              }}
+            >
+              <span>Total Exposure</span>
+              <strong>£{totalExposure.toLocaleString()}</strong>
+            </div>
+          </div>
+        </div>
+        <div style={cardStyle}>
+          <h3 style={sectionTitle}>Actions</h3>
+          <div style={{ display: "grid", gap: "12px", marginTop: "18px" }}>
+            <Link href="/assessment" style={{ textDecoration: "none" }}>
+              <button style={primaryButtonStyle} onClick={updateScore}>
+                Run Assessment
+              </button>
+            </Link>
+            <Link href="/tasks" style={{ textDecoration: "none" }}>
+              <button style={secondaryButtonStyle}>
+                View Compliance Tasks
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+      <div style={cardStyle}>
+        <h3 style={sectionTitle}>Open Risks</h3>
+        <div style={{ display: "grid", gap: "12px", marginTop: "18px" }}>
+          {adjustedGdpr > 0 && (
+            <div style={riskItemStyle}>Customer data protection risk</div>
+          )}
+          {adjustedAuth > 0 && (
+            <div style={riskItemStyle}>Weak authentication controls</div>
+          )}
+          {adjustedSecurity > 0 && (
+            <div style={riskItemStyle}>Security monitoring gaps</div>
+          )}
+          {adjustedGdpr === 0 &&
+            adjustedAuth === 0 &&
+            adjustedSecurity === 0 && (
+              <div style={riskItemStyle}>No active risks identified</div>
+            )}
         </div>
       </div>
     </div>
   );
-}  
+}
+// ✅ DO NOT REMOVE — REQUIRED STYLES
+const cardStyle: React.CSSProperties = {
+  background: "#ffffff",
+  border: "1px solid #e5e7eb",
+  borderRadius: "20px",
+  padding: "28px",
+  boxShadow: "0 10px 30px rgba(15, 23, 42, 0.08)",
+};
+const labelStyle: React.CSSProperties = {
+  margin: 0,
+  fontSize: "14px",
+  fontWeight: 600,
+  color: "#64748b",
+};
+const valueStyle: React.CSSProperties = {
+  margin: "10px 0 8px 0",
+  fontSize: "36px",
+  fontWeight: 800,
+  letterSpacing: "-0.03em",
+  color: "#0f172a",
+};
+const subtleStyle: React.CSSProperties = {
+  margin: 0,
+  fontSize: "13px",
+  color: "#94a3b8",
+};
+const sectionTitle: React.CSSProperties = {
+  margin: 0,
+  fontSize: "20px",
+  fontWeight: 700,
+  color: "#0f172a",
+};
+const rowStyle: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  fontSize: "14px",
+  color: "#334155",
+};
+const riskItemStyle: React.CSSProperties = {
+  padding: "14px 16px",
+  borderRadius: "14px",
+  border: "1px solid #e2e8f0",
+  background: "#ffffff",
+  color: "#334155",
+  fontWeight: 500,
+};
+const primaryButtonStyle: React.CSSProperties = {
+  width: "100%",
+  background: "#0f172a",
+  color: "#ffffff",
+  border: "none",
+  padding: "12px",
+  borderRadius: "10px",
+  fontWeight: 700,
+  fontSize: "14px",
+  cursor: "pointer",
+};
+const secondaryButtonStyle: React.CSSProperties = {
+  width: "100%",
+  background: "#ffffff",
+  color: "#0f172a",
+  border: "1px solid #cbd5e1",
+  padding: "12px",
+  borderRadius: "10px",
+  fontWeight: 700,
+  fontSize: "14px",
+  cursor: "pointer",
+};
