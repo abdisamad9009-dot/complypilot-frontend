@@ -3,7 +3,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 export default function Documents() {
   const router = useRouter();
-  const [docs, setDocs] = useState([
+  const [docs, setDocs] = useState<{
+  title: string;
+  desc: string;
+  status: string;
+  lastGenerated: Date | null;
+  nextDue: Date | null;
+}[]>([
     {
       title: "Information Security Policy",
       desc: "Define security controls, responsibilities, and internal policies.",
