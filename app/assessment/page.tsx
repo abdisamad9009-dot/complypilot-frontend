@@ -69,7 +69,7 @@ export default function AssessmentPage() {
   const start = page * questionsPerPage
   const currentQuestions = questions.slice(start, start + questionsPerPage)
 
-  function setAnswer(index, value) {
+  function setAnswer(index: number, value: string) {
     setAnswers(prev => ({
       ...prev,
       [index]: value
