@@ -81,9 +81,9 @@ export default function AssessmentPage() {
       setPage(page + 1)
       window.scrollTo(0, 0)
     } else {
-      let gdpr = []
-      let auth = []
-      let security = []
+     let gdpr: any[] = []
+     let auth: any[] = []
+     let security: any[] = []
 
       Object.entries(answers).forEach(([index, value]) => {
         if (value === "no") {
