@@ -218,19 +218,22 @@ export default function Documents() {
                     }}
                   >
                     Last generated:{" "}
-                    {new Date(doc.lastGenerated).toLocaleDateString()}
+                    {doc.lastGenerated
+  ? new Date(doc.lastGenerated).toLocaleDateString()
+  : "Not generated"}
                   </p>
-                  <p
                     style={{
                       fontSize: "12px",
                       color: "#6B7280",
                     }}
                   >
                     Next due:{" "}
-                    {new Date(doc.nextDue).toLocaleDateString()}
-                  </p>
+{doc.nextDue
+  ? new Date(doc.nextDue).toLocaleDateString()
+  : "No due date"}
+</p>
 
-                  {/* ✅ DOWNLOAD BUTTON (ADDED ONLY) */}
+        
                   <button
                     onClick={() => downloadDoc(doc.title)}
                     style={{
