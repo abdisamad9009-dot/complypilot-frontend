@@ -56,7 +56,7 @@ export default function AssessmentPage() {
   ]
 
   const [page, setPage] = useState(0)
-  const [answers, setAnswers] = useState({})
+ const [answers, setAnswers] = useState<{ [key: number]: string }>({})
 
   // ✅ EXISTING
   const [businessName, setBusinessName] = useState("")
