@@ -226,7 +226,6 @@ export default function Documents() {
                       fontSize: "12px",
                       color: "#6B7280",
                     }}
-                  >
                     Next due:{" "}
 {doc.nextDue
   ? new Date(doc.nextDue).toLocaleDateString()
