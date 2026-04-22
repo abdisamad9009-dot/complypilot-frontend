@@ -1,15 +1,17 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+
 export default function Documents() {
   const router = useRouter();
+
   const [docs, setDocs] = useState<{
-  title: string;
-  desc: string;
-  status: string;
-  lastGenerated: Date | null;
-  nextDue: Date | null;
-}[]>([
+    title: string;
+    desc: string;
+    status: string;
+    lastGenerated: Date | null;
+    nextDue: Date | null;
+  }[]>([
     {
       title: "Information Security Policy",
       desc: "Define security controls, responsibilities, and internal policies.",
@@ -52,8 +54,6 @@ export default function Documents() {
       lastGenerated: null,
       nextDue: null,
     },
-
-    // ✅ NEW DOCS ADDED (no layout change)
     {
       title: "Access Control Policy",
       desc: "Define user access levels and role-based permissions.",
@@ -110,7 +110,6 @@ export default function Documents() {
     router.push(`/chat?type=${encodeURIComponent(updatedDocs[index].title)}`);
   };
 
-  // ✅ DOWNLOAD FUNCTION (ADDED ONLY)
   const downloadDoc = (title: string) => {
     const content = `${title}\n\nThis document was generated automatically.`;
     const blob = new Blob([content], { type: "text/plain;charset=utf-8;" });
@@ -123,7 +122,6 @@ export default function Documents() {
 
   return (
     <div>
-      {/* HEADER */}
       <div style={{ marginBottom: "32px" }}>
         <h1
           style={{
@@ -146,7 +144,6 @@ export default function Documents() {
         </p>
       </div>
 
-      {/* GRID */}
       <div
         style={{
           display: "grid",
@@ -170,7 +167,6 @@ export default function Documents() {
               transition: "all 0.2s ease",
             }}
           >
-            {/* TOP */}
             <div>
               <h2
                 style={{
@@ -193,7 +189,6 @@ export default function Documents() {
               </p>
             </div>
 
-            {/* STATUS */}
             <div style={{ marginTop: "18px" }}>
               {doc.status === "Completed" ? (
                 <>
@@ -210,6 +205,7 @@ export default function Documents() {
                   >
                     Completed
                   </span>
+
                   <p
                     style={{
                       fontSize: "12px",
@@ -219,20 +215,22 @@ export default function Documents() {
                   >
                     Last generated:{" "}
                     {doc.lastGenerated
-  ? new Date(doc.lastGenerated).toLocaleDateString()
-  : "Not generated"}
+                      ? new Date(doc.lastGenerated).toLocaleDateString()
+                      : "Not generated"}
                   </p>
+
+                  <p
                     style={{
                       fontSize: "12px",
                       color: "#6B7280",
                     }}
+                  >
                     Next due:{" "}
-{doc.nextDue
-  ? new Date(doc.nextDue).toLocaleDateString()
-  : "No due date"}
-</p>
+                    {doc.nextDue
+                      ? new Date(doc.nextDue).toLocaleDateString()
+                      : "No due date"}
+                  </p>
 
-        
                   <button
                     onClick={() => downloadDoc(doc.title)}
                     style={{
@@ -268,7 +266,6 @@ export default function Documents() {
               )}
             </div>
 
-            {/* BUTTON */}
             <button
               onClick={() => generateDoc(index)}
               style={{
