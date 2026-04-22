@@ -18,7 +18,7 @@ export default function TasksPage() {
     })
     setActions(mappedActions)
   }, [])
-  function completeTask(index) {
+function completeTask(index: number) {
     let gdpr = JSON.parse(localStorage.getItem("gdprIssues") || "[]")
     let auth = JSON.parse(localStorage.getItem("authIssues") || "[]")
     let security = JSON.parse(localStorage.getItem("securityIssues") || "[]")
