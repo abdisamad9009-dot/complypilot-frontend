@@ -1,6 +1,17 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+useEffect(() => {
+  
+  const saved = localStorage.getItem("docs");
+  if (saved) {
+    setDocs(JSON.parse(saved));
+  }
+}, []);
+
+useEffect(() => {
+  localStorage.setItem("docs", JSON.stringify(docs));
+}, [docs]);
 
 export default function Documents() {
   const router = useRouter();
