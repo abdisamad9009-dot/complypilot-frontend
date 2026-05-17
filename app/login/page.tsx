@@ -13,7 +13,7 @@ export default function LoginPage() {
       const { data } = await supabase.auth.getUser();
 
       if (data.user) {
-        router.push("/dashboard"); // ✅ CHANGED HERE
+        router.push("/dashboard"); 
       } else {
         setChecking(false);
       }
