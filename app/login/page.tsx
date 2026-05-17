@@ -5,6 +5,7 @@ import { supabase } from "../../supabase";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState(""); // ✅ NEW
   const [checking, setChecking] = useState(true);
   const router = useRouter();
 
@@ -13,7 +14,7 @@ export default function LoginPage() {
       const { data } = await supabase.auth.getUser();
 
       if (data.user) {
-        router.push("/dashboard"); 
+        router.push("/dashboard");
       } else {
         setChecking(false);
       }
@@ -22,13 +23,32 @@ export default function LoginPage() {
     checkUser();
   }, [router]);
 
+  // ✅ LOGIN (email + password)
   const handleLogin = async () => {
-    await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
-      options: {
-        emailRedirectTo: "https://complypilot-frontend.vercel.app/login",
-      },
+      password,
     });
+
+    if (!error) {
+      router.push("/dashboard");
+    } else {
+      alert(error.message);
+    }
+  };
+
+  // ✅ SIGN UP
+  const handleSignup = async () => {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (!error) {
+      alert("Account created. Now log in.");
+    } else {
+      alert(error.message);
+    }
   };
 
   if (checking) return <div>Loading...</div>;
@@ -58,6 +78,7 @@ export default function LoginPage() {
           backdropFilter: "blur(18px)",
         }}
       >
+        {/* LEFT SIDE */}
         <div
           style={{
             padding: "64px 56px",
@@ -106,6 +127,7 @@ export default function LoginPage() {
           </p>
         </div>
 
+        {/* RIGHT SIDE */}
         <div
           style={{
             background: "#ffffff",
@@ -134,13 +156,14 @@ export default function LoginPage() {
                 marginBottom: "28px",
               }}
             >
-              Enter your email and we’ll send you a secure magic link.
+              Login or create an account below.
             </p>
 
             <div style={{ display: "grid", gap: "14px" }}>
+              {/* EMAIL */}
               <input
                 type="email"
-                placeholder="Enter your work email"
+                placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 style={{
@@ -151,6 +174,21 @@ export default function LoginPage() {
                 }}
               />
 
+              {/* PASSWORD */}
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "16px 18px",
+                  borderRadius: "14px",
+                  border: "1px solid #d1d5db",
+                }}
+              />
+
+              {/* LOGIN */}
               <button
                 onClick={handleLogin}
                 style={{
@@ -165,7 +203,23 @@ export default function LoginPage() {
                   cursor: "pointer",
                 }}
               >
-                Send Magic Link
+                Log In
+              </button>
+
+              {/* SIGN UP */}
+              <button
+                onClick={handleSignup}
+                style={{
+                  width: "100%",
+                  padding: "14px",
+                  borderRadius: "14px",
+                  border: "1px solid #d1d5db",
+                  background: "#fff",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}
+              >
+                Create Account
               </button>
             </div>
           </div>
