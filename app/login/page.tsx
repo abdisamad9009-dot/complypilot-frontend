@@ -12,42 +12,40 @@ export default function LoginPage() {
   useEffect(() => {
     const checkUser = async () => {
       const { data } = await supabase.auth.getUser();
-
       if (data.user) {
         router.push("/dashboard");
       } else {
         setChecking(false);
       }
     };
-
     checkUser();
   }, [router]);
 
-  // ✅ LOGIN (email + password)
+
   const handleLogin = async () => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (!error) {
-      router.push("/dashboard");
-    } else {
+    if (error) {
       alert(error.message);
+    } else {
+      router.push("/dashboard");
     }
   };
 
-  // ✅ SIGN UP
+
   const handleSignup = async () => {
     const { error } = await supabase.auth.signUp({
       email,
       password,
     });
 
-    if (!error) {
-      alert("Account created. Now log in.");
-    } else {
+    if (error) {
       alert(error.message);
+    } else {
+      alert("Account created. You can now log in.");
     }
   };
 
@@ -78,7 +76,6 @@ export default function LoginPage() {
           backdropFilter: "blur(18px)",
         }}
       >
-        {/* LEFT SIDE */}
         <div
           style={{
             padding: "64px 56px",
@@ -99,7 +96,6 @@ export default function LoginPage() {
           >
             ComplyPilot
           </div>
-
           <h1
             style={{
               fontSize: "48px",
@@ -112,7 +108,6 @@ export default function LoginPage() {
             <br />
             simplified.
           </h1>
-
           <p
             style={{
               fontSize: "17px",
@@ -127,7 +122,6 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* RIGHT SIDE */}
         <div
           style={{
             background: "#ffffff",
@@ -148,7 +142,6 @@ export default function LoginPage() {
             >
               Sign in
             </h2>
-
             <p
               style={{
                 color: "#6b7280",
@@ -160,7 +153,6 @@ export default function LoginPage() {
             </p>
 
             <div style={{ display: "grid", gap: "14px" }}>
-              {/* EMAIL */}
               <input
                 type="email"
                 placeholder="Enter your email"
@@ -174,7 +166,7 @@ export default function LoginPage() {
                 }}
               />
 
-              {/* PASSWORD */}
+      
               <input
                 type="password"
                 placeholder="Enter your password"
@@ -188,7 +180,6 @@ export default function LoginPage() {
                 }}
               />
 
-              {/* LOGIN */}
               <button
                 onClick={handleLogin}
                 style={{
@@ -206,15 +197,16 @@ export default function LoginPage() {
                 Log In
               </button>
 
-              {/* SIGN UP */}
+        
               <button
                 onClick={handleSignup}
                 style={{
                   width: "100%",
-                  padding: "14px",
+                  padding: "16px 18px",
                   borderRadius: "14px",
                   border: "1px solid #d1d5db",
-                  background: "#fff",
+                  background: "#ffffff",
+                  color: "#111827",
                   fontWeight: 600,
                   cursor: "pointer",
                 }}
