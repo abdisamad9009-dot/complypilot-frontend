@@ -1,25 +1,26 @@
 "use client";
-
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "../../supabase";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [checking, setChecking] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const checkUser = async () => {
       const { data } = await supabase.auth.getUser();
 
       if (data.user) {
-        window.location.href = "/dashboard";
+        router.push("/dashboard"); // ✅ CHANGED HERE
       } else {
         setChecking(false);
       }
     };
 
     checkUser();
-  }, []);
+  }, [router]);
 
   const handleLogin = async () => {
     await supabase.auth.signInWithOtp({
@@ -57,7 +58,6 @@ export default function LoginPage() {
           backdropFilter: "blur(18px)",
         }}
       >
-        {/* LEFT SIDE */}
         <div
           style={{
             padding: "64px 56px",
@@ -106,7 +106,6 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* RIGHT SIDE */}
         <div
           style={{
             background: "#ffffff",
