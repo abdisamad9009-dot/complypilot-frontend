@@ -5,7 +5,7 @@ import { supabase } from "../../supabase";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState(""); // ✅ NEW
+  const [password, setPassword] = useState(""); 
   const [checking, setChecking] = useState(true);
   const router = useRouter();
 
