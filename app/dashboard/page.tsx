@@ -59,10 +59,10 @@ export default function Dashboard() {
   const adjustedAuth = Math.max(Number(auth) - authCompleted, 0);
   const adjustedSecurity = Math.max(Number(security) - securityCompleted, 0);
   
-  const gdprExposure = adjustedGdpr * 2000000 * sizeMultiplier * 0.1;
-  const authExposure = adjustedAuth * 50000 * sizeMultiplier * 0.5;
-  const securityExposure = adjustedSecurity * 75000 * sizeMultiplier * 0.5;
-  const totalExposure = gdprExposure + authExposure + securityExposure;
+  const gdprExposure = adjustedGdpr * 500000 * sizeMultiplier * 0.1;
+const authExposure = adjustedAuth * 40000 * sizeMultiplier * 0.4;
+const securityExposure = adjustedSecurity * 30000 * sizeMultiplier * 0.4;
+const totalExposure = gdprExposure + authExposure + securityExposure;
   
   return (
     <div>
