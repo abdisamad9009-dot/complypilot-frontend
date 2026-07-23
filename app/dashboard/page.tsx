@@ -1,69 +1,77 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+
 export default function Dashboard() {
   const [score, setScore] = useState("0");
   const [gdpr, setGdpr] = useState("0");
   const [auth, setAuth] = useState("0");
   const [security, setSecurity] = useState("0");
   const [total, setTotal] = useState("0");
-  
+
   const [name, setName] = useState("");
   const [industry, setIndustry] = useState("");
-  const [employees, setEmployees] = useState(""); // 
+  const [employees, setEmployees] = useState("");
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const urlScore = params.get("score") || "0";
-    const urlGdpr = params.get("gdpr") || "0";
-    const urlAuth = params.get("auth") || "0";
-    const urlSecurity = params.get("security") || "0";
-    const urlTotal = params.get("total") || "0";
-    setGdpr(urlGdpr);
-    setAuth(urlAuth);
-    setSecurity(urlSecurity);
-    setTotal(urlTotal);
-    const savedScore = localStorage.getItem("complianceScore");
-    if (savedScore) {
-      setScore(savedScore);
-    } else {
-      setScore(urlScore);
-      localStorage.setItem("complianceScore", urlScore);
-    }
+
+    const urlScore = params.get("score");
+    const urlGdpr = params.get("gdpr");
+    const urlAuth = params.get("auth");
+    const urlSecurity = params.get("security");
+    const urlTotal = params.get("total");
+
+    const savedGdprArr = JSON.parse(localStorage.getItem("gdprIssues") || "[]");
+    const savedAuthArr = JSON.parse(localStorage.getItem("authIssues") || "[]");
+    const savedSecurityArr = JSON.parse(localStorage.getItem("securityIssues") || "[]");
+
+    const finalScore = urlScore ?? localStorage.getItem("complianceScore") ?? "0";
+    const finalGdprCount = urlGdpr ?? String(savedGdprArr.length);
+    const finalAuthCount = urlAuth ?? String(savedAuthArr.length);
+    const finalSecurityCount = urlSecurity ?? String(savedSecurityArr.length);
+    const finalTotal =
+      urlTotal ?? String(savedGdprArr.length + savedAuthArr.length + savedSecurityArr.length);
+
+    setScore(finalScore);
+    setGdpr(finalGdprCount);
+    setAuth(finalAuthCount);
+    setSecurity(finalSecurityCount);
+    setTotal(finalTotal);
+
+    localStorage.setItem("complianceScore", finalScore);
+
     setName(localStorage.getItem("businessName") || "");
     setIndustry(localStorage.getItem("industry") || "");
-    setEmployees(localStorage.getItem("employees") || ""); 
+    setEmployees(localStorage.getItem("employees") || "");
   }, []);
-  const updateScore = () => {
-    setScore((prev) => {
-      const newScore = (Number(prev) + 2).toString();
-      localStorage.setItem("complianceScore", newScore);
-      return newScore;
-    });
-  };
-  
+
   let sizeMultiplier = 0.5;
   if (employees === "1-10") sizeMultiplier = 0.3;
   if (employees === "11-50") sizeMultiplier = 0.6;
   if (employees === "51-200") sizeMultiplier = 1;
   if (employees === "200+") sizeMultiplier = 1.5;
-  // ✅ FIX ONLY HERE (no other changes)
+
   let completedTasks = 0;
   if (typeof window !== "undefined") {
     completedTasks = Number(localStorage.getItem("completedTasks") || 0);
   }
+
   const totalIssues = Number(gdpr) + Number(auth) + Number(security);
   const gdprCompleted = totalIssues > 0 ? Math.round((Number(gdpr) / totalIssues) * completedTasks) : 0;
   const authCompleted = totalIssues > 0 ? Math.round((Number(auth) / totalIssues) * completedTasks) : 0;
   const securityCompleted = totalIssues > 0 ? Math.round((Number(security) / totalIssues) * completedTasks) : 0;
+
   const adjustedGdpr = Math.max(Number(gdpr) - gdprCompleted, 0);
   const adjustedAuth = Math.max(Number(auth) - authCompleted, 0);
   const adjustedSecurity = Math.max(Number(security) - securityCompleted, 0);
-  
-  const gdprExposure = adjustedGdpr * 500000 * sizeMultiplier * 0.1;
-const authExposure = adjustedAuth * 40000 * sizeMultiplier * 0.4;
-const securityExposure = adjustedSecurity * 30000 * sizeMultiplier * 0.4;
-const totalExposure = gdprExposure + authExposure + securityExposure;
-  
+
+  const perFindingBase = 3000;
+  const gdprExposure = adjustedGdpr * perFindingBase * sizeMultiplier;
+  const authExposure = adjustedAuth * perFindingBase * sizeMultiplier;
+  const securityExposure = adjustedSecurity * perFindingBase * sizeMultiplier;
+  const totalExposure = gdprExposure + authExposure + securityExposure;
+
   return (
     <div>
       <div style={{ marginBottom: "32px" }}>
@@ -158,7 +166,7 @@ const totalExposure = gdprExposure + authExposure + securityExposure;
           <h3 style={sectionTitle}>Actions</h3>
           <div style={{ display: "grid", gap: "12px", marginTop: "18px" }}>
             <Link href="/assessment" style={{ textDecoration: "none" }}>
-              <button style={primaryButtonStyle} onClick={updateScore}>
+              <button style={primaryButtonStyle}>
                 Run Assessment
               </button>
             </Link>
@@ -192,7 +200,7 @@ const totalExposure = gdprExposure + authExposure + securityExposure;
     </div>
   );
 }
-// ✅ DO NOT REMOVE — REQUIRED STYLES
+
 const cardStyle: React.CSSProperties = {
   background: "#ffffff",
   border: "1px solid #e5e7eb",
