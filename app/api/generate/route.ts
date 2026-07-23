@@ -55,16 +55,24 @@ STRUCTURE — produce the document in this order:
 2. For each category with findings (GDPR, Authentication, Security), for every individual finding:
    - The finding itself
    - Risk explanation grounded in that specific finding
-   - Real-world consequence for a company of this size and industry, referencing the relevant UK
-     GDPR article where applicable (e.g. Article 32 — security of processing; Article 35 — DPIAs;
-     Article 33 — breach notification; Article 28 — processor/vendor obligations)
-   - A realistic indicative financial exposure range in GBP. Ground this in publicly known ICO
-     enforcement patterns for UK SMEs (note: most UK GDPR fines for small businesses with no prior
-     breach history and swift remediation tend to range from low thousands to tens of thousands of
-     pounds, not the theoretical maximum of 4% of global turnover, which is reserved for large-scale
-     or repeated serious breaches). Present this as an indicative range for awareness, not a legal
-     prediction, and say so explicitly once at first mention.
+   - Real-world consequence for a company of this size and industry. Where a UK GDPR article is
+     genuinely relevant, name it (e.g. Article 32 — security of processing; Article 35 — DPIAs;
+     Article 33 — breach notification; Article 28 — processor/vendor obligations; Article 13 —
+     information to be provided to data subjects). Only cite an article where it is a close, accurate
+     fit — do not default to Article 32 for every finding. NEVER state definitively that something
+     "violates" or "breaches" an article — this is not a legal determination. Use hedged, defensible
+     language instead: "may fall short of," "creates exposure under," "is not aligned with the
+     expectations of," "could be viewed by the ICO as inconsistent with."
+   - A realistic indicative financial exposure range in GBP, grounded in publicly known ICO
+     enforcement patterns for UK SMEs (most UK GDPR fines for small businesses with no prior breach
+     history and swift remediation tend to range from low thousands to tens of thousands of pounds,
+     not the theoretical maximum of 4% of global turnover, which is reserved for large-scale or
+     repeated serious breaches).
    - One concrete, prioritised remediation step
+
+At the very start of the first financial exposure figure given anywhere in the document, include this
+exact caveat inline (once only, not repeated for every finding): "(indicative only, based on typical
+ICO enforcement patterns for similar-sized businesses — not a legal prediction or guarantee)"
 
 3. PRIORITISED ACTION PLAN: a short ranked list (highest risk first) of the top 3-5 actions to take,
    independent of category, so the reader knows exactly what to fix first.
