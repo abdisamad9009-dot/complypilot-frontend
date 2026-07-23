@@ -45,50 +45,66 @@ ${authIssues.length ? authIssues.map((q: string) => `- ${q}`).join("\n") : "- No
 Security control gaps:
 ${securityIssues.length ? securityIssues.map((q: string) => `- ${q}`).join("\n") : "- None identified"}
 
-STRUCTURE — produce the document in this order:
+The document MUST contain exactly these six section headers, in this order, every single time,
+with no exceptions:
 
-1. EXECUTIVE SUMMARY (short, 3-5 sentences): state the compliance score, the total number of gaps
-   found, and a one-line characterisation of overall risk level (e.g. "moderate risk requiring
-   near-term action" or "low risk with a small number of gaps to close"). Write this for a
-   time-pressed business owner, not a technical audience.
+## EXECUTIVE SUMMARY
+## FINANCIAL EXPOSURE DISCLAIMER
+## DETAILED FINDINGS
+## COMPOUNDING RISKS
+## PRIORITISED ACTION PLAN
+## PATH FORWARD
 
-2. For each category with findings (GDPR, Authentication, Security), for every individual finding:
-   - The finding itself
-   - Risk explanation grounded in that specific finding
-   - Real-world consequence for a company of this size and industry. Where a UK GDPR article is
-     genuinely relevant, name it (e.g. Article 32 — security of processing; Article 35 — DPIAs;
-     Article 33 — breach notification; Article 28 — processor/vendor obligations; Article 13 —
-     information to be provided to data subjects). Only cite an article where it is a close, accurate
-     fit — do not default to Article 32 for every finding. NEVER state definitively that something
-     "violates" or "breaches" an article — this is not a legal determination. Use hedged, defensible
-     language instead: "may fall short of," "creates exposure under," "is not aligned with the
-     expectations of," "could be viewed by the ICO as inconsistent with."
-   - A realistic indicative financial exposure range in GBP, grounded in publicly known ICO
-     enforcement patterns for UK SMEs (most UK GDPR fines for small businesses with no prior breach
-     history and swift remediation tend to range from low thousands to tens of thousands of pounds,
-     not the theoretical maximum of 4% of global turnover, which is reserved for large-scale or
-     repeated serious breaches).
-   - One concrete, prioritised remediation step
+Content rules for each section:
 
-At the very start of the first financial exposure figure given anywhere in the document, include this
-exact caveat inline (once only, not repeated for every finding): "(indicative only, based on typical
-ICO enforcement patterns for similar-sized businesses — not a legal prediction or guarantee)"
+## EXECUTIVE SUMMARY
+3-5 sentences. State the compliance score, total gap count, and a one-line risk verdict (e.g.
+"moderate risk requiring near-term action"). Written for a time-pressed business owner.
 
-3. PRIORITISED ACTION PLAN: a short ranked list (highest risk first) of the top 3-5 actions to take,
-   independent of category, so the reader knows exactly what to fix first.
+## FINANCIAL EXPOSURE DISCLAIMER
+Exactly one sentence, appearing here ONLY and nowhere else in the document: "Financial exposure
+figures throughout this report are indicative only, based on typical ICO enforcement patterns for
+similarly sized businesses, and do not constitute a legal prediction or guarantee." Do not repeat
+any version of this sentence anywhere else in the document.
 
-RULES:
-- Every risk must be tied directly to one of the specific findings listed above — do not invent
-  generic risk categories (e.g. "Market Risks", "Strategic Risks") unrelated to the findings given.
-- Vary sentence structure between findings so it doesn't read as a repeated template.
-- Keep tone professional and consultative, as if written by a compliance analyst who has actually
-  reviewed this company's answers.
-- Do not include a signature block, appendices, or disclaimer boilerplate beyond the one financial
-  caveat described above.
+## DETAILED FINDINGS
+For every finding across GDPR, Authentication, and Security (grouped under their own subheadings),
+give: the finding, a risk explanation, the real-world consequence (naming a specific UK GDPR article
+ONLY where it is a close, accurate fit — vary which article you use, do not default to Article 32
+for everything), an indicative GBP financial exposure range (numbers only, no repeated disclaimer
+text), and one concrete remediation step. Use hedged, non-definitive language for legal claims
+always: "may fall short of," "creates exposure under," "is not aligned with the expectations of" —
+NEVER "violates" or "breaches."
+
+## COMPOUNDING RISKS
+This section is MANDATORY and must never be skipped or left empty. Identify at least one genuine
+way two or more of the findings above interact to create a combined risk greater than either alone
+(for example: absent MFA together with no monitoring of privileged users meaningfully increases
+insider-threat exposure; missing backup testing together with no disaster recovery plan means a
+single incident could cause irreversible data loss). Write 2-4 sentences on this.
+
+## PRIORITISED ACTION PLAN
+A ranked list of the top 3-5 actions, highest priority first. For EVERY item, include a short clause
+explaining why it is ranked where it is relative to the others (e.g. "ranked first because it is
+low-effort and closes the highest-likelihood gap"). Do not list actions without this justification.
+
+## PATH FORWARD
+This section is MANDATORY. One short closing paragraph estimating, in plain directional terms (not
+a fabricated precise percentage), how much completing the action plan would improve the company's
+compliance posture relative to the ${totalGaps} gaps identified.
+
+GENERAL RULES:
+- Every risk must trace to one of the specific findings given — never invent generic categories
+  like "Market Risks" or "Strategic Risks."
+- Vary sentence structure between findings so nothing reads like a repeated template.
+- Write with the confidence and economy of a compliance analyst who has done this hundreds of times.
+  Do not over-explain basic concepts the reader already understands.
+- No signature block, appendices, or extra disclaimer boilerplate anywhere outside the one
+  designated disclaimer section above.
 `;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
