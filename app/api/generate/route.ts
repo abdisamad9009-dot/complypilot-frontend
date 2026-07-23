@@ -68,13 +68,25 @@ similarly sized businesses, and do not constitute a legal prediction or guarante
 any version of this sentence anywhere else in the document.
 
 ## DETAILED FINDINGS
+You MUST cover every single finding listed above individually — do not skip, truncate, group, or
+summarize any of them, no matter how many there are. Never write phrases like "assessed similarly"
+or "summarized below" as a substitute for covering a finding in full. If there are many findings,
+keep each one's write-up concise rather than dropping any of them.
+
 For every finding across GDPR, Authentication, and Security (grouped under their own subheadings),
 give: the finding, a risk explanation, the real-world consequence (naming a specific UK GDPR article
 ONLY where it is a close, accurate fit — vary which article you use, do not default to Article 32
-for everything), an indicative GBP financial exposure range (numbers only, no repeated disclaimer
-text), and one concrete remediation step. Use hedged, non-definitive language for legal claims
-always: "may fall short of," "creates exposure under," "is not aligned with the expectations of" —
-NEVER "violates" or "breaches."
+for everything), an indicative GBP financial exposure range, and one concrete remediation step. Use
+hedged, non-definitive language for legal claims always: "may fall short of," "creates exposure
+under," "is not aligned with the expectations of" — NEVER "violates" or "breaches."
+
+Financial exposure ranges MUST stay realistic for a UK SME with no prior enforcement history and no
+confirmed breach — these are self-assessment gaps, not proven incidents. As a firm anchor: individual
+findings like these should generally fall between £500 and £15,000 each, with anything above £15,000
+reserved only for the single most severe finding in the whole report, if one clearly stands out. Do
+not let ranges climb into the tens of thousands for routine findings (e.g. missing an update schedule
+or backup testing) — that overstates real-world ICO enforcement patterns for first-time, self-
+identified gaps at small businesses and undermines the credibility of the report.
 
 ## COMPOUNDING RISKS
 This section is MANDATORY and must never be skipped or left empty. Identify at least one genuine
