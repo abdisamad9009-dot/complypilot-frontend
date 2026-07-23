@@ -56,13 +56,10 @@ export default function AssessmentPage() {
   ]
 
   const [page, setPage] = useState(0)
- const [answers, setAnswers] = useState<{ [key: number]: string }>({})
+  const [answers, setAnswers] = useState<{ [key: number]: string }>({})
 
-  // ✅ EXISTING
   const [businessName, setBusinessName] = useState("")
   const [industry, setIndustry] = useState("")
-
-  // ✅ ADDED
   const [employees, setEmployees] = useState("")
 
   const questionsPerPage = 10
@@ -81,15 +78,15 @@ export default function AssessmentPage() {
       setPage(page + 1)
       window.scrollTo(0, 0)
     } else {
-     let gdpr: any[] = []
-     let auth: any[] = []
-     let security: any[] = []
+      let gdpr: any[] = []
+      let auth: any[] = []
+      let security: any[] = []
 
       Object.entries(answers).forEach(([index, value]) => {
         if (value === "no") {
           const i = Number(index)
 
-          if ([0, 3, 20, 37, 40, 48].includes(i)) {
+          if ([0, 3, 20, 48].includes(i)) {
             gdpr.push(questions[i])
           }
 
@@ -101,7 +98,7 @@ export default function AssessmentPage() {
             [
               1, 4, 5, 6, 8, 9, 11, 12, 13, 17, 18, 19,
               21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-              31, 32, 33, 34, 35, 36, 38, 39, 41, 42,
+              31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
               45, 46, 47, 49
             ].includes(i)
           ) {
@@ -115,17 +112,13 @@ export default function AssessmentPage() {
 
       const score = Math.round((yesCount / 50) * 100)
 
-      // ✅ SAVE EVERYTHING
       localStorage.setItem("complianceScore", String(score))
       localStorage.setItem("gdprIssues", JSON.stringify(gdpr))
       localStorage.setItem("authIssues", JSON.stringify(auth))
       localStorage.setItem("securityIssues", JSON.stringify(security))
 
-      // ✅ EXISTING
       localStorage.setItem("businessName", businessName)
       localStorage.setItem("industry", industry)
-
-      // ✅ ADDED
       localStorage.setItem("employees", employees)
 
       window.location.href =
@@ -145,7 +138,6 @@ export default function AssessmentPage() {
         Compliance Assessment
       </h1>
 
-      {/* ✅ NEW INPUTS */}
       {page === 0 && (
         <div style={{ marginTop: "20px", marginBottom: "30px" }}>
           <input
@@ -184,7 +176,6 @@ export default function AssessmentPage() {
             <option value="Other">Other</option>
           </select>
 
-          {/* ✅ ADDED EMPLOYEE SIZE */}
           <select
             value={employees}
             onChange={(e) => setEmployees(e.target.value)}
