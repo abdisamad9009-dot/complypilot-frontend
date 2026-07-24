@@ -5,6 +5,238 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const POLICY_DOCS = [
+  "Information Security Policy",
+  "GDPR Compliance Policy",
+  "Data Retention Policy",
+  "Access Control Policy",
+  "Acceptable Use Policy",
+  "Vendor Risk Policy",
+  "Encryption Policy",
+];
+
+const PLAN_DOCS = [
+  "Incident Response Plan",
+  "Business Continuity Plan",
+  "Data Breach Response Policy",
+];
+
+function getDocCategory(type: string): "risk_report" | "policy" | "plan" | "privacy_policy" {
+  if (type === "Risk Assessment Report") return "risk_report";
+  if (type === "Privacy Policy") return "privacy_policy";
+  if (PLAN_DOCS.includes(type)) return "plan";
+  if (POLICY_DOCS.includes(type)) return "policy";
+  return "policy";
+}
+
+function buildRiskReportPrompt(vars: any) {
+  const { companyLabel, industry, employees, complianceScore, totalGaps, gdprIssues, authIssues, securityIssues } = vars;
+  return `
+Generate a professional "Risk Assessment Report" for the following UK company.
+Use their real details below. Do NOT use placeholders like [Company Name] or [Insert Date] —
+use the actual values provided.
+
+COMPANY DETAILS
+- Company name: ${companyLabel}
+- Industry: ${industry || "not specified"}
+- Company size: ${employees || "not specified"} employees
+- Overall compliance score: ${complianceScore || "not available"}%
+- Total gaps identified: ${totalGaps}
+
+SPECIFIC FINDINGS (answered "No" to these questions):
+GDPR / data protection gaps:
+${gdprIssues.length ? gdprIssues.map((q: string) => `- ${q}`).join("\n") : "- None identified"}
+Authentication gaps:
+${authIssues.length ? authIssues.map((q: string) => `- ${q}`).join("\n") : "- None identified"}
+Security control gaps:
+${securityIssues.length ? securityIssues.map((q: string) => `- ${q}`).join("\n") : "- None identified"}
+
+The document MUST contain exactly these six section headers, in this order:
+## EXECUTIVE SUMMARY
+## FINANCIAL EXPOSURE DISCLAIMER
+## DETAILED FINDINGS
+## COMPOUNDING RISKS
+## PRIORITISED ACTION PLAN
+## PATH FORWARD
+
+## EXECUTIVE SUMMARY
+3-5 sentences. State the compliance score, total gap count, and a one-line risk verdict.
+
+## FINANCIAL EXPOSURE DISCLAIMER
+Exactly one sentence, appearing here ONLY: "Financial exposure figures throughout this report are
+indicative only, based on typical ICO enforcement patterns for similarly sized businesses, and do
+not constitute a legal prediction or guarantee."
+
+## DETAILED FINDINGS
+Cover every single finding listed above individually — never skip, truncate, or summarize any of
+them. For each: the finding, a risk explanation, real-world consequence (naming a specific UK GDPR
+article ONLY where genuinely relevant — vary the article used, never default to Article 32 for
+everything), an indicative GBP financial exposure range (individual findings generally £500-£15,000,
+higher only for the single most severe finding if one clearly stands out), and one remediation step.
+Use hedged language always: "may fall short of," "creates exposure under" — NEVER "violates" or
+"breaches."
+
+## COMPOUNDING RISKS
+Mandatory. Identify at least one genuine way two or more findings interact to create a combined risk
+greater than either alone.
+
+## PRIORITISED ACTION PLAN
+Ranked top 3-5 actions, each with a short justification for its rank.
+
+## PATH FORWARD
+Mandatory. One paragraph, plain directional terms, on how much completing the plan would improve
+the company's posture relative to the ${totalGaps} gaps.
+
+RULES: vary sentence structure between findings; write with the confidence of an experienced
+analyst; no signature block or appendices.
+`;
+}
+
+function buildPolicyPrompt(vars: any) {
+  const { type, companyLabel, industry, employees, gdprIssues, authIssues, securityIssues } = vars;
+  const allGaps = [...gdprIssues, ...authIssues, ...securityIssues];
+  return `
+Generate a professional "${type}" for the following UK company. This is an internal company policy
+document — the kind an employee or auditor would read to understand the company's actual rules and
+standards. It is NOT a risk report and must not read like one. Do NOT list "findings" or reference
+a compliance score. Do NOT use placeholders like [Company Name] — use the real values given.
+
+COMPANY DETAILS
+- Company name: ${companyLabel}
+- Industry: ${industry || "not specified"}
+- Company size: ${employees || "not specified"} employees
+
+CONTEXT (for your awareness only — do not reference this list directly or call it out as "gaps" in
+the document; instead, make sure the policy's rules directly close these specific gaps by requiring
+the relevant practice):
+${allGaps.length ? allGaps.map((q: string) => `- ${q}`).join("\n") : "- No specific gaps flagged"}
+
+STRUCTURE:
+## PURPOSE
+1-2 sentences: what this policy governs and why it exists for this company.
+
+## SCOPE
+Who and what this policy applies to (e.g. all employees, contractors, systems handling company or
+customer data).
+
+## POLICY STATEMENTS
+The core rules of the policy, as numbered statements written in the present tense as binding company
+rules (e.g. "All company devices must have multi-factor authentication enabled before accessing
+production systems."). Make sure the statements collectively require the specific practices needed
+to close the gaps listed in CONTEXT above, phrased as forward-looking company rules, not references
+to past failures.
+
+## RESPONSIBILITIES
+Who owns enforcement and monitoring of this policy (e.g. IT lead, management, all staff) — keep
+generic to role, not named individuals.
+
+## REVIEW
+One sentence stating this policy should be reviewed at least annually or after any significant
+change to the company's systems or data handling.
+
+RULES:
+- Written entirely as forward-looking company rules — never in the language of "the company lacks X"
+  or "gaps were found."
+- Professional, plain business English — the tone of an actual internal policy document, not a
+  report.
+- No signature block, no disclaimers, no financial figures — those belong in the Risk Assessment
+  Report, not here.
+`;
+}
+
+function buildPlanPrompt(vars: any) {
+  const { type, companyLabel, industry, employees, gdprIssues, authIssues, securityIssues } = vars;
+  const allGaps = [...gdprIssues, ...authIssues, ...securityIssues];
+  return `
+Generate a professional "${type}" for the following UK company. This is a procedural plan document —
+a step-by-step guide for what the company actually does when a specific situation occurs. It is NOT
+a risk report. Do NOT use placeholders — use the real values given.
+
+COMPANY DETAILS
+- Company name: ${companyLabel}
+- Industry: ${industry || "not specified"}
+- Company size: ${employees || "not specified"} employees
+
+CONTEXT (for your awareness only — do not list this as "findings"; instead make sure the plan's
+procedures specifically close these gaps by requiring the relevant practice at the relevant step):
+${allGaps.length ? allGaps.map((q: string) => `- ${q}`).join("\n") : "- No specific gaps flagged"}
+
+STRUCTURE:
+## PURPOSE
+1-2 sentences on what scenario this plan covers and why it matters for this company.
+
+## ROLES AND RESPONSIBILITIES
+Who is responsible for what during an incident (by role, not named individuals — e.g. "IT lead",
+"management", "all staff").
+
+## PROCEDURE
+A clear, numbered, step-by-step sequence of actions to take when this scenario occurs, from initial
+detection/trigger through to resolution and follow-up. Where UK GDPR timing requirements are
+genuinely relevant (e.g. 72-hour ICO breach notification under Article 33), state them accurately.
+
+## COMMUNICATION
+Who needs to be informed (internally and, where relevant, externally — customers, ICO, etc.) and in
+what order.
+
+## REVIEW
+One sentence stating this plan should be tested/reviewed at least annually.
+
+RULES:
+- Written as an actionable procedure the company would actually follow, not a description of risks.
+- Plain, direct, numbered steps — a stressed employee following this during a real incident should
+  be able to act on it immediately.
+- No financial figures, no disclaimers — those belong in the Risk Assessment Report, not here.
+`;
+}
+
+function buildPrivacyPolicyPrompt(vars: any) {
+  const { companyLabel, industry } = vars;
+  return `
+Generate a professional, publishable "Privacy Policy" for the following UK company's website. This
+is an external, customer-facing legal document explaining to data subjects how their personal data
+is handled. It must NOT reference any internal compliance gaps, scores, or risk findings — those are
+completely irrelevant here. Do NOT use placeholders — use the real company name given.
+
+COMPANY DETAILS
+- Company name: ${companyLabel}
+- Industry: ${industry || "not specified"}
+
+STRUCTURE:
+## INTRODUCTION
+Who the company is and that this policy explains how it handles personal data, in plain terms.
+
+## WHAT DATA WE COLLECT
+A realistic list of data types a company in this industry would typically collect (e.g. contact
+details, account information, and industry-appropriate examples).
+
+## HOW WE USE YOUR DATA
+Plain-language explanation of the purposes data is used for.
+
+## LEGAL BASIS FOR PROCESSING
+Briefly note the relevant UK GDPR legal bases likely to apply (e.g. consent, contract, legitimate
+interests) in plain terms, without overclaiming certainty about which applies to every case.
+
+## DATA RETENTION
+General plain-language statement that data is kept only as long as necessary for the purposes
+described, and is reviewed periodically.
+
+## YOUR RIGHTS
+Plain-language summary of UK GDPR data subject rights (access, rectification, erasure, restriction,
+portability, objection).
+
+## CONTACT US
+A generic placeholder line inviting the reader to contact the company's data protection contact,
+without inventing a specific name or email (use "please contact us via the details on our website").
+
+RULES:
+- Written entirely in plain, customer-facing language — no compliance jargon, no internal audit
+  language, no reference to any assessment or score.
+- This must genuinely be usable, close to as-is, as a real published privacy policy.
+- No disclaimers about legal advice needed beyond a brief closing note that this is a template and
+  should be reviewed by a qualified professional before publishing.
+`;
+}
+
 export async function POST(req: Request) {
   try {
     const {
@@ -19,101 +251,27 @@ export async function POST(req: Request) {
     } = await req.json();
 
     const companyLabel = businessName?.trim() ? businessName : "the company";
-
     const totalGaps = gdprIssues.length + authIssues.length + securityIssues.length;
 
-    const prompt = `
-Generate a professional "${type}" compliance document for the following UK company.
-Use their real details below. Do NOT use placeholders like [Company Name] or [Insert Date] —
-use the actual values provided. If a value is missing, refer to them naturally as "the company"
-rather than leaving a bracketed placeholder.
+    const category = getDocCategory(type);
 
-COMPANY DETAILS
-- Company name: ${companyLabel}
-- Industry: ${industry || "not specified"}
-- Company size: ${employees || "not specified"} employees
-- Overall compliance score from their self-assessment: ${complianceScore || "not available"}%
-- Total gaps identified: ${totalGaps}
+    const vars = {
+      type,
+      companyLabel,
+      industry,
+      employees,
+      complianceScore,
+      totalGaps,
+      gdprIssues,
+      authIssues,
+      securityIssues,
+    };
 
-SPECIFIC FINDINGS FROM THEIR ASSESSMENT (answered "No" to these questions):
-GDPR / data protection gaps:
-${gdprIssues.length ? gdprIssues.map((q: string) => `- ${q}`).join("\n") : "- None identified"}
-
-Authentication gaps:
-${authIssues.length ? authIssues.map((q: string) => `- ${q}`).join("\n") : "- None identified"}
-
-Security control gaps:
-${securityIssues.length ? securityIssues.map((q: string) => `- ${q}`).join("\n") : "- None identified"}
-
-The document MUST contain exactly these six section headers, in this order, every single time,
-with no exceptions:
-
-## EXECUTIVE SUMMARY
-## FINANCIAL EXPOSURE DISCLAIMER
-## DETAILED FINDINGS
-## COMPOUNDING RISKS
-## PRIORITISED ACTION PLAN
-## PATH FORWARD
-
-Content rules for each section:
-
-## EXECUTIVE SUMMARY
-3-5 sentences. State the compliance score, total gap count, and a one-line risk verdict (e.g.
-"moderate risk requiring near-term action"). Written for a time-pressed business owner.
-
-## FINANCIAL EXPOSURE DISCLAIMER
-Exactly one sentence, appearing here ONLY and nowhere else in the document: "Financial exposure
-figures throughout this report are indicative only, based on typical ICO enforcement patterns for
-similarly sized businesses, and do not constitute a legal prediction or guarantee." Do not repeat
-any version of this sentence anywhere else in the document.
-
-## DETAILED FINDINGS
-You MUST cover every single finding listed above individually — do not skip, truncate, group, or
-summarize any of them, no matter how many there are. Never write phrases like "assessed similarly"
-or "summarized below" as a substitute for covering a finding in full. If there are many findings,
-keep each one's write-up concise rather than dropping any of them.
-
-For every finding across GDPR, Authentication, and Security (grouped under their own subheadings),
-give: the finding, a risk explanation, the real-world consequence (naming a specific UK GDPR article
-ONLY where it is a close, accurate fit — vary which article you use, do not default to Article 32
-for everything), an indicative GBP financial exposure range, and one concrete remediation step. Use
-hedged, non-definitive language for legal claims always: "may fall short of," "creates exposure
-under," "is not aligned with the expectations of" — NEVER "violates" or "breaches."
-
-Financial exposure ranges MUST stay realistic for a UK SME with no prior enforcement history and no
-confirmed breach — these are self-assessment gaps, not proven incidents. As a firm anchor: individual
-findings like these should generally fall between £500 and £15,000 each, with anything above £15,000
-reserved only for the single most severe finding in the whole report, if one clearly stands out. Do
-not let ranges climb into the tens of thousands for routine findings (e.g. missing an update schedule
-or backup testing) — that overstates real-world ICO enforcement patterns for first-time, self-
-identified gaps at small businesses and undermines the credibility of the report.
-
-## COMPOUNDING RISKS
-This section is MANDATORY and must never be skipped or left empty. Identify at least one genuine
-way two or more of the findings above interact to create a combined risk greater than either alone
-(for example: absent MFA together with no monitoring of privileged users meaningfully increases
-insider-threat exposure; missing backup testing together with no disaster recovery plan means a
-single incident could cause irreversible data loss). Write 2-4 sentences on this.
-
-## PRIORITISED ACTION PLAN
-A ranked list of the top 3-5 actions, highest priority first. For EVERY item, include a short clause
-explaining why it is ranked where it is relative to the others (e.g. "ranked first because it is
-low-effort and closes the highest-likelihood gap"). Do not list actions without this justification.
-
-## PATH FORWARD
-This section is MANDATORY. One short closing paragraph estimating, in plain directional terms (not
-a fabricated precise percentage), how much completing the action plan would improve the company's
-compliance posture relative to the ${totalGaps} gaps identified.
-
-GENERAL RULES:
-- Every risk must trace to one of the specific findings given — never invent generic categories
-  like "Market Risks" or "Strategic Risks."
-- Vary sentence structure between findings so nothing reads like a repeated template.
-- Write with the confidence and economy of a compliance analyst who has done this hundreds of times.
-  Do not over-explain basic concepts the reader already understands.
-- No signature block, appendices, or extra disclaimer boilerplate anywhere outside the one
-  designated disclaimer section above.
-`;
+    let prompt: string;
+    if (category === "risk_report") prompt = buildRiskReportPrompt(vars);
+    else if (category === "plan") prompt = buildPlanPrompt(vars);
+    else if (category === "privacy_policy") prompt = buildPrivacyPolicyPrompt(vars);
+    else prompt = buildPolicyPrompt(vars);
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -121,7 +279,7 @@ GENERAL RULES:
         {
           role: "system",
           content:
-            "You are a professional UK GDPR and security compliance analyst. You write specific, evidence-based compliance documents grounded strictly in the data you are given. You never use placeholder text and never introduce generic risk categories unrelated to the findings provided.",
+            "You are a professional UK GDPR and security compliance analyst. You write specific, evidence-based, correctly structured compliance documents. You never use placeholder text, never invent generic content unrelated to what you're given, and always match the actual structure and purpose of the specific document type requested.",
         },
         {
           role: "user",
