@@ -21,6 +21,32 @@ const PLAN_DOCS = [
   "Data Breach Response Policy",
 ];
 
+const POLICY_FOCUS: Record<string, string> = {
+  "Information Security Policy":
+    "Focus specifically on technical and access controls: authentication, monitoring, patching, encryption, environment separation, and incident tracking. This is the technical backbone document — be concrete about systems and controls.",
+  "GDPR Compliance Policy":
+    "Focus specifically on GDPR legal obligations rather than technical controls: lawful basis for processing, data subject rights, data protection by design and default, records of processing activities (Article 30), and when a Data Protection Impact Assessment (Article 35) is required. Only mention technical controls briefly where legally required (e.g. Article 32), and do not duplicate the full technical control list — that belongs in the Information Security Policy, not here.",
+  "Data Retention Policy":
+    "Focus specifically on how long different categories of data are kept, the criteria for those retention periods, and the process and cadence for reviewing and securely deleting data no longer needed.",
+  "Access Control Policy":
+    "Focus specifically on who gets access to what: role-based access, the principle of least privilege, joiner/mover/leaver provisioning and deprovisioning, and periodic access reviews.",
+  "Acceptable Use Policy":
+    "Focus specifically on employee conduct rules for company systems, devices, email, and internet use, including what is and isn't permitted, rather than infrastructure-level security controls.",
+  "Vendor Risk Policy":
+    "Focus specifically on managing third-party and supplier risk: due diligence before onboarding a vendor, data processing agreements, and ongoing monitoring of vendor security practices.",
+  "Encryption Policy":
+    "Focus specifically on encryption standards for data at rest and in transit, approved algorithms/methods at a policy level (not implementation detail), and key management practices including rotation.",
+};
+
+const PLAN_FOCUS: Record<string, string> = {
+  "Incident Response Plan":
+    "Focus on the general technical detection, containment, eradication, and recovery process for a security incident of any kind (not limited to personal data breaches).",
+  "Data Breach Response Policy":
+    "Focus specifically on the legal and regulatory side of a PERSONAL DATA breach under UK GDPR: accurately timed obligations (72-hour ICO notification under Article 33, when individuals must also be informed under Article 34), what must be documented and recorded about the breach, and who is legally responsible for those specific obligations. Keep technical containment steps brief — the emphasis here is notification, documentation, and legal compliance, not technical recovery, which belongs in the Incident Response Plan.",
+  "Business Continuity Plan":
+    "Focus specifically on maintaining overall business operations during a prolonged disruption (e.g. facility loss, extended outage, major supplier failure) — not limited to a data breach or security incident. Cover alternate ways of operating, recovery time expectations, and how the company keeps functioning while systems are restored.",
+};
+
 function getDocCategory(type: string): "risk_report" | "policy" | "plan" | "privacy_policy" {
   if (type === "Risk Assessment Report") return "risk_report";
   if (type === "Privacy Policy") return "privacy_policy";
@@ -95,11 +121,17 @@ analyst; no signature block or appendices.
 function buildPolicyPrompt(vars: any) {
   const { type, companyLabel, industry, employees, gdprIssues, authIssues, securityIssues } = vars;
   const allGaps = [...gdprIssues, ...authIssues, ...securityIssues];
+  const focus = POLICY_FOCUS[type] || "";
   return `
 Generate a professional "${type}" for the following UK company. This is an internal company policy
 document — the kind an employee or auditor would read to understand the company's actual rules and
 standards. It is NOT a risk report and must not read like one. Do NOT list "findings" or reference
 a compliance score. Do NOT use placeholders like [Company Name] — use the real values given.
+
+DOCUMENT FOCUS (important — this document type is distinct from other policies the company may also
+generate, so keep to this specific emphasis rather than repeating generic content that belongs in a
+different policy):
+${focus}
 
 COMPANY DETAILS
 - Company name: ${companyLabel}
@@ -107,8 +139,9 @@ COMPANY DETAILS
 - Company size: ${employees || "not specified"} employees
 
 CONTEXT (for your awareness only — do not reference this list directly or call it out as "gaps" in
-the document; instead, make sure the policy's rules directly close these specific gaps by requiring
-the relevant practice):
+the document; only weave in the ones that are actually relevant to this document's specific focus
+above, phrased as forward-looking company rules, not references to past failures. Do not force in
+gaps unrelated to this document's focus just because they're in this list):
 ${allGaps.length ? allGaps.map((q: string) => `- ${q}`).join("\n") : "- No specific gaps flagged"}
 
 STRUCTURE:
@@ -147,18 +180,25 @@ RULES:
 function buildPlanPrompt(vars: any) {
   const { type, companyLabel, industry, employees, gdprIssues, authIssues, securityIssues } = vars;
   const allGaps = [...gdprIssues, ...authIssues, ...securityIssues];
+  const focus = PLAN_FOCUS[type] || "";
   return `
 Generate a professional "${type}" for the following UK company. This is a procedural plan document —
 a step-by-step guide for what the company actually does when a specific situation occurs. It is NOT
 a risk report. Do NOT use placeholders — use the real values given.
+
+DOCUMENT FOCUS (important — this document type is distinct from other plans the company may also
+generate, so keep to this specific emphasis rather than repeating generic content that belongs in a
+different plan):
+${focus}
 
 COMPANY DETAILS
 - Company name: ${companyLabel}
 - Industry: ${industry || "not specified"}
 - Company size: ${employees || "not specified"} employees
 
-CONTEXT (for your awareness only — do not list this as "findings"; instead make sure the plan's
-procedures specifically close these gaps by requiring the relevant practice at the relevant step):
+CONTEXT (for your awareness only — do not list this as "findings"; only weave in the ones genuinely
+relevant to this document's specific focus above, at the relevant step. Do not force in unrelated
+gaps just because they're in this list):
 ${allGaps.length ? allGaps.map((q: string) => `- ${q}`).join("\n") : "- No specific gaps flagged"}
 
 STRUCTURE:
