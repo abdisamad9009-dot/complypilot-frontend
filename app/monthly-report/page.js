@@ -9,27 +9,68 @@ export default function MonthlyReport() {
   const [security, setSecurity] = useState("0");
   const [name, setName] = useState("");
   const [industry, setIndustry] = useState("");
+  const [narrative, setNarrative] = useState("");
+  const [loadingNarrative, setLoadingNarrative] = useState(false);
 
   useEffect(() => {
     const savedScore = localStorage.getItem("complianceScore") || "0";
     const savedName = localStorage.getItem("businessName") || "";
     const savedIndustry = localStorage.getItem("industry") || "";
-    const savedGdpr = localStorage.getItem("gdpr") || "0";
-    const savedAuth = localStorage.getItem("auth") || "0";
-    const savedSecurity = localStorage.getItem("security") || "0";
+
+    const savedGdprArr = JSON.parse(localStorage.getItem("gdprIssues") || "[]");
+    const savedAuthArr = JSON.parse(localStorage.getItem("authIssues") || "[]");
+    const savedSecurityArr = JSON.parse(localStorage.getItem("securityIssues") || "[]");
 
     setScore(savedScore);
     setName(savedName);
     setIndustry(savedIndustry);
-    setGdpr(savedGdpr);
-    setAuth(savedAuth);
-    setSecurity(savedSecurity);
+    setGdpr(String(savedGdprArr.length));
+    setAuth(String(savedAuthArr.length));
+    setSecurity(String(savedSecurityArr.length));
+
+    async function generateNarrative() {
+      setLoadingNarrative(true);
+      try {
+        const res = await fetch("/api/monthly-summary", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            businessName: savedName,
+            industry: savedIndustry,
+            complianceScore: savedScore,
+            gdprIssues: savedGdprArr,
+            authIssues: savedAuthArr,
+            securityIssues: savedSecurityArr,
+          }),
+        });
+        const data = await res.json();
+        setNarrative(data.summary || "");
+      } catch (err) {
+        console.error(err);
+      }
+      setLoadingNarrative(false);
+    }
+
+    generateNarrative();
   }, []);
 
   const issues = Number(gdpr) + Number(auth) + Number(security);
-  const completedTasks = Math.max(0, Math.floor(Number(score) / 20));
-  const upcomingReviews = Number(score) === 100 ? 0 : 2;
-  const status = Number(score) >= 80 ? "Fully Compliant" : "Needs Attention";
+
+  const completedTasks =
+    typeof window !== "undefined"
+      ? Number(localStorage.getItem("completedTasks") || 0)
+      : 0;
+
+  const upcomingReviews = issues === 0 ? 0 : Math.min(issues, 3);
+
+  const getStatus = (s: number) => {
+    if (s >= 90) return "Strong Compliance Posture";
+    if (s >= 70) return "Moderate Risk — Action Recommended";
+    if (s >= 40) return "Elevated Risk — Attention Needed";
+    return "High Risk — Immediate Action Needed";
+  };
+  const status = getStatus(Number(score));
+
   const month = new Date().toLocaleString("default", { month: "long" });
 
   const handleDownload = () => {
@@ -42,6 +83,9 @@ Status: ${status}
 Issues: ${issues}
 Tasks Completed: ${completedTasks}
 Upcoming Reviews: ${upcomingReviews}
+
+Summary:
+${narrative || "Summary not available."}
     `;
 
     const blob = new Blob([text], { type: "text/plain" });
@@ -107,8 +151,8 @@ Upcoming Reviews: ${upcomingReviews}
 
           <div style={cardStyle}>
             <p style={labelStyle}>Status</p>
-            <h2 style={valueStyle}>{status}</h2>
-            <p style={subtleStyle}>Current compliance state</p>
+            <h2 style={{ ...valueStyle, fontSize: "22px" }}>{status}</h2>
+            <p style={subtleStyle}>Based on self-assessment, not a legal determination</p>
           </div>
 
           <div style={cardStyle}>
@@ -121,6 +165,22 @@ Upcoming Reviews: ${upcomingReviews}
             <p style={labelStyle}>Tasks Completed</p>
             <h2 style={valueStyle}>{completedTasks}</h2>
             <p style={subtleStyle}>Completed compliance actions</p>
+          </div>
+        </div>
+
+        <div
+          style={{
+            ...cardStyle,
+            marginBottom: "24px",
+          }}
+        >
+          <h3 style={sectionTitle}>Monthly Summary</h3>
+          <div style={{ marginTop: "18px", fontSize: "14px", color: "#334155", lineHeight: 1.6 }}>
+            {loadingNarrative && <p>Generating summary...</p>}
+            {!loadingNarrative && narrative && <p>{narrative}</p>}
+            {!loadingNarrative && !narrative && (
+              <p style={subtleStyle}>Summary not available.</p>
+            )}
           </div>
         </div>
 
