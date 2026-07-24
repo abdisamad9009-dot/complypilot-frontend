@@ -47,6 +47,53 @@ const PLAN_FOCUS: Record<string, string> = {
     "Focus specifically on maintaining overall business operations during a prolonged disruption (e.g. facility loss, extended outage, major supplier failure) — not limited to a data breach or security incident. Cover alternate ways of operating, recovery time expectations, and how the company keeps functioning while systems are restored.",
 };
 
+// Keyword tags used to filter which findings are actually relevant to each
+// document type, so the model never has irrelevant findings to reach for.
+const DOC_KEYWORDS: Record<string, string[]> = {
+  "Information Security Policy": [
+    "authentication", "multi-factor", "admin access", "encrypt", "firewall",
+    "antivirus", "endpoint", "vulnerability", "update software", "monitor",
+    "log", "network traffic", "penetration", "api", "https", "cloud",
+    "device security", "phishing",
+  ],
+  "GDPR Compliance Policy": [
+    "privacy policy", "breach response plan", "third", "vendor", "risk assessment",
+  ],
+  "Data Retention Policy": [
+    "back up", "backup", "retention",
+  ],
+  "Access Control Policy": [
+    "admin access", "multi-factor", "access permissions", "unused accounts",
+    "access privileges", "privileged users", "database access", "audit system access",
+  ],
+  "Acceptable Use Policy": [
+    "employee devices", "device security", "phishing", "antivirus", "https",
+  ],
+  "Vendor Risk Policy": [
+    "third", "vendor",
+  ],
+  "Encryption Policy": [
+    "encrypt",
+  ],
+  "Incident Response Plan": [
+    "incident", "unauthorized access", "log security events", "security training",
+  ],
+  "Data Breach Response Policy": [
+    "breach response plan", "incident",
+  ],
+  "Business Continuity Plan": [
+    "backup", "disaster recovery",
+  ],
+};
+
+function filterRelevantFindings(type: string, allFindings: string[]): string[] {
+  const keywords = DOC_KEYWORDS[type];
+  if (!keywords) return allFindings;
+  return allFindings.filter((finding) =>
+    keywords.some((kw) => finding.toLowerCase().includes(kw.toLowerCase()))
+  );
+}
+
 function getDocCategory(type: string): "risk_report" | "policy" | "plan" | "privacy_policy" {
   if (type === "Risk Assessment Report") return "risk_report";
   if (type === "Privacy Policy") return "privacy_policy";
@@ -121,6 +168,7 @@ analyst; no signature block or appendices.
 function buildPolicyPrompt(vars: any) {
   const { type, companyLabel, industry, employees, gdprIssues, authIssues, securityIssues } = vars;
   const allGaps = [...gdprIssues, ...authIssues, ...securityIssues];
+  const relevantGaps = filterRelevantFindings(type, allGaps);
   const focus = POLICY_FOCUS[type] || "";
   return `
 Generate a professional "${type}" for the following UK company. This is an internal company policy
@@ -139,10 +187,10 @@ COMPANY DETAILS
 - Company size: ${employees || "not specified"} employees
 
 CONTEXT (for your awareness only — do not reference this list directly or call it out as "gaps" in
-the document; only weave in the ones that are actually relevant to this document's specific focus
-above, phrased as forward-looking company rules, not references to past failures. Do not force in
-gaps unrelated to this document's focus just because they're in this list):
-${allGaps.length ? allGaps.map((q: string) => `- ${q}`).join("\n") : "- No specific gaps flagged"}
+the document; weave these in naturally as forward-looking company rules, not references to past
+failures. This list has already been filtered to only findings relevant to this document's focus —
+do not add unrelated content beyond what's needed to cover these):
+${relevantGaps.length ? relevantGaps.map((q: string) => `- ${q}`).join("\n") : "- No specific gaps flagged for this document's focus area"}
 
 STRUCTURE:
 ## PURPOSE
@@ -180,6 +228,7 @@ RULES:
 function buildPlanPrompt(vars: any) {
   const { type, companyLabel, industry, employees, gdprIssues, authIssues, securityIssues } = vars;
   const allGaps = [...gdprIssues, ...authIssues, ...securityIssues];
+  const relevantGaps = filterRelevantFindings(type, allGaps);
   const focus = PLAN_FOCUS[type] || "";
   return `
 Generate a professional "${type}" for the following UK company. This is a procedural plan document —
@@ -196,10 +245,10 @@ COMPANY DETAILS
 - Industry: ${industry || "not specified"}
 - Company size: ${employees || "not specified"} employees
 
-CONTEXT (for your awareness only — do not list this as "findings"; only weave in the ones genuinely
-relevant to this document's specific focus above, at the relevant step. Do not force in unrelated
-gaps just because they're in this list):
-${allGaps.length ? allGaps.map((q: string) => `- ${q}`).join("\n") : "- No specific gaps flagged"}
+CONTEXT (for your awareness only — do not list this as "findings"; weave these in naturally at the
+relevant step. This list has already been filtered to only findings relevant to this document's
+focus — do not add unrelated content beyond what's needed to cover these):
+${relevantGaps.length ? relevantGaps.map((q: string) => `- ${q}`).join("\n") : "- No specific gaps flagged for this document's focus area"}
 
 STRUCTURE:
 ## PURPOSE
