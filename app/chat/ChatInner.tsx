@@ -50,7 +50,7 @@ export default function ChatInner() {
         setDoc(cleaned);
 
         const savedDocs = JSON.parse(localStorage.getItem("generatedDocs") || "{}");
-        savedDocs[type] = cleaned;
+        savedDocs[type as string] = cleaned;
         localStorage.setItem("generatedDocs", JSON.stringify(savedDocs));
       } catch (err) {
         console.error(err);
