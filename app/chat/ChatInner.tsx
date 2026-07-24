@@ -10,8 +10,9 @@ export default function ChatInner() {
 
   function cleanText(text: string) {
     return text
-      .replace(/[#*`]/g, "")
-      .replace(/\n{2,}/g, "\n\n")
+      .replace(/^## (.+)$/gm, "\n$1\n")
+      .replace(/[*`]/g, "")
+      .replace(/\n{3,}/g, "\n\n")
       .trim();
   }
 
@@ -49,7 +50,7 @@ export default function ChatInner() {
         setDoc(cleaned);
 
         const savedDocs = JSON.parse(localStorage.getItem("generatedDocs") || "{}");
-        savedDocs[type as string] = cleaned;
+        savedDocs[type] = cleaned;
         localStorage.setItem("generatedDocs", JSON.stringify(savedDocs));
       } catch (err) {
         console.error(err);
@@ -64,7 +65,7 @@ export default function ChatInner() {
 
   return (
     <div className="min-h-screen bg-white text-black p-12">
-      <h1 className="text-3xl font-semibold mb-10">{type} Report</h1>
+      <h1 className="text-3xl font-semibold mb-10">{type}</h1>
       {loading && <p>Generating document...</p>}
       {!loading && doc && (
         <div className="max-w-3xl bg-white border border-neutral-200 rounded-xl p-10">
