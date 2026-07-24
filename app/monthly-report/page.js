@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -63,12 +63,12 @@ export default function MonthlyReport() {
 
   const upcomingReviews = issues === 0 ? 0 : Math.min(issues, 3);
 
-  const getStatus = (s) => {
+  function getStatus(s) {
     if (s >= 90) return "Strong Compliance Posture";
     if (s >= 70) return "Moderate Risk — Action Recommended";
     if (s >= 40) return "Elevated Risk — Attention Needed";
     return "High Risk — Immediate Action Needed";
-  };
+  }
   const status = getStatus(Number(score));
 
   const month = new Date().toLocaleString("default", { month: "long" });
