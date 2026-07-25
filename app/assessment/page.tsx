@@ -1,58 +1,60 @@
 "use client"
 import { useState } from "react"
 
+type Question = {
+  text: string
+  category: "gdpr" | "auth" | "security"
+}
+
+const CATEGORY_WEIGHT: Record<string, number> = {
+  gdpr: 3,
+  auth: 2,
+  security: 1,
+}
+
 export default function AssessmentPage() {
-  const questions = [
-    "Do you have a privacy policy?",
-    "Do you encrypt stored user data?",
-    "Do you use secure authentication?",
-    "Do you have a data breach response plan?",
-    "Do you regularly update software?",
-    "Do employees receive security training?",
-    "Do you monitor unauthorized access attempts?",
-    "Do you restrict admin access?",
-    "Do you back up company data?",
-    "Do you test backups regularly?",
-    "Do you use multi-factor authentication?",
-    "Do you log security events?",
-    "Do you perform vulnerability scans?",
-    "Do you have firewall protection?",
-    "Do you enforce strong passwords?",
-    "Do you manage user access permissions?",
-    "Do you delete unused accounts?",
-    "Do you secure API endpoints?",
-    "Do you protect customer payment data?",
-    "Do you use HTTPS everywhere?",
-    "Do you review third‑party vendors?",
-    "Do you have incident reporting procedures?",
-    "Do you document security policies?",
-    "Do you restrict database access?",
-    "Do you use endpoint protection?",
-    "Do you monitor network traffic?",
-    "Do you run penetration tests?",
-    "Do you secure cloud infrastructure?",
-    "Do you rotate encryption keys?",
-    "Do you track security incidents?",
-    "Do you review security logs?",
-    "Do you enforce device security?",
-    "Do you use antivirus protection?",
-    "Do you audit system access?",
-    "Do you secure employee devices?",
-    "Do you encrypt backups?",
-    "Do you protect against phishing?",
-    "Do you maintain a risk register?",
-    "Do you have a disaster recovery plan?",
-    "Do you monitor cloud logs?",
-    "Do you review compliance regularly?",
-    "Do you conduct internal audits?",
-    "Do you maintain security documentation?",
-    "Do you review access privileges?",
-    "Do you monitor privileged users?",
-    "Do you secure development environments?",
-    "Do you separate production environments?",
-    "Do you review security alerts?",
-    "Do you perform regular risk assessments?",
-    "Do you continuously improve security controls?"
+  const questions: Question[] = [
+    // GDPR — legally required obligations, weighted highest
+    { text: "Do you have a published privacy policy?", category: "gdpr" },
+    { text: "Do you have a documented data breach response plan?", category: "gdpr" },
+    { text: "Do you know how to respond to a Subject Access Request within one month, as required by UK GDPR?", category: "gdpr" },
+    { text: "Do you have Data Processing Agreements in place with your third-party vendors and processors?", category: "gdpr" },
+    { text: "Do you conduct Data Protection Impact Assessments for high-risk data processing activities?", category: "gdpr" },
+    { text: "Do you maintain records of processing activities as required under Article 30?", category: "gdpr" },
+    { text: "Do you have a documented lawful basis for each type of personal data you process?", category: "gdpr" },
+    { text: "Do you have a process for handling personal data transfers outside the UK or EEA?", category: "gdpr" },
+    { text: "Do you use cookie consent management on your website?", category: "gdpr" },
+    { text: "Have you appointed a Data Protection Officer or nominated a privacy lead, if required for your business?", category: "gdpr" },
+
+    // Authentication & access — weighted medium
+    { text: "Do you use multi-factor authentication for company systems?", category: "auth" },
+    { text: "Do you enforce strong password requirements?", category: "auth" },
+    { text: "Do you follow the principle of least privilege for system access?", category: "auth" },
+    { text: "Do you have a formal process for removing access when someone leaves the company?", category: "auth" },
+    { text: "Do you monitor and log privileged user activity?", category: "auth" },
+    { text: "Do you restrict administrative access to only those who need it?", category: "auth" },
+    { text: "Do you conduct periodic access reviews?", category: "auth" },
+    { text: "Do you disable or delete unused and inactive accounts?", category: "auth" },
+
+    // Security controls — weighted standard
+    { text: "Do you encrypt sensitive data at rest?", category: "security" },
+    { text: "Do you use HTTPS across your website and services?", category: "security" },
+    { text: "Do you encrypt backups?", category: "security" },
+    { text: "Do you rotate encryption keys periodically?", category: "security" },
+    { text: "Do you apply software and security updates on a regular schedule?", category: "security" },
+    { text: "Do you have a documented patch management process?", category: "security" },
+    { text: "Do you use firewall protection for your network?", category: "security" },
+    { text: "Do you use antivirus or endpoint protection on company devices?", category: "security" },
+    { text: "Do you run vulnerability scans on your systems?", category: "security" },
+    { text: "Do you conduct penetration testing at least annually?", category: "security" },
+    { text: "Do you provide security awareness training to employees, including phishing awareness?", category: "security" },
+    { text: "Do you back up company data regularly?", category: "security" },
+    { text: "Do you test backup restoration regularly?", category: "security" },
+    { text: "Do you have a disaster recovery plan?", category: "security" },
+    { text: "Do you secure API endpoints with authentication and rate limiting?", category: "security" },
+    { text: "Do you separate development, testing, and production environments?", category: "security" },
+    { text: "Do you monitor for unauthorized access attempts?", category: "security" },
+    { text: "Do you maintain a risk register to track identified risks?", category: "security" },
   ]
 
   const [page, setPage] = useState(0)
@@ -62,7 +64,8 @@ export default function AssessmentPage() {
   const [industry, setIndustry] = useState("")
   const [employees, setEmployees] = useState("")
 
-  const questionsPerPage = 10
+  const questionsPerPage = 9
+  const totalPages = Math.ceil(questions.length / questionsPerPage)
   const start = page * questionsPerPage
   const currentQuestions = questions.slice(start, start + questionsPerPage)
 
@@ -74,43 +77,38 @@ export default function AssessmentPage() {
   }
 
   function nextPage() {
-    if (page < 4) {
+    const unanswered = currentQuestions.some((_, i) => !answers[start + i])
+    if (unanswered) {
+      alert("Please answer every question on this page before continuing.")
+      return
+    }
+
+    if (page < totalPages - 1) {
       setPage(page + 1)
       window.scrollTo(0, 0)
     } else {
-      let gdpr: any[] = []
-      let auth: any[] = []
-      let security: any[] = []
+      const gdpr: string[] = []
+      const auth: string[] = []
+      const security: string[] = []
 
-      Object.entries(answers).forEach(([index, value]) => {
-        if (value === "no") {
-          const i = Number(index)
+      let earnedWeight = 0
+      let totalWeight = 0
 
-          if ([0, 3, 20, 48].includes(i)) {
-            gdpr.push(questions[i])
-          }
+      questions.forEach((q, i) => {
+        const weight = CATEGORY_WEIGHT[q.category]
+        totalWeight += weight
 
-          if ([2, 7, 10, 14, 15, 16, 43, 44].includes(i)) {
-            auth.push(questions[i])
-          }
-
-          if (
-            [
-              1, 4, 5, 6, 8, 9, 11, 12, 13, 17, 18, 19,
-              21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-              31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42,
-              45, 46, 47, 49
-            ].includes(i)
-          ) {
-            security.push(questions[i])
-          }
+        const answer = answers[i]
+        if (answer === "yes") {
+          earnedWeight += weight
+        } else if (answer === "no") {
+          if (q.category === "gdpr") gdpr.push(q.text)
+          if (q.category === "auth") auth.push(q.text)
+          if (q.category === "security") security.push(q.text)
         }
       })
 
-      const yesCount =
-        Object.values(answers).filter(a => a === "yes").length
-
-      const score = Math.round((yesCount / 50) * 100)
+      const score = Math.round((earnedWeight / totalWeight) * 100)
 
       localStorage.setItem("complianceScore", String(score))
       localStorage.setItem("gdprIssues", JSON.stringify(gdpr))
@@ -195,7 +193,7 @@ export default function AssessmentPage() {
         </div>
       )}
 
-      <p>Page {page + 1} of 5</p>
+      <p>Page {page + 1} of {totalPages}</p>
 
       <div style={{ marginTop: "30px" }}>
         {currentQuestions.map((q, i) => {
@@ -205,7 +203,7 @@ export default function AssessmentPage() {
           return (
             <div key={i} style={{ marginBottom: "25px" }}>
               <p style={{ marginBottom: "10px" }}>
-                {index + 1}. {q}
+                {index + 1}. {q.text}
               </p>
 
               <button
@@ -254,7 +252,7 @@ export default function AssessmentPage() {
           fontSize: "16px"
         }}
       >
-        {page === 4 ? "Finish Assessment" : "Next Page"}
+        {page === totalPages - 1 ? "Finish Assessment" : "Next Page"}
       </button>
     </div>
   )
