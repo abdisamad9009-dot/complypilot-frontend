@@ -82,3 +82,66 @@ export default function PriorityPage() {
                   {index + 1}
                 </div>
                 <div>
+                  <span
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: 700,
+                      color: typeColor[issue.type],
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    {issue.type}
+                  </span>
+                  <p style={{ margin: "4px 0 0 0", color: "#1f2937", fontSize: "14px" }}>
+                    {issue.text}
+                  </p>
+                  <p style={{ margin: "4px 0 0 0", color: "#94a3b8", fontSize: "12px" }}>
+                    {rationale[issue.type]}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {totalCount > 0 && (
+        <div style={{ display: "flex", gap: "12px" }}>
+          <Link href="/tasks" style={{ textDecoration: "none" }}>
+            <button
+              style={{
+                padding: "10px 18px",
+                background: "#0f172a",
+                color: "#ffffff",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "13px",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              Resolve these actions
+            </button>
+          </Link>
+          <Link href="/risks" style={{ textDecoration: "none" }}>
+            <button
+              style={{
+                padding: "10px 18px",
+                background: "#ffffff",
+                color: "#0f172a",
+                border: "1px solid #cbd5e1",
+                borderRadius: "8px",
+                fontSize: "13px",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              View all {totalCount} risks
+            </button>
+          </Link>
+        </div>
+      )}
+    </div>
+  )
+}
