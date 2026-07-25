@@ -51,35 +51,38 @@ const PLAN_FOCUS: Record<string, string> = {
 // document type, so the model never has irrelevant findings to reach for.
 const DOC_KEYWORDS: Record<string, string[]> = {
   "Information Security Policy": [
-    "authentication", "multi-factor", "admin access", "encrypt", "firewall",
-    "antivirus", "endpoint", "vulnerability", "update software", "monitor",
-    "log", "network traffic", "penetration", "api", "https", "cloud",
-    "device security", "phishing",
+    "authentication", "multi-factor", "administrative access", "admin", "encrypt",
+    "firewall", "antivirus", "endpoint", "vulnerability", "update", "patch",
+    "password", "monitor", "log", "penetration", "api", "https", "cloud",
+    "phishing", "unauthorized access",
   ],
   "GDPR Compliance Policy": [
-    "privacy policy", "breach response plan", "third", "vendor", "risk assessment",
+    "privacy policy", "breach response plan", "third-party", "vendor",
+    "impact assessment", "records of processing", "lawful basis",
+    "transfers outside", "cookie", "data protection officer", "privacy lead",
+    "subject access request",
   ],
   "Data Retention Policy": [
     "back up", "backup", "retention",
   ],
   "Access Control Policy": [
-    "admin access", "multi-factor", "access permissions", "unused accounts",
-    "access privileges", "privileged users", "database access", "audit system access",
+    "administrative access", "admin", "multi-factor", "least privilege",
+    "when someone leaves", "privileged", "access review", "unused", "inactive",
   ],
   "Acceptable Use Policy": [
-    "employee devices", "device security", "phishing", "antivirus", "https",
+    "password", "phishing", "antivirus", "https",
   ],
   "Vendor Risk Policy": [
-    "third", "vendor",
+    "third-party", "vendor", "processors",
   ],
   "Encryption Policy": [
     "encrypt",
   ],
   "Incident Response Plan": [
-    "incident", "unauthorized access", "log security events", "security training",
+    "unauthorized access", "monitor", "log", "awareness training", "phishing",
   ],
   "Data Breach Response Policy": [
-    "breach response plan", "incident",
+    "breach response plan", "unauthorized access",
   ],
   "Business Continuity Plan": [
     "backup", "disaster recovery",
@@ -99,7 +102,7 @@ function getDocCategory(type: string): "risk_report" | "policy" | "plan" | "priv
   if (type === "Privacy Policy") return "privacy_policy";
   if (PLAN_DOCS.includes(type)) return "plan";
   if (POLICY_DOCS.includes(type)) return "policy";
-  return "policy";
+  return "policy"; // sensible default for anything unrecognised
 }
 
 function buildRiskReportPrompt(vars: any) {
