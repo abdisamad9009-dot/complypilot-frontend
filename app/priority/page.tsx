@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
+import Link from "next/link"
 
 export default function PriorityPage() {
   const [priority, setPriority] = useState<{ type: string; text: string }[]>([])
@@ -9,13 +10,11 @@ export default function PriorityPage() {
     const gdpr = JSON.parse(localStorage.getItem("gdprIssues") || "[]")
     const auth = JSON.parse(localStorage.getItem("authIssues") || "[]")
     const security = JSON.parse(localStorage.getItem("securityIssues") || "[]")
-
     const allIssues = [
       ...gdpr.map((text: string) => ({ type: "GDPR", text })),
       ...auth.map((text: string) => ({ type: "Authentication", text })),
       ...security.map((text: string) => ({ type: "Security", text })),
     ]
-
     setTotalCount(allIssues.length)
     setPriority(allIssues.slice(0, 5))
   }, [])
@@ -83,29 +82,3 @@ export default function PriorityPage() {
                   {index + 1}
                 </div>
                 <div>
-                  <span
-                    style={{
-                      fontSize: "11px",
-                      fontWeight: 700,
-                      color: typeColor[issue.type],
-                      textTransform: "uppercase",
-                      letterSpacing: "0.05em",
-                    }}
-                  >
-                    {issue.type}
-                  </span>
-                  <p style={{ margin: "4px 0 0 0", color: "#1f2937", fontSize: "14px" }}>
-                    {issue.text}
-                  </p>
-                  <p style={{ margin: "4px 0 0 0", color: "#94a3b8", fontSize: "12px" }}>
-                    {rationale[issue.type]}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
