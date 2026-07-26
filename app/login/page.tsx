@@ -5,7 +5,7 @@ import { supabase } from "../../supabase";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState(""); 
+  const [password, setPassword] = useState("");
   const [checking, setChecking] = useState(true);
   const router = useRouter();
 
@@ -21,7 +21,6 @@ export default function LoginPage() {
     checkUser();
   }, [router]);
 
-
   const handleLogin = async () => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -34,7 +33,6 @@ export default function LoginPage() {
       router.push("/dashboard");
     }
   };
-
 
   const handleSignup = async () => {
     const { error } = await supabase.auth.signUp({
@@ -166,7 +164,6 @@ export default function LoginPage() {
                 }}
               />
 
-      
               <input
                 type="password"
                 placeholder="Enter your password"
@@ -197,7 +194,6 @@ export default function LoginPage() {
                 Log In
               </button>
 
-        
               <button
                 onClick={handleSignup}
                 style={{
