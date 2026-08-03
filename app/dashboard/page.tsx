@@ -1,8 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRequireAuth } from "../../lib/useRequireAuth";
 
 export default function Dashboard() {
+  const { checking, authorized } = useRequireAuth();
   const [score, setScore] = useState("0");
   const [gdpr, setGdpr] = useState("0");
   const [auth, setAuth] = useState("0");
@@ -74,6 +76,10 @@ export default function Dashboard() {
 
   return (
     <div>
+      {checking && <div style={{ padding: "40px" }}>Loading...</div>}
+      {!checking && !authorized && null}
+      {!checking && authorized && (
+      <>
       <div style={{ marginBottom: "32px" }}>
         <h1
           style={{
@@ -197,6 +203,8 @@ export default function Dashboard() {
             )}
         </div>
       </div>
+      </>
+      )}
     </div>
   );
 }
